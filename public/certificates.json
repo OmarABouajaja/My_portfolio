@@ -1,0 +1,68 @@
+{
+  "certificates": [
+    {
+      "id": "ajsz-badge",
+      "title": "Badge de Club",
+      "category": "Robotics",
+      "year": "2023",
+      "image": "/omar_certificats/ajsz/badge de club.jpg",
+      "organization": "Association des Jeunes Scientifiques de Zarzis"
+    },
+    {
+      "id": "ajsz-formateur",
+      "title": "Certificat Formateur Robotique",
+      "category": "Robotics",
+      "year": "2023",
+      "image": "/omar_certificats/ajsz/certificat formateur robotique.jpg",
+      "organization": "Association des Jeunes Scientifiques de Zarzis"
+    },
+    {
+      "id": "ajsz-formation-base",
+      "title": "Formation de Base en Robotique",
+      "category": "Robotics",
+      "year": "2023",
+      "image": "/omar_certificats/ajsz/certificat formation de base en robotique.jpg",
+      "organization": "Association des Jeunes Scientifiques de Zarzis"
+    },
+    {
+      "id": "ajsz-congres-iot",
+      "title": "Participation en Congrès Regional de IoT",
+      "category": "Innovation",
+      "year": "2023",
+      "image": "/omar_certificats/ajsz/certificat de participation en congrés regional de IOT.jpg",
+      "organization": "Association des Jeunes Scientifiques de Zarzis"
+    },
+    {
+      "id": "clubscolaire-english",
+      "title": "Attestation d'Activité en English Fan Club",
+      "category": "Education",
+      "year": "2023",
+      "image": "/omar_certificats/clubscolaire/attestation d'activité en English Fan Club ZZ.jpg",
+      "organization": "Club Scolaire"
+    },
+    {
+      "id": "diplome-bac",
+      "title": "Certificat de BAC",
+      "category": "Academic",
+      "year": "2023",
+      "image": "/omar_certificats/diplome académique/certificat de BAC.jpg",
+      "organization": "Diplôme Académique"
+    },
+    {
+      "id": "googleclub-adobe",
+      "title": "Formation en Adobe Photoshop",
+      "category": "Development",
+      "year": "2023",
+      "image": "/omar_certificats/googleclub/certificat de formation en adobe PS.jpg",
+      "organization": "Google Developer Student Club"
+    },
+    {
+      "id": "injaz-formateur",
+      "title": "Certificat de Formateur Entreprenariat",
+      "category": "Leadership",
+      "year": "2023",
+      "image": "/omar_certificats/injaz/certificat de formateur entreprenariat.jpg",
+      "organization": "INJAZ Tunisia"
+    }
+  ]
+} 

@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0A1A2F"/>
+  
+  <!-- Tech Grid Pattern -->
+  <path d="M0 0h1200v630H0z" fill="#0A9D8B" fill-opacity="0.05"/>
+  <path d="M50 50h1100v530H50z" stroke="#0A9D8B" stroke-opacity="0.1" stroke-width="1"/>
+  
+  <!-- Main Content -->
+  <g transform="translate(100 150)">
+    <!-- Title -->
+    <text x="0" y="0" font-family="Arial" font-size="64" font-weight="bold" fill="white">
+      Omar Abouajaja
+    </text>
+    <text x="0" y="100" font-family="Arial" font-size="36" fill="#0A9D8B">
+      IoT & Robotics Engineer
+    </text>
+    
+    <!-- Tech Icons -->
+    <g transform="translate(0 180)">
+      <circle cx="40" cy="40" r="30" fill="#0A9D8B" fill-opacity="0.2" stroke="#0A9D8B" stroke-width="2"/>
+      <text x="40" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">🤖</text>
+      
+      <circle cx="120" cy="40" r="30" fill="#0A9D8B" fill-opacity="0.2" stroke="#0A9D8B" stroke-width="2"/>
+      <text x="120" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">📡</text>
+      
+      <circle cx="200" cy="40" r="30" fill="#0A9D8B" fill-opacity="0.2" stroke="#0A9D8B" stroke-width="2"/>
+      <text x="200" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">⚡</text>
+    </g>
+  </g>
+  
+  <!-- Bottom Text -->
+  <text x="100" y="550" font-family="Arial" font-size="24" fill="#0A9D8B">
+    Portfolio • IoT • Robotics • Embedded Systems
+  </text>
+</svg>
