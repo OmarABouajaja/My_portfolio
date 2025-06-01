@@ -2,6 +2,18 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * A reusable table component with consistent styling and accessibility features
+ * Built on top of native HTML table elements with enhanced functionality
+ */
+
+/**
+ * Root table component
+ * Features:
+ * - Responsive container with overflow handling
+ * - Customizable through className prop
+ * - Maintains all HTML table attributes
+ */
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
@@ -16,6 +28,12 @@ const Table = React.forwardRef<
 ))
 Table.displayName = "Table"
 
+/**
+ * Table header component
+ * Features:
+ * - Consistent border styling for header rows
+ * - Customizable through className prop
+ */
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
@@ -24,6 +42,12 @@ const TableHeader = React.forwardRef<
 ))
 TableHeader.displayName = "TableHeader"
 
+/**
+ * Table body component
+ * Features:
+ * - Removes border from last row
+ * - Customizable through className prop
+ */
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
@@ -36,6 +60,13 @@ const TableBody = React.forwardRef<
 ))
 TableBody.displayName = "TableBody"
 
+/**
+ * Table footer component
+ * Features:
+ * - Subtle background color
+ * - Consistent border styling
+ * - Customizable through className prop
+ */
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
@@ -51,6 +82,14 @@ const TableFooter = React.forwardRef<
 ))
 TableFooter.displayName = "TableFooter"
 
+/**
+ * Table row component
+ * Features:
+ * - Hover state with subtle background
+ * - Selected state styling
+ * - Smooth transition effects
+ * - Customizable through className prop
+ */
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
@@ -66,6 +105,14 @@ const TableRow = React.forwardRef<
 ))
 TableRow.displayName = "TableRow"
 
+/**
+ * Table header cell component
+ * Features:
+ * - Consistent height and padding
+ * - Muted text color for headers
+ * - Special handling for checkbox cells
+ * - Customizable through className prop
+ */
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
@@ -81,6 +128,13 @@ const TableHead = React.forwardRef<
 ))
 TableHead.displayName = "TableHead"
 
+/**
+ * Table cell component
+ * Features:
+ * - Consistent padding
+ * - Special handling for checkbox cells
+ * - Customizable through className prop
+ */
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
@@ -93,6 +147,13 @@ const TableCell = React.forwardRef<
 ))
 TableCell.displayName = "TableCell"
 
+/**
+ * Table caption component
+ * Features:
+ * - Consistent text styling
+ * - Muted text color
+ * - Customizable through className prop
+ */
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>

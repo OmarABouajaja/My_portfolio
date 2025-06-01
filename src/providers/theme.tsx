@@ -1,34 +1,68 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type Theme = 'light' | 'dark';
+// Define supported themes
+export type Theme = 'light' | 'dark' | 'system';
 
-interface ThemeContextType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+/**
+ * Theme context type definition
+ * Contains theme state and setter function
+ */
+type ThemeContextType = {
+  theme: Theme
+  setTheme: (theme: Theme) => void
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+/**
+ * Theme context for managing theme state
+ * Provides theme value and setter function to children
+ */
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
+/**
+ * Theme provider component
+ * Manages theme state and provides it to children
+ * Features:
+ * - Persists theme preference in localStorage
+ * - Applies theme class to document
+ * - Provides theme context to children
+ */
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = React.useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme') as Theme;
-      if (savedTheme) return savedTheme;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      return (localStorage.getItem('theme') as Theme) || 'system'
     }
-    return 'light';
-  });
+    return 'system'
+  })
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  React.useEffect(() => {
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      root.classList.add(systemTheme)
+      return
+    }
+
+    root.classList.add(theme)
+  }, [theme])
+
+  const value = React.useMemo(
+    () => ({
+      theme,
+      setTheme: (theme: Theme) => {
+        localStorage.setItem('theme', theme)
+        setTheme(theme)
+      },
+    }),
+    [theme]
+  )
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={value}>
       <AnimatePresence mode="wait">
         <motion.div
           key={theme}
@@ -41,9 +75,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         </motion.div>
       </AnimatePresence>
     </ThemeContext.Provider>
-  );
-};
+  )
+}
 
+// Hook to use the theme context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {

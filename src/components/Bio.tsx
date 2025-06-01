@@ -1,94 +1,59 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import { useLanguage } from '@/providers/language';
-import { Card } from '@/components/ui/card';
-import TechBadge from '@/components/TechBadge';
-import { cn } from '@/lib/utils';
 
 const Bio = () => {
   const { t } = useLanguage();
-  const technologies = [
-    'React',
-    'TypeScript',
-    'Node.js',
-    'Express',
-    'MongoDB',
-    'PostgreSQL',
-    'Next.js',
-    'Tailwind CSS',
-    'Framer Motion',
-    'Git',
-    'Docker',
-    'AWS'
-  ];
+  const bioTitle = t('bioTitle') as string;
+  const bioSubtitle = t('bioSubtitle') as string;
+  const bioSkills = t('bioSkills') as string;
+  const technologies = t('technologies') as string;
+  const iotDescription = t('iotDescription') as string;
+  const roboticsDescription = t('roboticsDescription') as string;
+  const embeddedDescription = t('embeddedDescription') as string;
+  const uiuxDescription = t('uiuxDescription') as string;
+  const webdevDescription = t('webdevDescription') as string;
+  const teachingDescription = t('teachingDescription') as string;
 
   return (
-    <section id="bio" className="py-24">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1 }
-          }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, x: -20 },
-              visible: { opacity: 1, x: 0 }
-            }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Card className="p-6 glass-effect border-0">
-              <h3 className="text-2xl font-bold mb-6">{t('bioTitle')}</h3>
-              <p className="text-muted-foreground mb-4">{t('bioSubtitle')}</p>
-              <div className="space-y-4">
-                <p>{t('iotDescription')}</p>
-                <p>{t('roboticsDescription')}</p>
-                <p>{t('embeddedDescription')}</p>
-                <p>{t('uiuxDescription')}</p>
-                <p>{t('webdevDescription')}</p>
-                <p>{t('teachingDescription')}</p>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, x: 20 },
-              visible: { opacity: 1, x: 0 }
-            }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          >
-            <Card className="p-6 glass-effect border-0">
-              <h3 className="text-2xl font-bold mb-6">{t('technologies')}</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {technologies.map((tech, index) => (
-                  <motion.div
-                    key={tech}
-                    variants={{
-                      hidden: { opacity: 0, scale: 0.8 },
-                      visible: { opacity: 1, scale: 1 }
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      ease: [0.22, 1, 0.36, 1],
-                      delay: index * 0.1
-                    }}
-                  >
-                    <TechBadge 
-                      name={tech}
-                      size="lg"
-                      className="w-full justify-center"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </Card>
-          </motion.div>
-        </motion.div>
+        <h2 className="text-3xl font-bold mb-8">{bioTitle}</h2>
+        <p className="text-xl mb-8">{bioSubtitle}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">{bioSkills}</h3>
+            <ul className="space-y-4">
+              <li>
+                <h4 className="font-medium">IoT Development</h4>
+                <p>{iotDescription}</p>
+              </li>
+              <li>
+                <h4 className="font-medium">Robotics</h4>
+                <p>{roboticsDescription}</p>
+              </li>
+              <li>
+                <h4 className="font-medium">Embedded Systems</h4>
+                <p>{embeddedDescription}</p>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">{technologies}</h3>
+            <ul className="space-y-4">
+              <li>
+                <h4 className="font-medium">UI/UX Design</h4>
+                <p>{uiuxDescription}</p>
+              </li>
+              <li>
+                <h4 className="font-medium">Web Development</h4>
+                <p>{webdevDescription}</p>
+              </li>
+              <li>
+                <h4 className="font-medium">Teaching & Training</h4>
+                <p>{teachingDescription}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -4,6 +4,12 @@ import { ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Breadcrumb component for displaying navigation hierarchy
+ * Features:
+ * - Semantic navigation structure
+ * - Customizable separator
+ */
 const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<"nav"> & {
@@ -12,6 +18,12 @@ const Breadcrumb = React.forwardRef<
 >(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />)
 Breadcrumb.displayName = "Breadcrumb"
 
+/**
+ * BreadcrumbList component for containing breadcrumb items
+ * Features:
+ * - Flexible layout with responsive spacing
+ * - Muted text color for secondary information
+ */
 const BreadcrumbList = React.forwardRef<
   HTMLOListElement,
   React.ComponentPropsWithoutRef<"ol">
@@ -27,6 +39,12 @@ const BreadcrumbList = React.forwardRef<
 ))
 BreadcrumbList.displayName = "BreadcrumbList"
 
+/**
+ * BreadcrumbItem component for individual breadcrumb entries
+ * Features:
+ * - Inline layout with consistent spacing
+ * - Customizable through className prop
+ */
 const BreadcrumbItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentPropsWithoutRef<"li">
@@ -39,6 +57,12 @@ const BreadcrumbItem = React.forwardRef<
 ))
 BreadcrumbItem.displayName = "BreadcrumbItem"
 
+/**
+ * BreadcrumbLink component for clickable breadcrumb entries
+ * Features:
+ * - Supports asChild prop for custom rendering
+ * - Hover effect for better user interaction
+ */
 const BreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
   React.ComponentPropsWithoutRef<"a"> & {
@@ -57,6 +81,12 @@ const BreadcrumbLink = React.forwardRef<
 })
 BreadcrumbLink.displayName = "BreadcrumbLink"
 
+/**
+ * BreadcrumbPage component for the current page indicator
+ * Features:
+ * - Disabled link styling
+ * - Indicates current page for accessibility
+ */
 const BreadcrumbPage = React.forwardRef<
   HTMLSpanElement,
   React.ComponentPropsWithoutRef<"span">
@@ -72,6 +102,12 @@ const BreadcrumbPage = React.forwardRef<
 ))
 BreadcrumbPage.displayName = "BreadcrumbPage"
 
+/**
+ * BreadcrumbSeparator component for visual separation between items
+ * Features:
+ * - Default chevron icon
+ * - Customizable through children prop
+ */
 const BreadcrumbSeparator = ({
   children,
   className,
@@ -88,6 +124,12 @@ const BreadcrumbSeparator = ({
 )
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator"
 
+/**
+ * BreadcrumbEllipsis component for indicating truncated breadcrumb items
+ * Features:
+ * - MoreHorizontal icon for visual indication
+ * - Accessible screen reader text
+ */
 const BreadcrumbEllipsis = ({
   className,
   ...props

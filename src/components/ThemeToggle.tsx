@@ -1,35 +1,27 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/providers/theme';
+import { useTheme } from '@/providers/theme'
+import { Button } from '@/components/ui/button'
+import { Moon, Sun } from 'lucide-react'
 
-const ThemeToggle = () => {
-  const { theme, setTheme } = useTheme();
+/**
+ * ThemeToggle component that allows users to switch between light and dark themes
+ * @param {string} [className] - Optional CSS class name for styling
+ */
+export default function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
 
   return (
     <Button
       variant="ghost"
+      size="sm"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className="icon-button relative"
+      className="w-9 px-0"
     >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={theme}
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 10, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex items-center gap-2"
-        >
-          {theme === 'light' ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
-        </motion.div>
-      </AnimatePresence>
+      {theme === 'light' ? (
+        <Moon className="h-5 w-5" />
+      ) : (
+        <Sun className="h-5 w-5" />
+      )}
+      <span className="sr-only">Toggle theme</span>
     </Button>
-  );
-};
-
-export default ThemeToggle; 
+  )
+} 

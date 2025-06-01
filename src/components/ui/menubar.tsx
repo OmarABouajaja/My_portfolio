@@ -4,16 +4,43 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * MenubarMenu component for individual menu sections
+ * Built on top of Radix UI's Menu primitive
+ */
 const MenubarMenu = MenubarPrimitive.Menu
 
+/**
+ * MenubarGroup component for grouping related menu items
+ * Built on top of Radix UI's Group primitive
+ */
 const MenubarGroup = MenubarPrimitive.Group
 
+/**
+ * MenubarPortal component for rendering menu content outside DOM hierarchy
+ * Built on top of Radix UI's Portal primitive
+ */
 const MenubarPortal = MenubarPrimitive.Portal
 
+/**
+ * MenubarSub component for nested submenus
+ * Built on top of Radix UI's Sub primitive
+ */
 const MenubarSub = MenubarPrimitive.Sub
 
+/**
+ * MenubarRadioGroup component for radio button menu items
+ * Built on top of Radix UI's RadioGroup primitive
+ */
 const MenubarRadioGroup = MenubarPrimitive.RadioGroup
 
+/**
+ * Root Menubar component
+ * Features:
+ * - Horizontal layout with consistent spacing
+ * - Rounded corners and border
+ * - Customizable through className prop
+ */
 const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
@@ -29,6 +56,13 @@ const Menubar = React.forwardRef<
 ))
 Menubar.displayName = MenubarPrimitive.Root.displayName
 
+/**
+ * MenubarTrigger component for activating menu items
+ * Features:
+ * - Focus and hover states
+ * - Open state styling
+ * - Customizable through className prop
+ */
 const MenubarTrigger = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>
@@ -44,6 +78,13 @@ const MenubarTrigger = React.forwardRef<
 ))
 MenubarTrigger.displayName = MenubarPrimitive.Trigger.displayName
 
+/**
+ * MenubarSubTrigger component for nested menu items
+ * Features:
+ * - Inset option for indented items
+ * - Chevron indicator for submenu
+ * - Focus and hover states
+ */
 const MenubarSubTrigger = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubTrigger> & {
@@ -65,6 +106,13 @@ const MenubarSubTrigger = React.forwardRef<
 ))
 MenubarSubTrigger.displayName = MenubarPrimitive.SubTrigger.displayName
 
+/**
+ * MenubarSubContent component for nested menu content
+ * Features:
+ * - Smooth animations for open/close states
+ * - Responsive positioning
+ * - Consistent styling with other menus
+ */
 const MenubarSubContent = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.SubContent>
@@ -80,6 +128,13 @@ const MenubarSubContent = React.forwardRef<
 ))
 MenubarSubContent.displayName = MenubarPrimitive.SubContent.displayName
 
+/**
+ * MenubarContent component for main menu content
+ * Features:
+ * - Customizable alignment and offset
+ * - Smooth animations
+ * - Portal rendering for proper stacking
+ */
 const MenubarContent = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>
@@ -105,6 +160,13 @@ const MenubarContent = React.forwardRef<
 )
 MenubarContent.displayName = MenubarPrimitive.Content.displayName
 
+/**
+ * MenubarItem component for menu items
+ * Features:
+ * - Inset option for indented items
+ * - Focus and hover states
+ * - Disabled state styling
+ */
 const MenubarItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Item> & {
@@ -123,6 +185,13 @@ const MenubarItem = React.forwardRef<
 ))
 MenubarItem.displayName = MenubarPrimitive.Item.displayName
 
+/**
+ * MenubarCheckboxItem component for checkbox menu items
+ * Features:
+ * - Check icon indicator
+ * - Focus and hover states
+ * - Disabled state styling
+ */
 const MenubarCheckboxItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.CheckboxItem>
@@ -146,6 +215,13 @@ const MenubarCheckboxItem = React.forwardRef<
 ))
 MenubarCheckboxItem.displayName = MenubarPrimitive.CheckboxItem.displayName
 
+/**
+ * MenubarRadioItem component for radio button menu items
+ * Features:
+ * - Circle indicator for selected state
+ * - Focus and hover states
+ * - Disabled state styling
+ */
 const MenubarRadioItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.RadioItem>
@@ -168,6 +244,13 @@ const MenubarRadioItem = React.forwardRef<
 ))
 MenubarRadioItem.displayName = MenubarPrimitive.RadioItem.displayName
 
+/**
+ * MenubarLabel component for menu section labels
+ * Features:
+ * - Inset option for indented labels
+ * - Consistent typography
+ * - Customizable through className prop
+ */
 const MenubarLabel = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Label> & {
@@ -186,6 +269,13 @@ const MenubarLabel = React.forwardRef<
 ))
 MenubarLabel.displayName = MenubarPrimitive.Label.displayName
 
+/**
+ * MenubarSeparator component for visual dividers
+ * Features:
+ * - Consistent spacing
+ * - Muted background color
+ * - Customizable through className prop
+ */
 const MenubarSeparator = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
@@ -198,6 +288,13 @@ const MenubarSeparator = React.forwardRef<
 ))
 MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName
 
+/**
+ * MenubarShortcut component for keyboard shortcuts
+ * Features:
+ * - Muted text color
+ * - Consistent typography
+ * - Customizable through className prop
+ */
 const MenubarShortcut = ({
   className,
   ...props

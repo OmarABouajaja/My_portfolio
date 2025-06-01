@@ -2,9 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/providers/language';
 import { loadingScreenContainer, loadingScreenItem, loadingScreenGlow } from '@/utils/animations';
+import { TranslationContent } from '@/data/translations';
 
 const LoadingScreen = () => {
-  const { currentLanguage: language } = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <AnimatePresence>

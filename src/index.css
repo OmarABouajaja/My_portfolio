@@ -1,12 +1,18 @@
+/* Import Google Fonts for the project */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 
+/* Tailwind base, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Base Layer: CSS custom properties, dark mode, RTL support, and font classes
+*/
 @layer base {
   :root {
+    /* Color variables for light mode */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -28,13 +34,13 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
-
-    /* Custom Colors */
+    /* Custom gradient colors */
     --subtle-start: 79 70 229;  /* Indigo-600 */
     --subtle-end: 124 58 237;   /* Purple-600 */
   }
 
   .dark {
+    /* Color variables for dark mode */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -55,27 +61,23 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
-
-    /* Custom Colors - Dark Mode */
+    /* Custom gradient colors for dark mode */
     --subtle-start: 99 102 241;  /* Indigo-500 */
     --subtle-end: 147 51 234;    /* Purple-500 */
   }
 
-  /* RTL Support */
+  /* RTL (Right-to-Left) language support */
   [dir="rtl"] {
     text-align: right;
   }
-
   [dir="rtl"] .lang-switcher {
     font-family: 'Noto Sans Arabic', sans-serif;
   }
-
-  /* Font Classes */
+  /* Arabic font utility */
   .font-arabic {
     font-family: 'Noto Sans Arabic', sans-serif;
   }
-
-  /* Adjust margins and paddings for RTL */
+  /* Adjust margins and paddings for RTL layouts */
   [dir="rtl"] .ml-1,
   [dir="rtl"] .ml-2,
   [dir="rtl"] .ml-3,
@@ -86,7 +88,6 @@
     margin-right: 0.75rem;
     margin-right: 1rem;
   }
-
   [dir="rtl"] .mr-1,
   [dir="rtl"] .mr-2,
   [dir="rtl"] .mr-3,
@@ -97,7 +98,6 @@
     margin-left: 0.75rem;
     margin-left: 1rem;
   }
-
   [dir="rtl"] .pl-1,
   [dir="rtl"] .pl-2,
   [dir="rtl"] .pl-3,
@@ -108,7 +108,6 @@
     padding-right: 0.75rem;
     padding-right: 1rem;
   }
-
   [dir="rtl"] .pr-1,
   [dir="rtl"] .pr-2,
   [dir="rtl"] .pr-3,
@@ -121,53 +120,51 @@
   }
 }
 
+/*
+  Base Layer: Typography and font utilities
+*/
 @layer base {
   * {
     @apply border-border;
   }
-  
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
   }
-
   h1 {
     @apply text-4xl md:text-5xl lg:text-6xl;
   }
-
   h2 {
     @apply text-3xl md:text-4xl lg:text-5xl;
   }
-
   h3 {
     @apply text-2xl md:text-3xl lg:text-4xl;
   }
-
   h4 {
     @apply text-xl md:text-2xl lg:text-3xl;
   }
-
   .font-inter {
     font-family: 'Inter', sans-serif;
   }
-
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
 }
 
+/*
+  Components Layer: Custom utility classes and effects
+*/
 @layer components {
+  /* Gradient title styling */
   .title-gradient {
     @apply text-slate-900 dark:text-white;
     @apply font-bold tracking-tight;
     @apply relative;
     text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
   }
-
   .title-gradient::after {
     content: '';
     @apply absolute -bottom-2 left-0 right-0 h-[2px];
@@ -175,18 +172,16 @@
     @apply transform scale-x-0 origin-left;
     @apply transition-transform duration-500 ease-out;
   }
-
   .title-gradient:hover::after {
     @apply scale-x-100;
   }
-
+  /* Section and card titles */
   .title-section {
     @apply text-3xl md:text-4xl font-bold;
     @apply mb-4 md:mb-6;
     @apply text-slate-800 dark:text-slate-100;
     @apply relative;
   }
-
   .title-section::before {
     content: '';
     @apply absolute -left-4 top-1/2 w-2 h-8;
@@ -194,20 +189,17 @@
     @apply bg-blue-500/20 dark:bg-blue-400/20;
     @apply rounded-full;
   }
-
   .title-subsection {
     @apply text-2xl md:text-3xl font-semibold;
     @apply mb-3 md:mb-4;
     @apply text-slate-700 dark:text-slate-200;
   }
-
   .title-card {
     @apply text-xl md:text-2xl font-semibold;
     @apply mb-2 md:mb-3;
     @apply text-slate-800 dark:text-slate-100;
     @apply relative inline-block;
   }
-
   .title-card::after {
     content: '';
     @apply absolute -bottom-1 left-0 right-0 h-[1px];
@@ -216,11 +208,10 @@
     @apply transition-transform duration-300 ease-out;
     @apply origin-left;
   }
-
   .title-card:hover::after {
     @apply scale-x-100;
   }
-
+  /* Glassmorphism effect for cards */
   .glass-effect {
     @apply backdrop-blur-md bg-white/10 dark:bg-black/10;
     @apply border border-white/20 dark:border-white/10;
@@ -228,30 +219,27 @@
     @apply hover:shadow-[0_4px_16px_0_rgba(31,38,135,0.15)];
     @apply transition-all duration-300 ease-smooth;
   }
-
+  /* Card hover effect */
   .card-hover {
     @apply transition-all duration-300 ease-smooth;
     @apply hover:translate-y-[-2px] hover:shadow-lg;
     @apply active:translate-y-0 active:shadow-md;
   }
-
+  /* Navigation item underline animation */
   .nav-item {
     @apply relative px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-out;
   }
-
   .nav-item::after {
     content: '';
     @apply absolute bottom-0 left-0 w-full h-[2px] bg-primary/80 transform scale-x-0 transition-transform duration-200 ease-out;
   }
-
   .nav-item:hover::after {
     @apply scale-x-100;
   }
-
   .nav-item.active::after {
     @apply scale-x-100;
   }
-
+  /* Gradient button styles */
   .btn-gradient {
     @apply bg-gradient-blue-violet text-white;
     @apply hover:opacity-90 active:opacity-100;
@@ -259,7 +247,7 @@
     @apply shadow-md hover:shadow-lg active:shadow-md;
     @apply transform hover:-translate-y-0.5 active:translate-y-0;
   }
-
+  /* Outline button with glow effect */
   .btn-outline-glow {
     @apply border-2 border-primary/20;
     @apply hover:border-primary/40 hover:bg-primary/5;
@@ -267,11 +255,11 @@
     @apply shadow-[0_0_15px_rgba(59,130,246,0.1)];
     @apply hover:shadow-[0_0_20px_rgba(59,130,246,0.2)];
   }
-
+  /* Icon button utility */
   .icon-button {
     @apply relative inline-flex items-center justify-center p-2 text-sm font-medium transition-all duration-200 rounded-md hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10;
   }
-
+  /* Shimmer effect for loading states */
   .shimmer {
     @apply relative overflow-hidden;
     @apply before:absolute before:inset-0;
@@ -280,7 +268,9 @@
   }
 }
 
-/* Animations */
+/*
+  Animations and custom effects
+*/
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-4px); }
@@ -296,84 +286,82 @@
   50% { border-color: hsl(var(--primary)); }
 }
 
+/* Floating animation utility */
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
 
+/* Smooth scroll behavior */
 .scroll-smooth {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar styles */
 ::-webkit-scrollbar {
   @apply w-1.5;
 }
-
 ::-webkit-scrollbar-track {
   @apply bg-muted/30;
 }
-
 ::-webkit-scrollbar-thumb {
   @apply bg-primary/20 rounded-full hover:bg-primary/30 transition-colors duration-200;
 }
 
+/* Gradient background animation */
 @keyframes gradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-
 .animate-gradient {
   animation: gradient 8s ease-smooth infinite;
 }
 
-/* Language Switcher Styles */
+/* Language switcher button styles */
 .lang-switcher {
   @apply relative px-3 py-1.5 text-sm font-medium transition-all duration-200;
 }
-
 .lang-switcher:hover {
   @apply bg-primary/5 dark:bg-primary/10;
 }
 
-/* Gradient Background */
+/* Blue-violet gradient background utility */
 .bg-gradient-blue-violet {
   @apply bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 transition-colors duration-200;
 }
 
-/* Button Animations */
+/* Button scale animation */
 .button-scale {
   @apply transition-transform duration-200 hover:scale-105 active:scale-95;
 }
 
-/* Text Gradients */
+/* Text gradient utility */
 .text-gradient {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-violet-500;
 }
 
-/* Smooth Scrolling */
+/* Smooth scrolling for html */
 html {
   scroll-behavior: smooth;
 }
 
-/* Skill icon animations */
+/* Skill icon glow effect */
 .skill-icon-glow {
   filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
 }
 
-/* Animate on scroll */
+/* Fade up animation for scroll effects */
 .fade-up {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
-
 .fade-up.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Smooth transitions */
+/* Utility for smooth transitions */
 .smooth-transition {
   @apply transition-all duration-300 ease-in-out;
 }

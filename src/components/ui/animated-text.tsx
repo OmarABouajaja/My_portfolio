@@ -2,6 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
+/**
+ * Props for the AnimatedText component
+ * - text: The string to animate
+ * - className: Optional additional classes
+ * - gradient: Whether to apply a gradient effect
+ * - delay: Delay before animation starts
+ * - duration: Duration of each word's animation
+ * - staggerChildren: Time between each word's animation
+ */
 interface AnimatedTextProps {
   text: string;
   className?: string;
@@ -11,6 +20,13 @@ interface AnimatedTextProps {
   staggerChildren?: number;
 }
 
+/**
+ * AnimatedText component animates each word in a string with a fade and slide effect
+ * Features:
+ * - Animates words in sequence using Framer Motion
+ * - Optional gradient effect for text
+ * - Customizable delay, duration, and stagger
+ */
 const AnimatedText: React.FC<AnimatedTextProps> = ({
   text,
   className,
@@ -19,8 +35,10 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   duration = 0.05,
   staggerChildren = 0.1,
 }) => {
+  // Split the text into words for individual animation
   const words = text.split(' ');
 
+  // Animation variants for the container (parent)
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
@@ -29,6 +47,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     }),
   };
 
+  // Animation variants for each word (child)
   const child = {
     visible: {
       opacity: 1,

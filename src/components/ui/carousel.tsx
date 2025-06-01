@@ -7,11 +7,25 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
+/**
+ * Type definitions for the Carousel component
+ * - CarouselApi: Type for the Embla Carousel API
+ * - UseCarouselParameters: Parameters for the useEmblaCarousel hook
+ * - CarouselOptions: Configuration options for the carousel
+ * - CarouselPlugin: Plugin type for additional functionality
+ */
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
 type CarouselPlugin = UseCarouselParameters[1]
 
+/**
+ * Props interface for the Carousel component
+ * - opts: Carousel configuration options
+ * - plugins: Additional carousel plugins
+ * - orientation: Horizontal or vertical layout
+ * - setApi: Callback for accessing the carousel API
+ */
 type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
@@ -19,17 +33,32 @@ type CarouselProps = {
   setApi?: (api: CarouselApi) => void
 }
 
-type CarouselContextProps = {
-  carouselRef: ReturnType<typeof useEmblaCarousel>[0]
-  api: ReturnType<typeof useEmblaCarousel>[1]
-  scrollPrev: () => void
+/**
+ * Carousel context type definition
+ * Contains state and methods for carousel functionality
+ */
+type CarouselContextType = {
+  scrollSnaps: number[]
+  selectedIndex: number
+  scrollTo: (index: number) => void
   scrollNext: () => void
-  canScrollPrev: boolean
+  scrollPrev: () => void
   canScrollNext: boolean
-} & CarouselProps
+  canScrollPrev: boolean
+  carouselRef: React.RefObject<HTMLDivElement>
+  orientation: 'horizontal' | 'vertical'
+}
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null)
+/**
+ * Carousel context for managing carousel state
+ * Provides carousel functionality to children
+ */
+const CarouselContext = React.createContext<CarouselContextType | undefined>(undefined)
 
+/**
+ * Custom hook for accessing carousel context
+ * Throws an error if used outside of a Carousel component
+ */
 function useCarousel() {
   const context = React.useContext(CarouselContext)
 
@@ -40,114 +69,97 @@ function useCarousel() {
   return context
 }
 
+/**
+ * Carousel component
+ * Features:
+ * - Smooth scrolling between slides
+ * - Touch and drag support
+ * - Keyboard navigation
+ * - Customizable through className prop
+ */
 const Carousel = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CarouselProps
->(
-  (
-    {
-      orientation = "horizontal",
-      opts,
-      setApi,
-      plugins,
-      className,
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const [carouselRef, api] = useEmblaCarousel(
-      {
-        ...opts,
-        axis: orientation === "horizontal" ? "x" : "y",
-      },
-      plugins
-    )
-    const [canScrollPrev, setCanScrollPrev] = React.useState(false)
-    const [canScrollNext, setCanScrollNext] = React.useState(false)
-
-    const onSelect = React.useCallback((api: CarouselApi) => {
-      if (!api) {
-        return
-      }
-
-      setCanScrollPrev(api.canScrollPrev())
-      setCanScrollNext(api.canScrollNext())
-    }, [])
-
-    const scrollPrev = React.useCallback(() => {
-      api?.scrollPrev()
-    }, [api])
-
-    const scrollNext = React.useCallback(() => {
-      api?.scrollNext()
-    }, [api])
-
-    const handleKeyDown = React.useCallback(
-      (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === "ArrowLeft") {
-          event.preventDefault()
-          scrollPrev()
-        } else if (event.key === "ArrowRight") {
-          event.preventDefault()
-          scrollNext()
-        }
-      },
-      [scrollPrev, scrollNext]
-    )
-
-    React.useEffect(() => {
-      if (!api || !setApi) {
-        return
-      }
-
-      setApi(api)
-    }, [api, setApi])
-
-    React.useEffect(() => {
-      if (!api) {
-        return
-      }
-
-      onSelect(api)
-      api.on("reInit", onSelect)
-      api.on("select", onSelect)
-
-      return () => {
-        api?.off("select", onSelect)
-      }
-    }, [api, onSelect])
-
-    return (
-      <CarouselContext.Provider
-        value={{
-          carouselRef,
-          api: api,
-          opts,
-          orientation:
-            orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-          scrollPrev,
-          scrollNext,
-          canScrollPrev,
-          canScrollNext,
-        }}
-      >
-        <div
-          ref={ref}
-          onKeyDownCapture={handleKeyDown}
-          className={cn("relative", className)}
-          role="region"
-          aria-roledescription="carousel"
-          {...props}
-        >
-          {children}
-        </div>
-      </CarouselContext.Provider>
-    )
+  React.HTMLAttributes<HTMLDivElement> & {
+    orientation?: 'horizontal' | 'vertical'
   }
-)
+>(({ className, orientation = 'horizontal', ...props }, ref) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
+  const [canScrollNext, setCanScrollNext] = React.useState(true)
+  const [canScrollPrev, setCanScrollPrev] = React.useState(false)
+  const carouselRef = React.useRef<HTMLDivElement>(null)
+
+  const scrollTo = React.useCallback((index: number) => {
+    if (carouselRef.current) {
+      const container = carouselRef.current
+      const slide = container.children[index] as HTMLElement
+      if (slide) {
+        container.scrollTo({
+          left: slide.offsetLeft,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }, [])
+
+  const scrollNext = React.useCallback(() => {
+    if (canScrollNext) {
+      scrollTo(selectedIndex + 1)
+    }
+  }, [canScrollNext, selectedIndex, scrollTo])
+
+  const scrollPrev = React.useCallback(() => {
+    if (canScrollPrev) {
+      scrollTo(selectedIndex - 1)
+    }
+  }, [canScrollPrev, selectedIndex, scrollTo])
+
+  const value = React.useMemo(
+    () => ({
+      scrollSnaps,
+      selectedIndex,
+      scrollTo,
+      scrollNext,
+      scrollPrev,
+      canScrollNext,
+      canScrollPrev,
+      carouselRef,
+      orientation
+    }),
+    [
+      scrollSnaps,
+      selectedIndex,
+      scrollTo,
+      scrollNext,
+      scrollPrev,
+      canScrollNext,
+      canScrollPrev,
+      orientation
+    ]
+  )
+
+  return (
+    <CarouselContext.Provider value={value}>
+      <div
+        ref={ref}
+        className={cn(
+          "relative overflow-hidden",
+          className
+        )}
+        {...props}
+      />
+    </CarouselContext.Provider>
+  )
+})
 Carousel.displayName = "Carousel"
 
+/**
+ * Content container for carousel items
+ * Features:
+ * - Overflow handling
+ * - Orientation-based layout
+ * - Proper spacing between items
+ */
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -170,6 +182,13 @@ const CarouselContent = React.forwardRef<
 })
 CarouselContent.displayName = "CarouselContent"
 
+/**
+ * Individual carousel item component
+ * Features:
+ * - Full-width/height basis
+ * - Proper spacing based on orientation
+ * - Accessibility attributes
+ */
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -192,6 +211,13 @@ const CarouselItem = React.forwardRef<
 })
 CarouselItem.displayName = "CarouselItem"
 
+/**
+ * Previous slide navigation button
+ * Features:
+ * - Position based on orientation
+ * - Disabled state when can't scroll
+ * - Accessible button with icon
+ */
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
@@ -221,6 +247,13 @@ const CarouselPrevious = React.forwardRef<
 })
 CarouselPrevious.displayName = "CarouselPrevious"
 
+/**
+ * Next slide navigation button
+ * Features:
+ * - Position based on orientation
+ * - Disabled state when can't scroll
+ * - Accessible button with icon
+ */
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>

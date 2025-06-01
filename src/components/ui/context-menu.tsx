@@ -4,18 +4,48 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * ContextMenu component for displaying a context menu
+ * Built on top of Radix UI's ContextMenu primitive
+ */
 const ContextMenu = ContextMenuPrimitive.Root
 
+/**
+ * ContextMenuTrigger component for triggering the context menu
+ * Built on top of Radix UI's ContextMenuTrigger primitive
+ */
 const ContextMenuTrigger = ContextMenuPrimitive.Trigger
 
+/**
+ * ContextMenuGroup component for grouping related menu items
+ * Built on top of Radix UI's ContextMenuGroup primitive
+ */
 const ContextMenuGroup = ContextMenuPrimitive.Group
 
+/**
+ * ContextMenuPortal component for rendering the context menu outside the DOM hierarchy
+ * Built on top of Radix UI's ContextMenuPortal primitive
+ */
 const ContextMenuPortal = ContextMenuPrimitive.Portal
 
+/**
+ * ContextMenuSub component for creating a submenu
+ * Built on top of Radix UI's ContextMenuSub primitive
+ */
 const ContextMenuSub = ContextMenuPrimitive.Sub
 
+/**
+ * ContextMenuRadioGroup component for grouping radio items
+ * Built on top of Radix UI's ContextMenuRadioGroup primitive
+ */
 const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup
 
+/**
+ * ContextMenuSubTrigger component for triggering a submenu
+ * Features:
+ * - Customizable through className and inset props
+ * - Focus and open states
+ */
 const ContextMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger> & {
@@ -37,6 +67,12 @@ const ContextMenuSubTrigger = React.forwardRef<
 ))
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName
 
+/**
+ * ContextMenuSubContent component for the content of a submenu
+ * Features:
+ * - Customizable through className prop
+ * - Smooth animations for open/close states
+ */
 const ContextMenuSubContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent>
@@ -52,6 +88,12 @@ const ContextMenuSubContent = React.forwardRef<
 ))
 ContextMenuSubContent.displayName = ContextMenuPrimitive.SubContent.displayName
 
+/**
+ * ContextMenuContent component for the main content of the context menu
+ * Features:
+ * - Customizable through className prop
+ * - Smooth animations for open/close states
+ */
 const ContextMenuContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>
@@ -69,6 +111,12 @@ const ContextMenuContent = React.forwardRef<
 ))
 ContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName
 
+/**
+ * ContextMenuItem component for individual menu items
+ * Features:
+ * - Customizable through className and inset props
+ * - Focus and disabled states
+ */
 const ContextMenuItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item> & {
@@ -87,6 +135,12 @@ const ContextMenuItem = React.forwardRef<
 ))
 ContextMenuItem.displayName = ContextMenuPrimitive.Item.displayName
 
+/**
+ * ContextMenuCheckboxItem component for checkbox menu items
+ * Features:
+ * - Customizable through className prop
+ * - Checked state with indicator
+ */
 const ContextMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem>
@@ -111,6 +165,12 @@ const ContextMenuCheckboxItem = React.forwardRef<
 ContextMenuCheckboxItem.displayName =
   ContextMenuPrimitive.CheckboxItem.displayName
 
+/**
+ * ContextMenuRadioItem component for radio menu items
+ * Features:
+ * - Customizable through className prop
+ * - Selected state with indicator
+ */
 const ContextMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem>
@@ -133,6 +193,12 @@ const ContextMenuRadioItem = React.forwardRef<
 ))
 ContextMenuRadioItem.displayName = ContextMenuPrimitive.RadioItem.displayName
 
+/**
+ * ContextMenuLabel component for menu labels
+ * Features:
+ * - Customizable through className and inset props
+ * - Consistent typography
+ */
 const ContextMenuLabel = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Label> & {
@@ -151,6 +217,12 @@ const ContextMenuLabel = React.forwardRef<
 ))
 ContextMenuLabel.displayName = ContextMenuPrimitive.Label.displayName
 
+/**
+ * ContextMenuSeparator component for visual separation between items
+ * Features:
+ * - Consistent styling with border color
+ * - Customizable through className prop
+ */
 const ContextMenuSeparator = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator>
@@ -163,6 +235,12 @@ const ContextMenuSeparator = React.forwardRef<
 ))
 ContextMenuSeparator.displayName = ContextMenuPrimitive.Separator.displayName
 
+/**
+ * ContextMenuShortcut component for displaying keyboard shortcuts
+ * Features:
+ * - Muted text color for secondary information
+ * - Consistent typography
+ */
 const ContextMenuShortcut = ({
   className,
   ...props

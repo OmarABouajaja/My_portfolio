@@ -4,8 +4,18 @@ import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Root component for the accordion
+ * Manages the state and behavior of the accordion items
+ */
 const Accordion = AccordionPrimitive.Root
 
+/**
+ * AccordionItem component for individual accordion sections
+ * Features:
+ * - Customizable through className prop
+ * - Maintains all Radix UI accordion item attributes
+ */
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
@@ -18,6 +28,13 @@ const AccordionItem = React.forwardRef<
 ))
 AccordionItem.displayName = "AccordionItem"
 
+/**
+ * AccordionTrigger component for toggling the accordion item
+ * Features:
+ * - Customizable through className prop
+ * - Includes a chevron icon that rotates on open/close
+ * - Hover effect with underline
+ */
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
@@ -38,6 +55,13 @@ const AccordionTrigger = React.forwardRef<
 ))
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
+/**
+ * AccordionContent component for the content of each accordion item
+ * Features:
+ * - Customizable through className prop
+ * - Animates open/close states
+ * - Maintains all Radix UI accordion content attributes
+ */
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>

@@ -5,6 +5,13 @@ import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Root NavigationMenu component
+ * Features:
+ * - Centered layout with max width
+ * - Proper z-index stacking
+ * - Includes viewport for dropdown content
+ */
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
@@ -23,6 +30,13 @@ const NavigationMenu = React.forwardRef<
 ))
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
+/**
+ * NavigationMenuList component for containing menu items
+ * Features:
+ * - Horizontal layout with consistent spacing
+ * - Group styling for hover effects
+ * - Customizable through className prop
+ */
 const NavigationMenuList = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
@@ -38,12 +52,31 @@ const NavigationMenuList = React.forwardRef<
 ))
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 
+/**
+ * NavigationMenuItem component for individual menu items
+ * Built on top of Radix UI's Item primitive
+ */
 const NavigationMenuItem = NavigationMenuPrimitive.Item
 
+/**
+ * Style configuration for navigation menu triggers
+ * Features:
+ * - Consistent sizing and padding
+ * - Hover and focus states
+ * - Active and open state styling
+ * - Disabled state handling
+ */
 const navigationMenuTriggerStyle = cva(
   "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
 )
 
+/**
+ * NavigationMenuTrigger component for activating dropdown menus
+ * Features:
+ * - Chevron indicator with rotation animation
+ * - Consistent styling with other triggers
+ * - Customizable through className prop
+ */
 const NavigationMenuTrigger = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
@@ -62,6 +95,13 @@ const NavigationMenuTrigger = React.forwardRef<
 ))
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName
 
+/**
+ * NavigationMenuContent component for dropdown content
+ * Features:
+ * - Smooth animations for open/close states
+ * - Responsive positioning
+ * - Customizable through className prop
+ */
 const NavigationMenuContent = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>
@@ -77,8 +117,19 @@ const NavigationMenuContent = React.forwardRef<
 ))
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName
 
+/**
+ * NavigationMenuLink component for menu item links
+ * Built on top of Radix UI's Link primitive
+ */
 const NavigationMenuLink = NavigationMenuPrimitive.Link
 
+/**
+ * NavigationMenuViewport component for containing dropdown content
+ * Features:
+ * - Responsive sizing
+ * - Smooth animations
+ * - Proper positioning and overflow handling
+ */
 const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
@@ -97,6 +148,13 @@ const NavigationMenuViewport = React.forwardRef<
 NavigationMenuViewport.displayName =
   NavigationMenuPrimitive.Viewport.displayName
 
+/**
+ * NavigationMenuIndicator component for showing active menu state
+ * Features:
+ * - Animated appearance/disappearance
+ * - Arrow indicator with shadow
+ * - Proper positioning and z-index
+ */
 const NavigationMenuIndicator = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Indicator>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator>

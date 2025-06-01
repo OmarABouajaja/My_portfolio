@@ -1,3 +1,4 @@
+// Define the structure for education entries
 interface Education {
   degree: string;
   institution: string;
@@ -7,6 +8,7 @@ interface Education {
   achievements?: string[];
 }
 
+// Define the structure for experience entries
 interface Experience {
   title: string;
   company: string;
@@ -17,18 +19,21 @@ interface Experience {
   technologies: string[];
 }
 
+// Define the structure for skills
 interface Skill {
   name: string;
   level: number; // 1-5
   keywords: string[];
 }
 
+// Define the structure for languages
 interface Language {
   name: string;
   level: string;
   certification?: string;
 }
 
+// Define the overall resume configuration
 interface ResumeConfig {
   header: {
     name: string;
@@ -46,10 +51,10 @@ interface ResumeConfig {
     soft: Skill[];
   };
   languages: Language[];
-  certifications: string[];
   interests: string[];
 }
 
+// Resume configuration for Omar Abouajaja
 export const resumeConfig: ResumeConfig = {
   header: {
     name: "Omar Abouajaja",
@@ -170,11 +175,6 @@ export const resumeConfig: ResumeConfig = {
       name: "German",
       level: "Basic"
     }
-  ],
-  certifications: [
-    "Gold Medal - National IoT Congress (2022)",
-    "Formation de base en robotique - AJSZ (2019)",
-    "Leadership & Team Management - AJSZ (2022)"
   ],
   interests: [
     "IoT Innovation",

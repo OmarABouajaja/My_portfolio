@@ -1,3 +1,4 @@
+// Define the structure for SEO configuration
 interface SEOConfig {
   title: string;
   description: string;
@@ -22,6 +23,7 @@ interface SEOConfig {
   };
 }
 
+// Default SEO configuration for the site
 export const defaultSEO: SEOConfig = {
   title: 'Omar Abouajaja - IoT Developer & Robotics Trainer',
   description: 'IoT Developer and Robotics Trainer from Tunisia, specializing in smart automation systems, embedded development, and robotics education.',
@@ -48,6 +50,7 @@ export const defaultSEO: SEOConfig = {
   }
 };
 
+// SEO configurations for specific pages
 export const pageSEO = {
   home: {
     title: 'Omar Abouajaja - IoT Developer & Robotics Trainer',
@@ -56,10 +59,6 @@ export const pageSEO = {
   projects: {
     title: 'Projects - Omar Abouajaja',
     description: 'Explore my featured projects in IoT, robotics, and web development. From smart home systems to educational robotics platforms.'
-  },
-  certifications: {
-    title: 'Certifications - Omar Abouajaja',
-    description: 'View my professional certifications and achievements in robotics, IoT, and technology education.'
   },
   resume: {
     title: 'Resume - Omar Abouajaja',
@@ -71,6 +70,7 @@ export const pageSEO = {
   }
 };
 
+// Structured data for SEO
 export const structuredData = {
   person: {
     '@context': 'https://schema.org',

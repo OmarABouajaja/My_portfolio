@@ -9,26 +9,37 @@ import { cn } from '@/lib/utils';
 import { ProjectsIcon, ContactIcon } from '@/components/ui/icons';
 import { Menu, X } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/animated-background';
+import { TranslationContent } from '@/data/translations';
 
+/**
+ * Main layout component that provides the application's structure and navigation
+ * Includes responsive header, navigation, and footer
+ */
 const Layout = () => {
   const { t } = useLanguage();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Define navigation items with translated labels
   const navItems = [
-    { href: '/', label: t('home') },
-    { href: '/projects', label: t('projects') },
-    { href: '/contact', label: t('contact') },
+    { href: '/', label: String(t('home')) },
+    { href: '/projects', label: String(t('projects')) },
+    { href: '/contact', label: String(t('contact')) },
   ];
 
+  // Helper function to check if a navigation item is active
   const isActive = (href: string) => location.pathname === href;
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Animated background effect */}
       <AnimatedBackground />
+      
+      {/* Sticky header with navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 shadow-md transition-shadow">
         <nav className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* Logo and brand name */}
             <Link to="/" className="flex items-center gap-2 group">
               <motion.div
                 whileHover={{ scale: 1.08, rotate: 3 }}
@@ -47,7 +58,7 @@ const Layout = () => {
               </motion.span>
             </Link>
 
-            {/* Desktop Nav */}
+            {/* Desktop navigation menu */}
             <div className="hidden sm:flex items-center gap-2">
               <nav className="flex items-center gap-1">
                 {navItems.map(({ href, label }) => (
@@ -63,6 +74,7 @@ const Layout = () => {
                   >
                     <Link to={href} tabIndex={0}>
                       <span>{label}</span>
+                      {/* Active page indicator */}
                       {isActive(href) && (
                         <motion.div
                           layoutId="nav-underline"
@@ -74,13 +86,14 @@ const Layout = () => {
                   </Button>
                 ))}
               </nav>
+              {/* Language and theme controls */}
               <div className="flex items-center gap-2 ml-4">
                 <LanguageSwitcher className="font-bold" />
                 <ThemeToggle />
               </div>
             </div>
 
-            {/* Mobile Hamburger */}
+            {/* Mobile navigation controls */}
             <div className="sm:hidden flex items-center gap-2">
               <LanguageSwitcher className="font-bold" />
               <ThemeToggle />
@@ -96,7 +109,8 @@ const Layout = () => {
             </div>
           </div>
         </nav>
-        {/* Mobile Nav Drawer */}
+
+        {/* Mobile navigation drawer */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -126,6 +140,7 @@ const Layout = () => {
         </AnimatePresence>
       </header>
 
+      {/* Main content area with page transitions */}
       <main className="pt-16">
         <AnimatePresence mode="wait">
           <motion.div
@@ -140,10 +155,11 @@ const Layout = () => {
         </AnimatePresence>
       </main>
 
+      {/* Footer with copyright and social links */}
       <footer className="border-t">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2024 Omar Abouajaja. {t('allRightsReserved')}</p>
+            <p>© 2024 Omar Abouajaja. {String(t('allRightsReserved'))}</p>
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/OmarABouajaja "

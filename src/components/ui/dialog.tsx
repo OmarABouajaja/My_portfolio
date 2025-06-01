@@ -4,14 +4,37 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Dialog component for displaying modal dialogs
+ * Built on top of Radix UI's Dialog primitive
+ */
 const Dialog = DialogPrimitive.Root
 
+/**
+ * DialogTrigger component for triggering the dialog
+ * Built on top of Radix UI's DialogTrigger primitive
+ */
 const DialogTrigger = DialogPrimitive.Trigger
 
+/**
+ * DialogPortal component for rendering the dialog outside the DOM hierarchy
+ * Built on top of Radix UI's DialogPortal primitive
+ */
 const DialogPortal = DialogPrimitive.Portal
 
+/**
+ * DialogClose component for closing the dialog
+ * Built on top of Radix UI's DialogClose primitive
+ */
 const DialogClose = DialogPrimitive.Close
 
+/**
+ * DialogOverlay component for dimming the background when the dialog is open
+ * Features:
+ * - Semi-transparent black background
+ * - Fade in/out animations
+ * - Fixed positioning
+ */
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
@@ -27,6 +50,14 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+/**
+ * DialogContent component for the main content of the dialog
+ * Features:
+ * - Customizable through className prop
+ * - Includes overlay
+ * - Responsive sizing
+ * - Smooth animations
+ */
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
@@ -51,6 +82,12 @@ const DialogContent = React.forwardRef<
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
+/**
+ * DialogHeader component for the dialog's header section
+ * Features:
+ * - Centered on mobile, left-aligned on desktop
+ * - Flexible spacing for content
+ */
 const DialogHeader = ({
   className,
   ...props
@@ -65,6 +102,13 @@ const DialogHeader = ({
 )
 DialogHeader.displayName = "DialogHeader"
 
+/**
+ * DialogFooter component for the dialog's footer section
+ * Features:
+ * - Reversed column layout on mobile
+ * - Row layout with space between on desktop
+ * - Flexible spacing for content
+ */
 const DialogFooter = ({
   className,
   ...props
@@ -79,6 +123,12 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
+/**
+ * DialogTitle component for the dialog's title
+ * Features:
+ * - Semantic heading structure
+ * - Consistent typography
+ */
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
@@ -94,6 +144,12 @@ const DialogTitle = React.forwardRef<
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
+/**
+ * DialogDescription component for the dialog's descriptive content
+ * Features:
+ * - Muted text color for secondary information
+ * - Consistent typography
+ */
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>

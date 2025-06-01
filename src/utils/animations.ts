@@ -1,66 +1,34 @@
 import { Variants } from 'framer-motion';
 
-// Custom easing
+// Custom easing for animations
 export const customEase = [0.22, 1, 0.36, 1];
 export const springEase = [0.43, 1.19, 0.49, 0.96];
 
-// Loading screen animations
+// Loading screen container animation
 export const loadingScreenContainer: Variants = {
-  initial: { opacity: 0 },
-  animate: {
+  hidden: { opacity: 0 },
+  visible: {
     opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: customEase,
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.6,
-      ease: customEase,
-      staggerChildren: 0.05,
-      staggerDirection: -1
-    }
+    transition: { duration: 0.4, ease: customEase }
   }
 };
 
+// Loading screen item animation
 export const loadingScreenItem: Variants = {
-  initial: { opacity: 0, y: 20 },
-  animate: {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: springEase
-    }
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.4,
-      ease: customEase
-    }
+    transition: { duration: 0.4, ease: customEase }
   }
 };
 
+// Loading screen glow animation
 export const loadingScreenGlow: Variants = {
-  initial: { 
-    opacity: 0,
-    scale: 0.8
-  },
-  animate: {
-    opacity: [0.2, 0.4, 0.2],
-    scale: [1, 1.2, 1],
-    transition: {
-      duration: 4,
-      ease: "linear",
-      repeat: Infinity,
-      repeatType: "reverse"
-    }
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.4, ease: customEase }
   }
 };
 
@@ -89,28 +57,57 @@ export const fadeInDown: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+    transition: { duration: 0.4, ease: customEase }
   }
 };
 
-// Scale animation
-export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-  }
-};
-
-// Stagger children animation
+// Stagger container animation
 export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.05,
-      ease: [0.22, 1, 0.36, 1]
+      ease: customEase
+    }
+  }
+};
+
+// Page transition animation
+export const pageTransition: Variants = {
+  initial: {
+    opacity: 0,
+    x: -10
+  },
+  enter: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.4,
+      ease: customEase
+    }
+  },
+  exit: {
+    opacity: 0,
+    x: 10,
+    transition: {
+      duration: 0.3,
+      ease: customEase
+    }
+  }
+};
+
+// Floating animation
+export const floating: Variants = {
+  initial: {
+    y: 0
+  },
+  animate: {
+    y: [-4, 4, -4],
+    transition: {
+      duration: 4,
+      ease: "easeInOut",
+      repeat: Infinity
     }
   }
 };
@@ -130,30 +127,6 @@ export const cardHover: Variants = {
     y: -2,
     transition: {
       duration: 0.2,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
-// Page transition
-export const pageTransition: Variants = {
-  initial: {
-    opacity: 0,
-    x: -10
-  },
-  enter: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  },
-  exit: {
-    opacity: 0,
-    x: 10,
-    transition: {
-      duration: 0.3,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -185,21 +158,6 @@ export const gradientText: Variants = {
     transition: {
       duration: 8,
       ease: [0.22, 1, 0.36, 1],
-      repeat: Infinity
-    }
-  }
-};
-
-// Floating animation
-export const floating: Variants = {
-  initial: {
-    y: 0
-  },
-  animate: {
-    y: [-4, 4, -4],
-    transition: {
-      duration: 4,
-      ease: "easeInOut",
       repeat: Infinity
     }
   }

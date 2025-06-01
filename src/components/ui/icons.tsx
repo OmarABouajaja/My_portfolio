@@ -1,10 +1,17 @@
 import { cn } from '@/lib/utils';
 
+/**
+ * Interface for icon component props
+ * Allows customization of icon appearance through className
+ */
 interface IconProps {
   className?: string;
 }
 
-// List of icons that should switch to white in dark mode
+/**
+ * List of icons that should be inverted to white in dark mode
+ * These icons need special handling for dark theme visibility
+ */
 const whiteInDarkMode = [
   'Figma',
   'python',
@@ -27,7 +34,12 @@ const whiteInDarkMode = [
   'Tailwind CSS'
 ];
 
-// Import SVG icons as React components
+/**
+ * Factory function to create icon components from SVG files
+ * @param category - The category folder containing the icon
+ * @param name - The name of the icon file (without extension)
+ * @returns A React component that renders the icon
+ */
 export const importIcon = (category: string, name: string) => {
   const IconComponent = ({ className }: IconProps) => {
     const shouldInvert = whiteInDarkMode.includes(name);
@@ -58,20 +70,20 @@ export const importIcon = (category: string, name: string) => {
   return IconComponent;
 };
 
-// Design Icons
+// Design tool icons
 export const FigmaIcon = importIcon('design', 'Figma');
 export const CanvaIcon = importIcon('design', 'Canva');
 export const PhotoshopIcon = importIcon('design', 'Photoshop');
 export const BlenderIcon = importIcon('design', 'blender');
 
-// Programming Icons
+// Programming language icons
 export const PythonIcon = importIcon('programming', 'python');
 export const CPPIcon = importIcon('programming', 'c++');
 export const CIcon = importIcon('programming', 'c');
 export const CSharpIcon = importIcon('programming', 'csharp');
 export const JavaIcon = importIcon('programming', 'java');
 
-// Web Development Icons
+// Web development technology icons
 export const HTMLCSSJSIcon = importIcon('web', 'HTMLCSSJS');
 export const PHPIcon = importIcon('web', 'PHP');
 export const ReactIcon = importIcon('web', 'React');
@@ -82,12 +94,12 @@ export const GitHubIcon = importIcon('web', 'github');
 export const CloudIcon = importIcon('web', 'cloud');
 export const PrototypingIcon = importIcon('web', 'Prototypage');
 
-// Embedded Systems Icons
+// Embedded systems and hardware icons
 export const ArduinoIcon = importIcon('embedded', 'Arduino');
 export const ESP32Icon = importIcon('embedded', 'ESP32');
 export const RaspberryPiIcon = importIcon('embedded', 'raspberyy pi');
 
-// Soft Skills Icons
+// Soft skills and professional development icons
 export const ResourceManagementIcon = importIcon('soft', 'gestion de ressource');
 export const ResponsivenessIcon = importIcon('soft', 'resposivity');
 export const TeachingIcon = importIcon('soft', 'pedagogy');
@@ -98,13 +110,17 @@ export const LeadershipIcon = importIcon('soft', 'leadership');
 export const ProblemSolvingIcon = importIcon('soft', 'problem solving');
 export const SelfLearningIcon = importIcon('soft', 'self learning');
 
-// Category Icons
+// Category representation icons
 export const DeviceIcon = importIcon('web', 'cloud');
 export const PaletteIcon = importIcon('design', 'Figma');
 export const BookIcon = importIcon('programming', 'python');
 export const RobotIcon = importIcon('embedded', 'Arduino');
 export const BrainIcon = importIcon('soft', 'self learning');
 
+/**
+ * Language translation icon component
+ * Renders a circular icon with translation-related symbols
+ */
 export const TranslateIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -125,6 +141,10 @@ export const TranslateIcon = ({ className, ...props }: IconProps) => (
   </svg>
 );
 
+/**
+ * Skills icon component
+ * Renders a layered structure representing skill development
+ */
 export const SkillsIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -144,6 +164,10 @@ export const SkillsIcon = ({ className, ...props }: IconProps) => (
   </svg>
 );
 
+/**
+ * Community icon component
+ * Renders interconnected circles representing community
+ */
 export const CommunityIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -163,6 +187,10 @@ export const CommunityIcon = ({ className, ...props }: IconProps) => (
   </svg>
 );
 
+/**
+ * Timeline icon component
+ * Renders a clock-like design representing time progression
+ */
 export const TimelineIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -183,6 +211,10 @@ export const TimelineIcon = ({ className, ...props }: IconProps) => (
   </svg>
 );
 
+/**
+ * Projects icon component
+ * Renders a grid-like structure representing project organization
+ */
 export const ProjectsIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -167,6 +167,7 @@ export interface TranslationContent {
   timeline2018: string;
   timeline2019: string;
   timeline2020: string;
+  timeline2021: string;
   timeline2022: string;
   timeline2023: string;
   timeline2024: string;

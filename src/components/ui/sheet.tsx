@@ -5,21 +5,40 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Re-exported Radix UI Dialog components with enhanced styling and accessibility
+ * Each component is built on top of Radix UI primitives with consistent styling
+ */
+
+// Root component that manages the sheet state
 const Sheet = SheetPrimitive.Root
 
+// Trigger component that opens the sheet
 const SheetTrigger = SheetPrimitive.Trigger
 
+// Close component that closes the sheet
 const SheetClose = SheetPrimitive.Close
 
+// Portal component that renders the sheet outside the DOM hierarchy
 const SheetPortal = SheetPrimitive.Portal
 
+/**
+ * Overlay component that dims the background when the sheet is open
+ * Features:
+ * - Semi-transparent black background
+ * - Fade in/out animations
+ * - Fixed positioning
+ */
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
     className={cn(
-      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      // Base styles
+      "fixed inset-0 z-50 bg-black/80",
+      // Animation states
+      "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -28,7 +47,13 @@ const SheetOverlay = React.forwardRef<
 ))
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
+/**
+ * Variant configuration for sheet positioning and animations
+ * Supports four positions: top, bottom, left, and right
+ * Each position has specific animations and responsive behavior
+ */
 const sheetVariants = cva(
+  // Base styles
   "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
   {
     variants: {
@@ -47,10 +72,23 @@ const sheetVariants = cva(
   }
 )
 
+/**
+ * Props interface for the SheetContent component
+ * Extends Radix UI Dialog Content props with sheet variants
+ */
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
   VariantProps<typeof sheetVariants> { }
 
+/**
+ * Content component that renders the main sheet content
+ * Features:
+ * - Customizable through className prop
+ * - Supports different positions (top, bottom, left, right)
+ * - Includes close button
+ * - Responsive sizing
+ * - Smooth animations
+ */
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
@@ -72,6 +110,12 @@ const SheetContent = React.forwardRef<
 ))
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
+/**
+ * Header component for the sheet
+ * Features:
+ * - Centered on mobile, left-aligned on desktop
+ * - Flexible spacing for content
+ */
 const SheetHeader = ({
   className,
   ...props
@@ -86,6 +130,13 @@ const SheetHeader = ({
 )
 SheetHeader.displayName = "SheetHeader"
 
+/**
+ * Footer component for the sheet
+ * Features:
+ * - Reversed column layout on mobile
+ * - Row layout with space between on desktop
+ * - Flexible spacing for content
+ */
 const SheetFooter = ({
   className,
   ...props
@@ -100,6 +151,13 @@ const SheetFooter = ({
 )
 SheetFooter.displayName = "SheetFooter"
 
+/**
+ * Title component for the sheet
+ * Features:
+ * - Semantic heading structure
+ * - Consistent typography
+ * - Theme-aware text color
+ */
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
@@ -112,6 +170,13 @@ const SheetTitle = React.forwardRef<
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
+/**
+ * Description component for the sheet
+ * Features:
+ * - Semantic description structure
+ * - Muted text color for secondary information
+ * - Consistent typography
+ */
 const SheetDescription = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>

@@ -1,3 +1,4 @@
+// Define the structure for navigation items
 interface NavItem {
   path: string;
   label: {
@@ -9,12 +10,14 @@ interface NavItem {
   showInMobile: boolean;
 }
 
+// Define the structure for routes
 interface Route {
   path: string;
   component: string;
   exact?: boolean;
 }
 
+// Navigation items for the site
 export const navigation: NavItem[] = [
   {
     path: '/',
@@ -33,16 +36,6 @@ export const navigation: NavItem[] = [
       fr: 'Projets'
     },
     icon: '🚀',
-    showInNav: true,
-    showInMobile: true
-  },
-  {
-    path: '/certifications',
-    label: {
-      en: 'Certifications',
-      fr: 'Certifications'
-    },
-    icon: '📜',
     showInNav: true,
     showInMobile: true
   },
@@ -68,6 +61,7 @@ export const navigation: NavItem[] = [
   }
 ];
 
+// Routes for the application
 export const routes: Route[] = [
   {
     path: '/',
@@ -77,10 +71,6 @@ export const routes: Route[] = [
   {
     path: '/projects',
     component: 'Projects'
-  },
-  {
-    path: '/certifications',
-    component: 'Certifications'
   },
   {
     path: '/resume',
@@ -96,6 +86,7 @@ export const routes: Route[] = [
   }
 ];
 
+// Social media links
 export const socialLinks = [
   {
     platform: 'LinkedIn',
@@ -114,4 +105,5 @@ export const socialLinks = [
   }
 ];
 
-export const mobileBreakpoint = 768; // in pixels 
+// Mobile breakpoint in pixels
+export const mobileBreakpoint = 768; 

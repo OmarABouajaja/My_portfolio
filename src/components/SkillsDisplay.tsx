@@ -40,6 +40,7 @@ import {
   SelfLearningIcon,
 } from '@/components/ui/icons';
 
+// Define the props for the SkillIcon component
 interface SkillIconProps {
   icon: React.FC<{ className?: string }>;
   name: string;
@@ -50,6 +51,7 @@ interface SkillIconProps {
   translationKey?: number;
 }
 
+// Function to get the description for a skill
 const getSkillDescription = (name: string) => {
   const descriptions: { [key: string]: string } = {
     // Design Tools
@@ -128,13 +130,14 @@ const getSkillDescription = (name: string) => {
   return descriptions[name] || '';
 };
 
+// SkillIcon component to display individual skills
 const SkillIcon = ({ icon: Icon, name, className, index, category, translationKey }: SkillIconProps) => {
   const { t } = useLanguage();
   const description = getSkillDescription(name);
   
   // Get translated name for soft skills
   const displayName = category === 'soft' && translationKey !== undefined
-    ? (t('skills') as Skills).soft.items[translationKey]
+    ? String((t('skills') as Skills).soft.items[translationKey])
     : name;
   
   // Unified icon size and label for all skills
@@ -183,6 +186,7 @@ const SkillIcon = ({ icon: Icon, name, className, index, category, translationKe
   );
 };
 
+// Define skills by category
 const skillsByCategory = {
   'design': [
     { name: 'Figma', icon: FigmaIcon },
@@ -224,77 +228,54 @@ const skillsByCategory = {
     { name: 'Problem Solving', translationKey: 7, icon: ProblemSolvingIcon },
     { name: 'Self Learning', translationKey: 8, icon: SelfLearningIcon },
   ],
-};
+} as const;
 
+// Main SkillsDisplay component
 const SkillsDisplay = () => {
   const { t } = useLanguage();
   const skills = t('skills') as Skills;
   const categories = Object.keys(skillsByCategory);
 
+  // Function to get the title for each category
   const getCategoryTitle = (category: string) => {
     switch (category) {
       case 'design':
-        return skills.design.title;
+        return String(skills.design.title);
       case 'programming':
-        return skills.programming.title;
+        return String(skills.programming.title);
       case 'web':
-        return skills.web.title;
+        return String(skills.web.title);
       case 'embedded':
-        return skills.embedded.title;
+        return String(skills.embedded.title);
       case 'soft':
-        return skills.soft.title;
+        return String(skills.soft.title);
       default:
-        return category;
+        return '';
     }
   };
 
   return (
-    <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-3 pb-24">
-      {categories.map((category, categoryIndex) => {
-        const skillsForCategory = skillsByCategory[category as keyof typeof skillsByCategory];
-        const categoryTitle = getCategoryTitle(category);
-
-        return (
-          <motion.div
-            key={category}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-            className="group relative p-8 rounded-2xl bg-card/95 hover:bg-card hover:shadow-2xl transition-all duration-500 ease-out border border-border/50"
-          >
-            {/* Category title with language switch */}
-            <h3 className="text-2xl font-bold capitalize mb-10">
-              <span className="bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-transparent backdrop-blur-sm">
-                {categoryTitle}
-              </span>
-            </h3>
-
-            {/* Skills grid with unified layout for all categories */}
-            <div className={cn(
-              "grid gap-x-12 gap-y-16",
-              category === 'web' ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2',
-              category === 'soft' ? 'md:grid-cols-3 xl:grid-cols-3 gap-y-20' : '',
-              "place-items-center relative z-10"
-            )}>
-              {skillsForCategory.map((skill, index) => (
+    <div className="container mx-auto px-4 py-12">
+      <h2 className="text-3xl font-bold text-center mb-12">{String(t('journeyTitle'))}</h2>
+      <div className="space-y-16">
+        {categories.map((category) => (
+          <div key={category} className="space-y-8">
+            <h3 className="text-2xl font-semibold text-center">{getCategoryTitle(category)}</h3>
+            <div className="flex flex-wrap justify-center gap-8">
+              {skillsByCategory[category as keyof typeof skillsByCategory].map((skill, index) => (
                 <SkillIcon
-                  key={index}
+                  key={skill.name}
                   icon={skill.icon}
                   name={skill.name}
                   index={index}
                   category={category}
                   translationKey={'translationKey' in skill ? skill.translationKey : undefined}
-                  className="relative z-10"
                 />
               ))}
             </div>
-
-            {/* Background glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-          </motion.div>
-        );
-      })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

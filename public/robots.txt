@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ob.m-and-o-studio.com.tn/sitemap.xml

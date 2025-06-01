@@ -3,6 +3,13 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Avatar component for displaying user profile images
+ * Built on top of Radix UI's Avatar primitive
+ * Features:
+ * - Circular container with overflow handling
+ * - Customizable through className prop
+ */
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
@@ -18,6 +25,13 @@ const Avatar = React.forwardRef<
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 
+/**
+ * AvatarImage component for rendering the user's image
+ * Features:
+ * - Ensures image fills the avatar container
+ * - Maintains aspect ratio
+ * - Customizable through className prop
+ */
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
@@ -30,6 +44,13 @@ const AvatarImage = React.forwardRef<
 ))
 AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
+/**
+ * AvatarFallback component for displaying fallback content (e.g., initials)
+ * Features:
+ * - Centered content with muted background
+ * - Used when image fails to load
+ * - Customizable through className prop
+ */
 const AvatarFallback = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Fallback>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>

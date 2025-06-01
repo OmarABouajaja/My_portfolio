@@ -4,6 +4,13 @@ import { Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * RadioGroup component for grouping related radio options
+ * Features:
+ * - Grid layout with consistent spacing
+ * - Customizable through className prop
+ * - Built on top of Radix UI's RadioGroup primitive
+ */
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
@@ -18,6 +25,15 @@ const RadioGroup = React.forwardRef<
 })
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 
+/**
+ * RadioGroupItem component for individual radio options
+ * Features:
+ * - Circular design with border
+ * - Focus and hover states
+ * - Disabled state styling
+ * - Custom indicator with Circle icon
+ * - Accessible through Radix UI primitives
+ */
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>

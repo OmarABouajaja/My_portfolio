@@ -3,9 +3,14 @@ import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/providers/language';
 import { ChevronDown, FileText, Rocket } from 'lucide-react';
+import { TranslationContent } from '@/data/translations';
 
 const Hero = () => {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
+  const heroTitle = t('heroTitle') as TranslationContent['heroTitle'];
+  const heroSubtitle = t('heroSubtitle') as TranslationContent['heroSubtitle'];
+  const exploreProjects = t('exploreProjects') as TranslationContent['exploreProjects'];
+  const downloadCV = t('downloadCV') as TranslationContent['downloadCV'];
 
   const handleScrollToProjects = () => {
     document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -13,8 +18,8 @@ const Hero = () => {
 
   const handleDownloadCV = () => {
     const link = document.createElement('a');
-    link.href = language === 'fr' ? '/resume/omar-cv-fr.pdf' : '/resume/omar-cv-en.pdf';
-    link.download = language === 'fr' ? 'Omar_Abouajaja_CV_FR.pdf' : 'Omar_Abouajaja_CV_EN.pdf';
+    link.href = '/resume/omar-cv-en.pdf';
+    link.download = 'Omar_Abouajaja_CV_EN.pdf';
     link.click();
   };
 
@@ -89,12 +94,10 @@ const Hero = () => {
             className="max-w-2xl mx-auto"
           >
             <h2 className="text-xl md:text-2xl font-medium gradient-text mb-4">
-              Crafting connected things since 2018
+              {heroTitle}
             </h2>
             <p className="text-muted-foreground">
-              {language === 'fr' 
-                ? "Toujours en création. Toujours en exploration. Toujours en apprentissage."
-                : "Still building. Still exploring. Still learning."}
+              {heroSubtitle}
             </p>
           </motion.div>
 
@@ -111,7 +114,7 @@ const Hero = () => {
               className="tech-gradient text-white hover:scale-105 transition-transform duration-300"
             >
               <Rocket className="w-5 h-5 mr-2" />
-              {t('exploreProjects')}
+              {exploreProjects}
             </Button>
             <Button
               size="lg"
@@ -120,7 +123,7 @@ const Hero = () => {
               className="hover:scale-105 transition-transform duration-300 border-2"
             >
               <FileText className="w-5 h-5 mr-2" />
-              {t('downloadCV')}
+              {downloadCV}
             </Button>
           </motion.div>
 

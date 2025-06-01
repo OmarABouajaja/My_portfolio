@@ -4,6 +4,14 @@ import { Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Checkbox component for boolean input
+ * Built on top of Radix UI's Checkbox primitive
+ * Features:
+ * - Customizable through className prop
+ * - Focus and disabled states
+ * - Checked state with primary color
+ */
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>

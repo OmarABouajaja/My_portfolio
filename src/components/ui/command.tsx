@@ -6,6 +6,14 @@ import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 
+/**
+ * Command component for command palette functionality
+ * Built on top of cmdk primitive
+ * Features:
+ * - Customizable through className prop
+ * - Responsive layout
+ * - Popover styling
+ */
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive>
@@ -21,6 +29,13 @@ const Command = React.forwardRef<
 ))
 Command.displayName = CommandPrimitive.displayName
 
+/**
+ * CommandDialog component for modal command palette
+ * Features:
+ * - Dialog-based presentation
+ * - Custom styling for command groups and items
+ * - Shadow and overflow handling
+ */
 interface CommandDialogProps extends DialogProps {}
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
@@ -35,6 +50,14 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   )
 }
 
+/**
+ * CommandInput component for search input
+ * Features:
+ * - Search icon
+ * - Border styling
+ * - Placeholder text
+ * - Disabled state
+ */
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
@@ -54,6 +77,13 @@ const CommandInput = React.forwardRef<
 
 CommandInput.displayName = CommandPrimitive.Input.displayName
 
+/**
+ * CommandList component for scrollable command items
+ * Features:
+ * - Max height with scrolling
+ * - Overflow handling
+ * - Customizable through className prop
+ */
 const CommandList = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
@@ -67,6 +97,12 @@ const CommandList = React.forwardRef<
 
 CommandList.displayName = CommandPrimitive.List.displayName
 
+/**
+ * CommandEmpty component for no results state
+ * Features:
+ * - Centered text
+ * - Customizable through props
+ */
 const CommandEmpty = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Empty>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
@@ -80,6 +116,13 @@ const CommandEmpty = React.forwardRef<
 
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName
 
+/**
+ * CommandGroup component for grouping related commands
+ * Features:
+ * - Group heading styling
+ * - Overflow handling
+ * - Customizable through className prop
+ */
 const CommandGroup = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Group>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>
@@ -96,6 +139,12 @@ const CommandGroup = React.forwardRef<
 
 CommandGroup.displayName = CommandPrimitive.Group.displayName
 
+/**
+ * CommandSeparator component for visual separation
+ * Features:
+ * - Border styling
+ * - Customizable through className prop
+ */
 const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
@@ -108,6 +157,14 @@ const CommandSeparator = React.forwardRef<
 ))
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
+/**
+ * CommandItem component for individual command options
+ * Features:
+ * - Selection state
+ * - Disabled state
+ * - Hover and focus states
+ * - Customizable through className prop
+ */
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
@@ -124,6 +181,13 @@ const CommandItem = React.forwardRef<
 
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
+/**
+ * CommandShortcut component for keyboard shortcuts
+ * Features:
+ * - Muted text color
+ * - Tracking for better readability
+ * - Customizable through className prop
+ */
 const CommandShortcut = ({
   className,
   ...props

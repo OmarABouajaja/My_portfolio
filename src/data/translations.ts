@@ -1,4 +1,168 @@
-import { TranslationContent, Translations } from '@/types/translations';
+export interface TranslationContent {
+  home: string
+  about: string
+  projects: string
+  journey: string
+  contact: string
+  certifications: string
+  allRightsReserved: string
+  lightMode: string
+  darkMode: string
+  intro: string
+  name: string
+  email: string
+  message: string
+  responseTime: string
+  sending: string
+  send: string
+  messageSent: string
+  messageError: string
+  tryAgainLater: string
+  tooManyAttempts: string
+  timelineTitle: string
+  journeyTitle: string
+  timeline2018: string
+  timeline2019: string
+  timeline2020: string
+  timeline2021: string
+  timeline2022: string
+  timeline2023: string
+  timeline2024: string
+  projectsPageContact: string
+  bioTitle: string
+  bioSubtitle: string
+  bioSkills: string
+  technologies: string
+  iotDescription: string
+  roboticsDescription: string
+  embeddedDescription: string
+  uiuxDescription: string
+  webdevDescription: string
+  teachingDescription: string
+  educationTitle: string
+  bacInfo: string
+  bacScores: string
+  licenseIot: string
+  heroTitle: string
+  heroSubtitle: string
+  shortPitch: string
+  exploreProjects: string
+  downloadCV: string
+  motivation: {
+    title: string
+    description: string
+  }
+  skills: {
+    title: string
+    design: {
+      title: string
+      items: string[]
+    }
+    programming: {
+      title: string
+      items: string[]
+    }
+    web: {
+      title: string
+      items: string[]
+    }
+    embedded: {
+      title: string
+      items: string[]
+    }
+    soft: {
+      title: string
+      items: string[]
+    }
+  }
+  community: {
+    title: string
+    description: string
+    activities: {
+      robotics: {
+        title: string
+        description: string
+      }
+      injaz: {
+        title: string
+        description: string
+      }
+      jci: {
+        title: string
+        description: string
+      }
+      english: {
+        title: string
+        description: string
+      }
+    }
+    conclusion: string
+  }
+  stats: {
+    title: string
+    projects: string
+    medal: string
+    olympiad: string
+    experience: string
+  }
+  timeline: {
+    title: string
+    intro: string
+    entries: Record<string, {
+      fr: string
+      en: string
+      description: {
+        fr: string
+        en: string
+      }
+    }>
+  }
+  projectsTitle: string
+  projectsSubtitle: string
+  viewGithub: string
+  viewDemo: string
+  smartHomeDesc: string
+  callboxDesc: string
+  rallyCarDesc: string
+  studioDesc: string
+  contactTitle: string
+  contactDesc: string
+  contactMe: string
+  contactSuccess: string
+  nameLabel: string
+  emailLabel: string
+  messageLabel: string
+  sendMessage: string
+  viewAll: string
+  sourceCode: string
+  viewProject: string
+  viewMoreProjects: string
+  all: string
+  awardWinning: string
+  notFoundTitle: string
+  notFoundMessage: string
+  goHome: string
+  projectsPageTitle: string
+  projectsPageIntro: string
+  projectsPageGithub: string
+  projectsPageLinkedin: string
+  resumeTitle: string
+  resumeSubtitle: string
+  downloadResume: string
+  education: string
+  experience: string
+  skillsSection: string
+  languages: string
+  certificationsTitle: string
+  certificationsSubtitle: string
+  viewCertificate: string
+  roboticsCerts: string
+  educationCerts: string
+  softSkillsCerts: string
+  activities: string
+}
+
+export type Translations = Record<'en' | 'fr' | 'ar' | 'de', TranslationContent>
 
 const translations: Translations = {
   en: {
@@ -9,7 +173,6 @@ const translations: Translations = {
     journey: 'Journey',
     contact: 'Contact',
     certifications: 'Certifications',
-    resume: 'Resume',
     allRightsReserved: 'All rights reserved',
     lightMode: 'Light Mode',
     darkMode: 'Dark Mode',
@@ -205,10 +368,10 @@ const translations: Translations = {
     timeline2018: 'Started with electronics & sensors',
     timeline2019: 'Youth robotics workshops (AJSZ)',
     timeline2020: 'Smart Parking at Gabès tech fair',
+    timeline2021: 'Digital expansion - Web & Community',
     timeline2022: 'Gold Medal – Smart Home IoT project',
     timeline2023: 'ESP32 CallBox + freelance UI/UX work',
     timeline2024: 'Co-founded M&O Studio',
-    journeySubtitle: 'A passion for innovation growing since 2018',
 
     // Projects Section
     projectsTitle: 'Featured Projects',
@@ -235,7 +398,6 @@ const translations: Translations = {
     bacInfo: 'Computer Science Baccalaureate',
     bacScores: 'Algorithm: 19/20, STI: 17/20',
     licenseIot: 'IoT Systems Engineering License',
-    activities: 'Volunteer Activities',
 
     // Bio Section
     bioTitle: 'About Me',
@@ -280,7 +442,18 @@ const translations: Translations = {
     projectsPageIntro: "Since 2018, I've been creating hands-on projects in IoT, embedded systems, robotics and web development. These projects were built in personal, competitive or community-based settings. They reflect my growth, curiosity, and ability to turn ideas into working solutions.",
     projectsPageGithub: 'View all projects on GitHub',
     projectsPageLinkedin: 'Connect on LinkedIn',
-    projectsPageContact: 'Contact me'
+    projectsPageContact: 'Contact me',
+    activities: 'Volunteer Activities',
+    name: 'Name',
+    email: 'Email',
+    message: 'Message',
+    responseTime: 'Response Time',
+    sending: 'Sending...',
+    send: 'Send',
+    messageSent: 'Message sent successfully!',
+    messageError: 'Error sending message',
+    tryAgainLater: 'Please try again later',
+    tooManyAttempts: 'Too many attempts, please try again later'
   },
   fr: {
     // Navigation
@@ -290,7 +463,6 @@ const translations: Translations = {
     journey: 'Parcours',
     contact: 'Contact',
     certifications: 'Certifications',
-    resume: 'CV',
     allRightsReserved: 'Tous droits réservés',
     lightMode: 'Mode Clair',
     darkMode: 'Mode Sombre',
@@ -486,10 +658,10 @@ const translations: Translations = {
     timeline2018: 'Débuts en électronique',
     timeline2019: 'Ateliers robotiques avec AJSZ',
     timeline2020: 'Projet Smart Parking à Gabès',
+    timeline2021: 'Expansion digitale - Web & Communauté',
     timeline2022: 'Médaille d\'or – Maison intelligente',
     timeline2023: 'ESP32 CallBox + Freelance UI/UX',
     timeline2024: 'Fondation de M&O Studio',
-    journeySubtitle: 'Une passion pour l\'innovation qui grandit depuis 2018',
 
     // Projects Section
     projectsTitle: 'Projets Phares',
@@ -516,7 +688,6 @@ const translations: Translations = {
     bacInfo: 'Baccalauréat en Informatique',
     bacScores: 'Algorithme : 19/20, STI : 17/20',
     licenseIot: 'Licence en Ingénierie des Systèmes IoT',
-    activities: 'Activités Bénévoles',
 
     // Bio Section
     bioTitle: 'À Propos de Moi',
@@ -529,7 +700,7 @@ const translations: Translations = {
     uiuxDescription: 'Conception d\'interfaces utilisateur intuitives et belles pour applications web et mobile.',
     webdevDescription: 'Création d\'applications web modernes avec les dernières technologies.',
     teachingDescription: 'Animation d\'ateliers et de sessions de formation en robotique et électronique.',
-
+    
     // Resume Section
     resumeTitle: 'Parcours Professionnel',
     resumeSubtitle: 'Formation & Expérience',
@@ -556,12 +727,23 @@ const translations: Translations = {
     awardWinning: 'Projet Lauréat',
     notFoundTitle: 'Page non trouvée',
     notFoundMessage: "La page que vous recherchez n'existe pas ou a été déplacée.",
-    goHome: 'Retour à l\'accueil',
+    goHome: "Retour à l'accueil",
     projectsPageTitle: 'Mes Projets',
     projectsPageIntro: "Depuis 2018, je développe des projets pratiques dans les domaines de l'IoT, des systèmes embarqués, de la robotique et du développement web. Ces projets ont été réalisés dans un cadre personnel, associatif, ou compétitif, et reflètent ma progression technique, mon autonomie, et ma volonté de créer des solutions utiles et concrètes.",
     projectsPageGithub: 'Voir tous les projets sur GitHub',
     projectsPageLinkedin: 'Me contacter sur LinkedIn',
-    projectsPageContact: 'Me contacter'
+    projectsPageContact: 'Me contacter',
+    activities: 'Activités Bénévoles',
+    name: 'Nom',
+    email: 'Email',
+    message: 'Message',
+    responseTime: 'Temps de réponse',
+    sending: 'Envoi en cours...',
+    send: 'Envoyer',
+    messageSent: 'Message envoyé avec succès !',
+    messageError: 'Erreur lors de l\'envoi du message',
+    tryAgainLater: 'Veuillez réessayer plus tard',
+    tooManyAttempts: 'Trop de tentatives, veuillez réessayer plus tard'
   },
   ar: {
     // Navigation
@@ -571,7 +753,6 @@ const translations: Translations = {
     journey: 'رحلة',
     contact: 'اتصل',
     certifications: 'الشهادات',
-    resume: 'السيرة الذاتية',
     allRightsReserved: 'جميع الحقوق محفوظة',
     lightMode: 'الوضع الفاتح',
     darkMode: 'الوضع الداكن',
@@ -613,7 +794,7 @@ const translations: Translations = {
         ]
       },
       embedded: {
-        title: "إنترنت الأشياء والأنظمة المدمجة",
+        title: "IoT & Systèmes Embarqués",
         items: [
           "تطوير Arduino",
           "حلول ESP32",
@@ -690,7 +871,7 @@ const translations: Translations = {
           fr: "Fondations – Maîtrise Arduino & Électronique",
           en: "Foundations – Arduino & Electronics Mastery",
           description: {
-            fr: "Apprentissage des systèmes embarqués et de l'électronique",
+            fr: "Apprentissage des systèmes embarqués و de l'électronique",
             en: "Learning embedded systems and electronics"
           }
         },
@@ -778,7 +959,7 @@ const translations: Translations = {
     contactSuccess: 'تم استلام الرسالة! سأرد قريباً.',
     nameLabel: 'الاسم',
     emailLabel: 'البريد الإلكتروني',
-    messageLabel: 'رسالتك',
+    messageLabel: 'الرسالة',
     sendMessage: 'إرسال الرسالة',
 
     // Education Section
@@ -786,7 +967,6 @@ const translations: Translations = {
     bacInfo: 'بكالوريوس في علوم الكمبيوتر',
     bacScores: 'الخوارزميات: 19/20, STI: 17/20',
     licenseIot: 'رخصة هندسة أنظمة إنترنت الأشياء',
-    activities: 'الأنشطة التطوعية',
 
     // Bio Section
     bioTitle: 'عني',
@@ -831,7 +1011,27 @@ const translations: Translations = {
     projectsPageIntro: "منذ عام 2018، أنشأت مشاريع عملية في إنترنت الأشياء والأنظمة المدمجة والروبوتات وتطوير الويب. تم تنفيذ هذه المشاريع في بيئات شخصية أو تنافسية أو مجتمعية، وتعكس نموي وفضولي وقدرتي على تحويل الأفكار إلى حلول عملية.",
     projectsPageGithub: 'عرض جميع المشاريع على GitHub',
     projectsPageLinkedin: 'تواصل معي على LinkedIn',
-    projectsPageContact: 'اتصل بي'
+    projectsPageContact: 'اتصل بي',
+    activities: 'النشاطات التطوعية',
+    name: 'الاسم',
+    email: 'البريد الإلكتروني',
+    message: 'الرسالة',
+    responseTime: 'وقت الاستجابة',
+    sending: 'جاري الإرسال...',
+    send: 'إرسال',
+    messageSent: 'تم إرسال الرسالة بنجاح!',
+    messageError: 'خطأ في إرسال الرسالة',
+    tryAgainLater: 'يرجى المحاولة مرة أخرى لاحقاً',
+    tooManyAttempts: 'محاولات كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً',
+    timelineTitle: 'رحلة',
+    journeyTitle: 'رحلة',
+    timeline2018: 'بدايات في الإلكترونيات',
+    timeline2019: 'ورش عمل الروبوتات مع AJSZ',
+    timeline2020: 'مشروع موقف ذكي في قابس',
+    timeline2021: 'توسع رقمي - تطوير الويب والمجتمع',
+    timeline2022: 'ميدالية ذهبية - منزل ذكي',
+    timeline2023: 'ESP32 CallBox + عمل حر في UI/UX',
+    timeline2024: 'تأسيس M&O Studio'
   },
   de: {
     // Navigation
@@ -841,7 +1041,6 @@ const translations: Translations = {
     journey: 'Reise',
     contact: 'Kontakt',
     certifications: 'Zertifizierungen',
-    resume: 'Lebenslauf',
     allRightsReserved: 'Alle Rechte vorbehalten',
     lightMode: 'Heller Modus',
     darkMode: 'Dunkler Modus',
@@ -1048,7 +1247,7 @@ const translations: Translations = {
     contactSuccess: 'Nachricht empfangen! Ich antworte in Kürze.',
     nameLabel: 'Name',
     emailLabel: 'E-Mail',
-    messageLabel: 'Ihre Nachricht',
+    messageLabel: 'Nachricht',
     sendMessage: 'Nachricht Senden',
 
     // Education Section
@@ -1056,7 +1255,6 @@ const translations: Translations = {
     bacInfo: 'Informatik-Abitur',
     bacScores: 'Algorithmus: 19/20, STI: 17/20',
     licenseIot: 'IoT-Systemtechnik-Lizenz',
-    activities: 'Ehrenamtliche Aktivitäten',
 
     // Bio Section
     bioTitle: 'Über Mich',
@@ -1101,7 +1299,27 @@ const translations: Translations = {
     projectsPageIntro: "Seit 2018 realisiere ich praxisnahe Projekte in den Bereichen IoT, Embedded Systems, Robotik und Webentwicklung. Diese Projekte entstanden im privaten, wettbewerblichen oder gemeinschaftlichen Rahmen und spiegeln mein Wachstum, meine Neugier und meine Fähigkeit wider, Ideen in funktionierende Lösungen umzusetzen.",
     projectsPageGithub: 'Alle Projekte auf GitHub ansehen',
     projectsPageLinkedin: 'Auf LinkedIn vernetzen',
-    projectsPageContact: 'Kontakt aufnehmen'
+    projectsPageContact: 'Kontakt aufnehmen',
+    activities: 'Ehrenamtliche Aktivitäten',
+    name: 'Name',
+    email: 'E-Mail',
+    message: 'Nachricht',
+    responseTime: 'Antwortzeit',
+    sending: 'Wird gesendet...',
+    send: 'Senden',
+    messageSent: 'Nachricht erfolgreich gesendet!',
+    messageError: 'Fehler beim Senden der Nachricht',
+    tryAgainLater: 'Bitte versuchen Sie es später erneut',
+    tooManyAttempts: 'Zu viele Versuche, bitte versuchen Sie es später erneut',
+    timelineTitle: 'Reise',
+    journeyTitle: 'Reise',
+    timeline2018: 'Anfänge in der Elektronik',
+    timeline2019: 'Robotik-Workshops mit AJSZ',
+    timeline2020: 'Smart-Parking-Projekt in Gabès',
+    timeline2021: 'Expansion digitale - Web & Communauté',
+    timeline2022: 'Goldmedaille - Smart Home',
+    timeline2023: 'ESP32 CallBox + UI/UX Freelance',
+    timeline2024: 'Gründung von M&O Studio'
   }
 };
 

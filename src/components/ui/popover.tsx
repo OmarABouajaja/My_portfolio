@@ -3,10 +3,26 @@ import * as PopoverPrimitive from "@radix-ui/react-popover"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Root Popover component for displaying floating content
+ * Built on top of Radix UI's Popover primitive
+ */
 const Popover = PopoverPrimitive.Root
 
+/**
+ * PopoverTrigger component that activates the popover
+ * Built on top of Radix UI's PopoverTrigger primitive
+ */
 const PopoverTrigger = PopoverPrimitive.Trigger
 
+/**
+ * PopoverContent component for the popover's content
+ * Features:
+ * - Customizable alignment and offset
+ * - Smooth animations for open/close states
+ * - Responsive positioning based on available space
+ * - Consistent styling with other UI components
+ */
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>

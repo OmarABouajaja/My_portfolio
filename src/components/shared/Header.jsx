@@ -22,7 +22,6 @@ const Header = () => {
   const navItems = [
     { key: 'home', href: '#home', icon: HomeIcon },
     { key: 'projects', href: '#projects', icon: RocketIcon },
-    { key: 'certifications', href: '#certifications', icon: GraduationIcon },
     { key: 'resume', href: '#resume', icon: DocumentIcon },
     { key: 'contact', href: '#contact', icon: EmailIcon }
   ];

@@ -4,12 +4,29 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
+/**
+ * Root component for the alert dialog
+ * Manages the state and behavior of the alert dialog
+ */
 const AlertDialog = AlertDialogPrimitive.Root
 
+/**
+ * Trigger component that opens the alert dialog
+ */
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
+/**
+ * Portal component that renders the alert dialog outside the DOM hierarchy
+ */
 const AlertDialogPortal = AlertDialogPrimitive.Portal
 
+/**
+ * Overlay component that dims the background when the alert dialog is open
+ * Features:
+ * - Semi-transparent black background
+ * - Fade in/out animations
+ * - Fixed positioning
+ */
 const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
@@ -25,6 +42,14 @@ const AlertDialogOverlay = React.forwardRef<
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
+/**
+ * Content component that renders the main alert dialog content
+ * Features:
+ * - Customizable through className prop
+ * - Includes overlay
+ * - Responsive sizing
+ * - Smooth animations
+ */
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
@@ -43,6 +68,12 @@ const AlertDialogContent = React.forwardRef<
 ))
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
+/**
+ * Header component for the alert dialog
+ * Features:
+ * - Centered on mobile, left-aligned on desktop
+ * - Flexible spacing for content
+ */
 const AlertDialogHeader = ({
   className,
   ...props
@@ -57,6 +88,13 @@ const AlertDialogHeader = ({
 )
 AlertDialogHeader.displayName = "AlertDialogHeader"
 
+/**
+ * Footer component for the alert dialog
+ * Features:
+ * - Reversed column layout on mobile
+ * - Row layout with space between on desktop
+ * - Flexible spacing for content
+ */
 const AlertDialogFooter = ({
   className,
   ...props
@@ -71,6 +109,13 @@ const AlertDialogFooter = ({
 )
 AlertDialogFooter.displayName = "AlertDialogFooter"
 
+/**
+ * Title component for the alert dialog
+ * Features:
+ * - Semantic heading structure
+ * - Consistent typography
+ * - Theme-aware text color
+ */
 const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
@@ -83,6 +128,13 @@ const AlertDialogTitle = React.forwardRef<
 ))
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
 
+/**
+ * Description component for the alert dialog
+ * Features:
+ * - Semantic description structure
+ * - Muted text color for secondary information
+ * - Consistent typography
+ */
 const AlertDialogDescription = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
@@ -96,6 +148,12 @@ const AlertDialogDescription = React.forwardRef<
 AlertDialogDescription.displayName =
   AlertDialogPrimitive.Description.displayName
 
+/**
+ * Action button component for the alert dialog
+ * Features:
+ * - Uses buttonVariants for consistent styling
+ * - Customizable through className prop
+ */
 const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
@@ -108,6 +166,13 @@ const AlertDialogAction = React.forwardRef<
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
+/**
+ * Cancel button component for the alert dialog
+ * Features:
+ * - Uses buttonVariants with outline variant
+ * - Customizable through className prop
+ * - Responsive margin adjustments
+ */
 const AlertDialogCancel = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>

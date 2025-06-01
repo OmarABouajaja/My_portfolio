@@ -1,10 +1,11 @@
-import { useTranslation } from '@/hooks/useTranslation';
+import { useLanguage } from '@/providers/language';
 import { DeviceIcon, RobotIcon, ParkingIcon, MedalIcon, RocketIcon, PaletteIcon } from '@/components/ui/custom-icons';
+import { TranslationContent } from '@/data/translations';
 
 interface TimelineItem {
   year: number;
   icon: React.FC<{ className?: string }>;
-  titleKey: string;
+  titleKey: keyof TranslationContent;
 }
 
 const timelineItems: TimelineItem[] = [
@@ -17,11 +18,11 @@ const timelineItems: TimelineItem[] = [
 ];
 
 const Timeline = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   return (
     <div className="relative container mx-auto px-6">
-      <h2 className="text-3xl font-bold text-center mb-12">{t('timelineTitle')}</h2>
+      <h2 className="text-3xl font-bold text-center mb-12">{String(t('timelineTitle'))}</h2>
       
       {/* Timeline Line */}
       <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary/20" />
@@ -43,7 +44,7 @@ const Timeline = () => {
                   index % 2 === 0 ? 'text-right' : 'text-left'
                 }`}>
                   <span className="text-sm text-muted-foreground">{item.year}</span>
-                  <h3 className="text-lg font-semibold mt-1">{t(item.titleKey)}</h3>
+                  <h3 className="text-lg font-semibold mt-1">{String(t(item.titleKey))}</h3>
                 </div>
               </div>
 

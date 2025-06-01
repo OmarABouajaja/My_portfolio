@@ -1,7 +1,9 @@
 /// <reference lib="webworker" />
 
+// Name of the cache storage
 const CACHE_NAME = 'portfolio-cache-v1';
-const STATIC_ASSETS = [
+// List of static assets to cache
+const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
@@ -9,34 +11,41 @@ const STATIC_ASSETS = [
   '/assets/',
 ];
 
-self.addEventListener('install', (event: ExtendableMessageEvent) => {
-  event.waitUntil(
+// Install event: cache static assets
+self.addEventListener('install', (event) => {
+  (event as ExtendableEvent).waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(urlsToCache);
     })
   );
 });
 
-self.addEventListener('activate', (event: ExtendableMessageEvent) => {
-  event.waitUntil(
+// Activate event: clean up old caches
+self.addEventListener('activate', (event) => {
+  (event as ExtendableEvent).waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+          return Promise.resolve();
+        })
       );
     })
   );
 });
 
-self.addEventListener('fetch', (event: FetchEvent) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
+// Fetch event: serve from cache, then network, and update cache
+self.addEventListener('fetch', (event) => {
+  const fetchEvent = event as FetchEvent;
+  fetchEvent.respondWith(
+    caches.match(fetchEvent.request).then((response) => {
       if (response) {
         return response;
       }
 
-      return fetch(event.request).then((response) => {
+      return fetch(fetchEvent.request).then((response) => {
         if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
@@ -44,7 +53,7 @@ self.addEventListener('fetch', (event: FetchEvent) => {
         const responseToCache = response.clone();
 
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+          cache.put(fetchEvent.request, responseToCache);
         });
 
         return response;
