@@ -10,16 +10,16 @@ export function Navigation() {
     <nav className="flex items-center justify-between p-4">
       <div className="flex items-center space-x-4">
         <Link to="/" className="text-lg font-bold">
-          {t('home')}
+          {t('home') as string}
         </Link>
         <Link to="/about" className="text-lg">
-          {t('about')}
+          {t('about') as string}
         </Link>
         <Link to="/projects" className="text-lg">
-          {t('projects')}
+          {t('projects') as string}
         </Link>
         <Link to="/contact" className="text-lg">
-          {t('contact')}
+          {t('contact') as string}
         </Link>
       </div>
       <div className="flex items-center space-x-4">

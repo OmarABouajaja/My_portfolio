@@ -14,48 +14,14 @@ import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 
 /**
- * Form component that provides form context to all form elements
- * Built on top of react-hook-form's FormProvider
- */
-const Form = FormProvider
-
-/**
  * Type definition for form field context value
- * Contains the field name for form validation and state management
+ * Contains field name and validation state
  */
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > = {
   name: TName
-}
-
-/**
- * Context for form field state and validation
- * Provides field name to child components
- */
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
-)
-
-/**
- * FormField component that wraps form controls with validation and state management
- * Features:
- * - Integrates with react-hook-form's Controller
- * - Provides field context to child components
- * - Handles form validation and state
- */
-const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
-  return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  )
 }
 
 /**
@@ -67,10 +33,18 @@ type FormItemContextValue = {
 }
 
 /**
+ * Context for form field state
+ * Provides field name and validation to children
+ */
+const FormFieldContext = React.createContext<FormFieldContextValue>(
+  {} as FormFieldContextValue
+)
+
+/**
  * Context for form item state
  * Provides unique ID to child components
  */
-const FormItemContext = React.createContext<FormItemContextValue>({ id: '' })
+const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
 /**
  * Hook for accessing form field state and validation
@@ -105,11 +79,40 @@ const useFormField = () => {
 }
 
 /**
- * FormItem component that wraps individual form elements
+ * Form component for handling form state and validation
  * Features:
- * - Provides spacing between form elements
- * - Generates unique ID for form item
- * - Customizable through className prop
+ * - Integrates with react-hook-form
+ * - Provides form context to children
+ * - Handles form submission
+ */
+const Form = FormProvider
+
+/**
+ * FormField component for form field state management
+ * Features:
+ * - Integrates with react-hook-form
+ * - Provides field context to children
+ * - Handles field validation
+ */
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  )
+}
+
+/**
+ * FormItem component for form field layout
+ * Features:
+ * - Provides unique ID for form elements
+ * - Handles field layout and spacing
+ * - Manages form item state
  */
 const FormItem = React.forwardRef<
   HTMLDivElement,
@@ -128,9 +131,9 @@ FormItem.displayName = "FormItem"
 /**
  * FormLabel component for form field labels
  * Features:
- * - Integrates with Radix UI Label primitive
- * - Shows error state with destructive color
+ * - Integrates with Radix UI Label
  * - Associates label with form control
+ * - Handles required field indication
  */
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
@@ -150,11 +153,11 @@ const FormLabel = React.forwardRef<
 FormLabel.displayName = "FormLabel"
 
 /**
- * FormControl component for form input elements
+ * FormControl component for form field input
  * Features:
- * - Integrates with Radix UI Slot primitive
- * - Handles ARIA attributes for accessibility
- * - Manages error states and descriptions
+ * - Integrates with Radix UI Slot
+ * - Associates control with form field
+ * - Handles field state
  */
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,

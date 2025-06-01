@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * AnimatedBackground component that creates a dynamic, layered background effect
  * Includes gradient overlays, grid pattern, and animated blob elements

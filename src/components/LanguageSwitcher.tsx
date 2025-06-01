@@ -1,4 +1,4 @@
-import { useLanguage } from '@/providers/language';
+import { useLanguage, Language } from '@/providers/language';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -8,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Language } from '@/types/translations';
 
 // Map of language codes to their full names
 const languageNames: Record<Language, string> = {

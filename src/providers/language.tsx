@@ -2,9 +2,12 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { motion, AnimatePresence } from 'framer-motion';
 import translations, { TranslationContent } from '@/data/translations';
 
+export type Language = keyof typeof translations;
+
 export interface LanguageContextType {
-  language: keyof typeof translations;
-  setLanguage: (lang: keyof typeof translations) => void;
+  language: Language;
+  currentLanguage: Language;
+  setLanguage: (lang: Language) => void;
   t: (key: keyof TranslationContent) => string | Record<string, any>;
   isRTL: boolean;
 }
@@ -12,10 +15,10 @@ export interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<keyof typeof translations>('en');
+  const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as keyof typeof translations;
+    const savedLanguage = localStorage.getItem('language') as Language;
     if (savedLanguage) {
       setLanguage(savedLanguage);
     }
@@ -29,7 +32,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const isRTL = language === 'ar';
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, isRTL }}>
+    <LanguageContext.Provider value={{ language, currentLanguage: language, setLanguage, t, isRTL }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={language}

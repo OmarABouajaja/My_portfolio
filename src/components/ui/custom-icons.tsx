@@ -1,8 +1,114 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 
+/**
+ * Props interface for icon components
+ * Extends SVG attributes with optional className
+ */
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
 }
+
+/**
+ * TypeScript icon component
+ * Features:
+ * - Clean, minimal design
+ * - Consistent stroke width
+ * - Proper viewBox and dimensions
+ */
+export const TypeScriptIcon = ({ className, ...props }: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={cn('h-4 w-4', className)}
+    {...props}
+  >
+    <path d="M3 3h18v18H3z" />
+    <path d="M12 7H8v8" />
+    <path d="M8 11h4" />
+    <path d="M17 7v4c0 1.1-.9 2-2 2h-1" />
+    <path d="M14 15.5c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z" />
+  </svg>
+);
+
+/**
+ * React icon component
+ * Features:
+ * - Atom-like design
+ * - Orbital rings
+ * - Electron dots
+ */
+export const ReactIcon = ({ className, ...props }: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={cn('h-4 w-4', className)}
+    {...props}
+  >
+    <circle cx="12" cy="12" r="2" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    <path d="M2 12h20" />
+  </svg>
+);
+
+/**
+ * Node.js icon component
+ * Features:
+ * - Hexagonal shape
+ * - Leaf-like design
+ * - Clean lines
+ */
+export const NodeIcon = ({ className, ...props }: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={cn('h-4 w-4', className)}
+    {...props}
+  >
+    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5" />
+    <path d="M2 12l10 5 10-5" />
+  </svg>
+);
+
+/**
+ * MongoDB icon component
+ * Features:
+ * - Leaf-like design
+ * - Curved lines
+ * - Minimal style
+ */
+export const MongoIcon = ({ className, ...props }: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={cn('h-4 w-4', className)}
+    {...props}
+  >
+    <path d="M12 2c-2.5 0-4.5 2-4.5 4.5 0 2.5 2 4.5 4.5 4.5s4.5-2 4.5-4.5S14.5 2 12 2z" />
+    <path d="M12 11c-2.5 0-4.5 2-4.5 4.5 0 2.5 2 4.5 4.5 4.5s4.5-2 4.5-4.5S14.5 11 12 11z" />
+  </svg>
+);
 
 export const WaveIcon = ({ className, ...props }: IconProps) => (
   <svg
@@ -296,25 +402,6 @@ export const DeviceIcon = ({ className, ...props }: IconProps) => (
 );
 
 // Web Development Icons
-export const ReactIcon = ({ className, ...props }: IconProps) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.75"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={cn('h-4 w-4', className)}
-    {...props}
-  >
-    <circle cx="12" cy="12" r="2.5" />
-    <ellipse cx="12" cy="12" rx="10" ry="4.5" />
-    <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)" />
-    <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(-60 12 12)" />
-  </svg>
-);
-
 export const TailwindIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -351,26 +438,6 @@ export const JavaScriptIcon = ({ className, ...props }: IconProps) => (
     <path d="M16 12c1.5 0 2.5-1 2.5-2s-1-2-2.5-2-2.5 1-2.5 2" />
     <path d="M3 8h18" strokeDasharray="2 2" opacity="0.5" />
     <path d="M3 16h18" strokeDasharray="2 2" opacity="0.5" />
-  </svg>
-);
-
-export const TypeScriptIcon = ({ className, ...props }: IconProps) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.75"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={cn('h-4 w-4', className)}
-    {...props}
-  >
-    <path d="M3 3h18v18H3z" />
-    <path d="M12 7H8v8" />
-    <path d="M8 11h4" />
-    <path d="M17 7v4c0 1.1-.9 2-2 2h-1" />
-    <path d="M14 15.5c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z" />
   </svg>
 );
 
@@ -1095,7 +1162,7 @@ export const PrototypingIcon = ({ className, ...props }: IconProps) => (
     className={cn('h-4 w-4', className)}
     {...props}
   >
-    <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+    <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
     <path d="M18 14h-8" />
     <path d="M15 18h-5" />
     <path d="M10 6h8" />

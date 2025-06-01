@@ -12,17 +12,7 @@ type ToasterProps = React.ComponentProps<typeof Sonner>
  * - Handles errors accessing the theme context gracefully
  */
 export function Toaster({ ...props }: ToasterProps) {
-  let theme: Theme = "light";
-  
-  try {
-    // Get the current theme from the theme context
-    const { theme: currentTheme } = useTheme();
-    theme = currentTheme;
-  } catch (error) {
-    // Handle errors if the theme context is unavailable
-    console.error('Error accessing theme context:', error);
-    return null;
-  }
+  const { theme } = useTheme();
 
   return (
     <Sonner

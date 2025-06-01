@@ -7,63 +7,87 @@ import type {
 
 // Maximum number of toasts allowed
 const TOAST_LIMIT = 1
-// Delay before removing a toast
-const TOAST_REMOVE_DELAY = 1000000
+// Delay before removing a toast (in milliseconds)
+const TOAST_REMOVE_DELAY = 1000
 
-// Define the shape of a toast
-type ToasterToast = ToastProps & {
+/**
+ * Extended toast type that includes internal properties
+ * Features:
+ * - Unique identifier for each toast
+ * - Support for React nodes in title and description
+ * - Optional action element
+ * - Open state for visibility control
+ */
+interface ToasterToast {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  variant?: 'default' | 'destructive'
+  duration?: number
+  className?: string
+  style?: React.CSSProperties
+  onClick?: React.MouseEventHandler<HTMLDivElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
+  onFocus?: React.FocusEventHandler<HTMLDivElement>
+  onBlur?: React.FocusEventHandler<HTMLDivElement>
 }
 
-// Action types for toast management
-const actionTypes = {
-  ADD_TOAST: "ADD_TOAST",
-  UPDATE_TOAST: "UPDATE_TOAST",
-  DISMISS_TOAST: "DISMISS_TOAST",
-  REMOVE_TOAST: "REMOVE_TOAST",
-} as const
-
-let count = 0
-
-// Generate a unique ID for each toast
-function genId() {
-  count = (count + 1) % Number.MAX_SAFE_INTEGER
-  return count.toString()
-}
-
-type ActionType = typeof actionTypes
-
-// Define the shape of actions
-type Action =
+/**
+ * Action types for toast state management
+ * Features:
+ * - ADD_TOAST: Add a new toast
+ * - UPDATE_TOAST: Update an existing toast
+ * - DISMISS_TOAST: Dismiss a toast (with optional ID)
+ * - REMOVE_TOAST: Remove a toast from the state
+ */
+type ToastActionType =
   | {
-      type: ActionType["ADD_TOAST"]
+      type: "ADD_TOAST"
       toast: ToasterToast
     }
   | {
-      type: ActionType["UPDATE_TOAST"]
+      type: "UPDATE_TOAST"
       toast: Partial<ToasterToast>
     }
   | {
-      type: ActionType["DISMISS_TOAST"]
-      toastId?: ToasterToast["id"]
+      type: "DISMISS_TOAST"
+      toastId?: string
     }
   | {
-      type: ActionType["REMOVE_TOAST"]
-      toastId?: ToasterToast["id"]
+      type: "REMOVE_TOAST"
+      toastId?: string
     }
 
-// Define the state shape
+/**
+ * State interface for toast management
+ * Features:
+ * - Array of active toasts
+ * - Maintains toast order
+ */
 interface State {
   toasts: ToasterToast[]
+}
+
+// Initial state for toast management
+const initialState: State = {
+  toasts: [],
 }
 
 // Map to store timeouts for toast removal
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
-// Add a toast to the removal queue
+/**
+ * Add a toast to the removal queue
+ * Features:
+ * - Prevents duplicate timeouts
+ * - Automatically removes toast after delay
+ * - Cleans up timeout references
+ */
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
     return
@@ -80,8 +104,14 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout)
 }
 
-// Reducer to manage toast state
-export const reducer = (state: State, action: Action): State => {
+/**
+ * Reducer function for toast state management
+ * Features:
+ * - Handles all toast actions
+ * - Maintains toast limit
+ * - Manages toast lifecycle
+ */
+export const reducer = (state: State, action: ToastActionType): State => {
   switch (action.type) {
     case "ADD_TOAST":
       return {
@@ -100,27 +130,26 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // Side effect: Add toasts to the removal queue
-      if (toastId) {
-        addToRemoveQueue(toastId)
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id)
-        })
+      // Dismiss all toasts if no ID provided
+      if (toastId === undefined) {
+        return {
+          ...state,
+          toasts: state.toasts.map((t) => ({
+            ...t,
+            open: false,
+          })),
+        }
       }
 
+      // Dismiss specific toast
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false,
-              }
-            : t
+          t.id === toastId ? { ...t, open: false } : t
         ),
       }
     }
+
     case "REMOVE_TOAST":
       if (action.toastId === undefined) {
         return {
@@ -135,26 +164,37 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
-// Array to store listeners for state changes
+// Listeners for toast state changes
 const listeners: Array<(state: State) => void> = []
 
-// Initial state
-let memoryState: State = { toasts: [] }
+// Current toast state
+let memoryState: State = initialState
 
-// Dispatch function to update state and notify listeners
-function dispatch(action: Action) {
+/**
+ * Dispatch function for toast actions
+ * Features:
+ * - Updates state
+ * - Notifies listeners
+ * - Maintains state consistency
+ */
+function dispatch(action: ToastActionType) {
   memoryState = reducer(memoryState, action)
   listeners.forEach((listener) => {
     listener(memoryState)
   })
 }
 
-// Define the shape of a toast without an ID
+/**
+ * Toast creation function
+ * Features:
+ * - Generates unique ID
+ * - Handles updates and dismissal
+ * - Manages toast lifecycle
+ */
 type Toast = Omit<ToasterToast, "id">
 
-// Function to create a toast
 function toast({ ...props }: Toast) {
-  const id = genId()
+  const id = Math.random().toString(36).substring(2, 9)
 
   const update = (props: ToasterToast) =>
     dispatch({
@@ -169,7 +209,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open) => {
+      onOpenChange: (open: boolean) => {
         if (!open) dismiss()
       },
     },
@@ -182,7 +222,13 @@ function toast({ ...props }: Toast) {
   }
 }
 
-// Hook to use the toast functionality
+/**
+ * Hook for using toast functionality
+ * Features:
+ * - Manages toast state
+ * - Provides toast creation and dismissal
+ * - Handles cleanup on unmount
+ */
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 

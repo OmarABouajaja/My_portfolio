@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -8,7 +7,6 @@ import { cn } from '@/lib/utils';
  * - className: Optional additional classes
  * - gradient: Whether to apply a gradient effect
  * - delay: Delay before animation starts
- * - duration: Duration of each word's animation
  * - staggerChildren: Time between each word's animation
  */
 interface AnimatedTextProps {
@@ -16,7 +14,6 @@ interface AnimatedTextProps {
   className?: string;
   gradient?: boolean;
   delay?: number;
-  duration?: number;
   staggerChildren?: number;
 }
 
@@ -25,16 +22,15 @@ interface AnimatedTextProps {
  * Features:
  * - Animates words in sequence using Framer Motion
  * - Optional gradient effect for text
- * - Customizable delay, duration, and stagger
+ * - Customizable delay and stagger
  */
-const AnimatedText: React.FC<AnimatedTextProps> = ({
+const AnimatedText = ({
   text,
   className,
   gradient = false,
   delay = 0,
-  duration = 0.05,
   staggerChildren = 0.1,
-}) => {
+}: AnimatedTextProps) => {
   // Split the text into words for individual animation
   const words = text.split(' ');
 

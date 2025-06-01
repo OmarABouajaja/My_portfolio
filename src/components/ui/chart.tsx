@@ -1,6 +1,8 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 import type { TooltipProps } from "recharts"
+import { motion } from "framer-motion"
+import { useTheme } from "@/providers/theme"
 
 import { cn } from "@/lib/utils"
 
@@ -8,20 +10,23 @@ import { cn } from "@/lib/utils"
  * Theme configuration for light and dark modes
  * Maps theme names to their corresponding CSS selectors
  */
-const THEMES = { light: "", dark: ".dark" } as const
+const THEMES = {
+  light: "light",
+  dark: "dark",
+} as const
 
 /**
  * Configuration type for chart elements
  * Supports custom labels, icons, and theme-aware colors
  */
 export type ChartConfig = {
-  [k in string]: {
-    label?: React.ReactNode
-    icon?: React.ComponentType
-  } & (
-    | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
-  )
+  [key: string]: {
+    theme?: {
+      light?: string
+      dark?: string
+    }
+    color?: string
+  }
 }
 
 /**
@@ -95,6 +100,7 @@ ChartContainer.displayName = "Chart"
  * Generates CSS variables for each chart element
  */
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  const { theme } = useTheme()
   const colorConfig = Object.entries(config).filter(
     ([_, config]) => config.theme || config.color
   )
@@ -108,15 +114,16 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
-            ([theme, prefix]) => `
+            ([themeName, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+      itemConfig.theme?.[themeName as keyof typeof itemConfig.theme] ||
       itemConfig.color
     return color ? `  --color-${key}: ${color};` : null
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `

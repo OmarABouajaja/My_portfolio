@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/providers/language';
@@ -6,10 +6,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ProjectsIcon, ContactIcon } from '@/components/ui/icons';
 import { Menu, X } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/animated-background';
-import { TranslationContent } from '@/data/translations';
 
 /**
  * Main layout component that provides the application's structure and navigation
@@ -22,9 +20,9 @@ const Layout = () => {
 
   // Define navigation items with translated labels
   const navItems = [
-    { href: '/', label: String(t('home')) },
-    { href: '/projects', label: String(t('projects')) },
-    { href: '/contact', label: String(t('contact')) },
+    { href: '/', label: t('home') as string },
+    { href: '/projects', label: t('projects') as string },
+    { href: '/contact', label: t('contact') as string },
   ];
 
   // Helper function to check if a navigation item is active
@@ -159,7 +157,7 @@ const Layout = () => {
       <footer className="border-t">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2024 Omar Abouajaja. {String(t('allRightsReserved'))}</p>
+            <p>© 2024 Omar Abouajaja. {t('allRightsReserved') as string}</p>
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/OmarABouajaja "

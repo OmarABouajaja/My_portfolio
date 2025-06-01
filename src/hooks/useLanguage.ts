@@ -1,10 +1,12 @@
 import { useContext } from 'react';
-import { LanguageContext, LanguageContextType } from '@/providers/language';
+import { useLanguage as useLanguageContext } from '@/providers/language';
 
+/**
+ * Custom hook for accessing the language context
+ * Provides access to language state and functions
+ * @throws {Error} If used outside of a LanguageProvider
+ * @returns {LanguageContextType} The language context value
+ */
 export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
+  return useLanguageContext();
 }; 

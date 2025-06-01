@@ -31,6 +31,7 @@ const alertVariants = cva(
  * Features:
  * - Customizable through className and variant props
  * - Supports icons and flexible content
+ * - Accessible with proper ARIA attributes
  */
 const Alert = React.forwardRef<
   HTMLDivElement,
@@ -50,9 +51,10 @@ Alert.displayName = "Alert"
  * Features:
  * - Semantic heading structure
  * - Consistent typography
+ * - Accessible heading level
  */
 const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
+  HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
   <h5
@@ -64,10 +66,11 @@ const AlertTitle = React.forwardRef<
 AlertTitle.displayName = "AlertTitle"
 
 /**
- * AlertDescription component for the alert's descriptive content
+ * AlertDescription component for the alert's content
  * Features:
- * - Flexible content area
- * - Consistent text styling
+ * - Muted text color for secondary information
+ * - Proper spacing and typography
+ * - Accessible text structure
  */
 const AlertDescription = React.forwardRef<
   HTMLParagraphElement,

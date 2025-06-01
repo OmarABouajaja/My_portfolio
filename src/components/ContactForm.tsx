@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Send, Loader2, AlertTriangle } from 'lucide-react';
-import { checkRateLimit } from '@/utils/emailObfuscator';
 import { toast } from '@/hooks/use-toast';
 import { TranslationContent } from '@/data/translations';
 
@@ -14,7 +13,6 @@ const ContactForm = () => {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error' | 'rateLimit'>('idle');
-  const [formStartTime] = useState(Date.now());
   const [submitCount, setSubmitCount] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -30,16 +28,18 @@ const ContactForm = () => {
       // Simulate form submission
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast({
-        title: t('messageSent') as TranslationContent['messageSent'],
-        description: t('responseTime') as TranslationContent['responseTime'],
+        title: t('messageSent') as string,
+        description: t('responseTime') as string,
       });
       setFormData({ name: '', email: '', message: '' });
+      setSubmitStatus('success');
     } catch (error) {
       toast({
-        title: t('messageError') as TranslationContent['messageError'],
-        description: t('tryAgainLater') as TranslationContent['tryAgainLater'],
+        title: t('messageError') as string,
+        description: t('tryAgainLater') as string,
         variant: 'destructive',
       });
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
       setSubmitCount((prev) => prev + 1);
@@ -49,8 +49,8 @@ const ContactForm = () => {
   if (submitCount >= 3) {
     return (
       <div className="text-center">
-        <p className="text-lg font-medium">{t('tooManyAttempts') as TranslationContent['tooManyAttempts']}</p>
-        <p className="text-sm text-muted-foreground">{t('tryAgainLater') as TranslationContent['tryAgainLater']}</p>
+        <p className="text-lg font-medium">{t('tooManyAttempts') as string}</p>
+        <p className="text-sm text-muted-foreground">{t('tryAgainLater') as string}</p>
       </div>
     );
   }
@@ -72,7 +72,7 @@ const ContactForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
-                {t('name') as TranslationContent['name']} *
+                {t('name') as string} *
               </label>
               <Input
                 id="name"
@@ -82,7 +82,7 @@ const ContactForm = () => {
                 required
                 minLength={2}
                 maxLength={50}
-                placeholder={t('name') as TranslationContent['name']}
+                placeholder={t('name') as string}
                 className="glass-input"
                 autoComplete="name"
               />
@@ -90,7 +90,7 @@ const ContactForm = () => {
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                {t('email') as TranslationContent['email']} *
+                {t('email') as string} *
               </label>
               <Input
                 id="email"
@@ -99,7 +99,7 @@ const ContactForm = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                placeholder={t('email') as TranslationContent['email']}
+                placeholder={t('email') as string}
                 className="glass-input"
                 pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                 autoComplete="email"
@@ -109,7 +109,7 @@ const ContactForm = () => {
 
           <div className="space-y-2">
             <label htmlFor="message" className="text-sm font-medium">
-              {t('message') as TranslationContent['message']} *
+              {t('message') as string} *
             </label>
             <Textarea
               id="message"
@@ -119,7 +119,7 @@ const ContactForm = () => {
               required
               minLength={10}
               maxLength={1000}
-              placeholder={t('message') as TranslationContent['message']}
+              placeholder={t('message') as string}
               className="glass-input min-h-[150px]"
               autoComplete="off"
             />
@@ -128,7 +128,7 @@ const ContactForm = () => {
 
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {t('responseTime') as TranslationContent['responseTime']}
+            {t('responseTime') as string}
           </p>
           <Button
             type="submit"
@@ -140,7 +140,7 @@ const ContactForm = () => {
             ) : (
               <Send className="w-4 h-4 mr-2" />
             )}
-            {isSubmitting ? t('sending') as TranslationContent['sending'] : t('send') as TranslationContent['send']}
+            {isSubmitting ? t('sending') as string : t('send') as string}
           </Button>
         </div>
 
@@ -153,19 +153,19 @@ const ContactForm = () => {
           {submitStatus === 'success' && (
             <p className="text-green-500 text-sm mt-4 flex items-center">
               <span className="mr-2">✅</span>
-              {t('messageSent') as TranslationContent['messageSent']}
+              {t('messageSent') as string}
             </p>
           )}
           {submitStatus === 'error' && (
             <p className="text-red-500 text-sm mt-4 flex items-center">
               <AlertTriangle className="w-4 h-4 mr-2" />
-              {t('messageError') as TranslationContent['messageError']} {t('tryAgainLater') as TranslationContent['tryAgainLater']}
+              {t('messageError') as string} {t('tryAgainLater') as string}
             </p>
           )}
           {submitStatus === 'rateLimit' && (
             <p className="text-yellow-500 text-sm mt-4 flex items-center">
               <AlertTriangle className="w-4 h-4 mr-2" />
-              {t('tooManyAttempts') as TranslationContent['tooManyAttempts']} {t('tryAgainLater') as TranslationContent['tryAgainLater']}
+              {t('tooManyAttempts') as string} {t('tryAgainLater') as string}
             </p>
           )}
         </motion.div>

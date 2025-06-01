@@ -6,19 +6,19 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /**
- * Re-exported Radix UI Toast components with enhanced styling and accessibility
- * Each component is built on top of Radix UI primitives with consistent styling
+ * Toast provider component
+ * Features:
+ * - Manages toast state and lifecycle
+ * - Provides toast context to children
+ * - Handles toast animations
  */
-
-// Provider component that manages toast state and context
 const ToastProvider = ToastPrimitives.Provider
 
 /**
- * Viewport component that contains all toasts
+ * Toast viewport component
  * Features:
- * - Fixed positioning
- * - Responsive layout (mobile and desktop)
- * - Maximum width constraint
+ * - Fixed position for toast display
+ * - Responsive layout
  * - Customizable through className prop
  */
 const ToastViewport = React.forwardRef<
@@ -28,10 +28,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      // Base styles
-      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4",
-      // Responsive layout
-      "sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
+      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
       className
     )}
     {...props}
@@ -40,9 +37,11 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
 /**
- * Variant configuration for toast styling
- * Supports different variants (default, destructive)
- * Includes animations and swipe interactions
+ * Toast variants for different styles
+ * Features:
+ * - Default and destructive variants
+ * - Consistent styling across themes
+ * - Customizable through className prop
  */
 const toastVariants = cva(
   "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
@@ -61,11 +60,11 @@ const toastVariants = cva(
 )
 
 /**
- * Root toast component
+ * Toast component for displaying notifications
  * Features:
- * - Customizable through className prop
- * - Supports different variants
- * - Maintains all Radix UI toast attributes
+ * - Customizable variants
+ * - Smooth animations
+ * - Accessible design
  */
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
@@ -83,12 +82,11 @@ const Toast = React.forwardRef<
 Toast.displayName = ToastPrimitives.Root.displayName
 
 /**
- * Action component for toast buttons
+ * Toast action component for interactive elements
  * Features:
- * - Customizable through className prop
- * - Hover and focus states
- * - Special styling for destructive variant
- * - Disabled state
+ * - Integrates with Radix UI Toast Action
+ * - Consistent styling
+ * - Accessible button design
  */
 const ToastAction = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Action>,
@@ -97,14 +95,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      // Base styles
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium",
-      // Focus and hover states
-      "ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-      // Disabled state
-      "disabled:pointer-events-none disabled:opacity-50",
-      // Destructive variant styles
-      "group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
+      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
       className
     )}
     {...props}
@@ -113,12 +104,11 @@ const ToastAction = React.forwardRef<
 ToastAction.displayName = ToastPrimitives.Action.displayName
 
 /**
- * Close button component for toasts
+ * Toast close button component
  * Features:
- * - Customizable through className prop
- * - Hover and focus states
- * - Special styling for destructive variant
- * - Smooth opacity transitions
+ * - Integrates with Radix UI Toast Close
+ * - Consistent styling
+ * - Accessible button design
  */
 const ToastClose = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Close>,
@@ -127,12 +117,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      // Base styles
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity",
-      // Hover and focus states
-      "hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
-      // Destructive variant styles
-      "group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
       className
     )}
     toast-close=""
@@ -144,11 +129,11 @@ const ToastClose = React.forwardRef<
 ToastClose.displayName = ToastPrimitives.Close.displayName
 
 /**
- * Title component for toasts
+ * Toast title component
  * Features:
- * - Customizable through className prop
+ * - Integrates with Radix UI Toast Title
  * - Consistent typography
- * - Semantic heading structure
+ * - Accessible heading structure
  */
 const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
@@ -163,11 +148,11 @@ const ToastTitle = React.forwardRef<
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
 /**
- * Description component for toasts
+ * Toast description component
  * Features:
- * - Customizable through className prop
+ * - Integrates with Radix UI Toast Description
  * - Consistent typography
- * - Slightly muted opacity
+ * - Accessible text structure
  */
 const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
@@ -181,23 +166,28 @@ const ToastDescription = React.forwardRef<
 ))
 ToastDescription.displayName = ToastPrimitives.Description.displayName
 
-/**
- * Toast action element type
- * Used for action buttons in toast notifications
- */
 type ToastActionElement = React.ReactElement<typeof ToastAction>
 
-/**
- * Toast props interface
- * Defines the structure of toast notification data
- */
-export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string
-  description?: string
+interface ToastProps {
+  title?: React.ReactNode
+  description?: React.ReactNode
   action?: ToastActionElement
   variant?: 'default' | 'destructive'
   duration?: number
+  className?: string
+  style?: React.CSSProperties
+  onClick?: React.MouseEventHandler<HTMLDivElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
+  onFocus?: React.FocusEventHandler<HTMLDivElement>
+  onBlur?: React.FocusEventHandler<HTMLDivElement>
 }
+
+/**
+ * Re-exported Radix UI Toast components with enhanced styling and accessibility
+ * Each component is built on top of Radix UI primitives with consistent styling
+ */
 
 /**
  * Toast content component
