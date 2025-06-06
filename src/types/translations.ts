@@ -183,6 +183,11 @@ export interface TranslationContent {
   projectsPageGithub: string;
   projectsPageLinkedin: string;
   projectsPageContact: string;
+  filterByCategory: string;
+  selectCategory: string;
+  searchProjects: string;
+  searchProjectsPlaceholder: string;
+  noProjectsFound: string;
 }
 
 export type Translations = {

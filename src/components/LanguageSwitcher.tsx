@@ -101,12 +101,16 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
             key={code}
             onClick={() => setLanguage(code)}
             className={cn(
-              language === code && "bg-primary/10 text-primary",
-              code === 'ar' && "font-arabic text-right"
+              language === code ? 'bg-primary/10 text-primary' : '',
+              code === 'ar' ? 'font-arabic text-right' : '',
+              isRTL && 'font-arabic'
             )}
             aria-selected={language === code}
           >
-            <span className="flex items-center gap-2">
+            <span className={cn(
+              "flex items-center gap-2",
+              isRTL && "flex-row-reverse"
+            )}>
               <span className="font-bold">{languageCodes[code]}</span>
               <span>{languageNames[code]}</span>
             </span>

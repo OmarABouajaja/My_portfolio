@@ -47,19 +47,19 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       },
       plugins
     )
-    const [canScrollPrev, setCanScrollPrev] = React.useState(false)
+  const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       setCanScrollPrev(api?.canScrollPrev() ?? false)
       setCanScrollNext(api?.canScrollNext() ?? false)
-    }, [])
+  }, [])
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev()
     }, [api])
 
-    const scrollNext = React.useCallback(() => {
+  const scrollNext = React.useCallback(() => {
       api?.scrollNext()
     }, [api])
 
@@ -88,25 +88,25 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
 
       return () => {
         api?.off("select", onSelect)
-      }
+    }
     }, [api, onSelect, setApi])
 
     return (
       <CarouselContext.Provider
         value={React.useMemo(
-          () => ({
+    () => ({
             carouselRef: carouselRef as unknown as React.RefObject<HTMLDivElement>,
             api,
             scrollPrev,
-            scrollNext,
+      scrollNext,
             canScrollPrev,
-            canScrollNext,
+      canScrollNext,
           }),
           [api, canScrollPrev, canScrollNext, carouselRef, scrollNext, scrollPrev]
         )}
       >
-        <div
-          ref={ref}
+      <div
+        ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn("relative", className)}
           role="region"
@@ -118,7 +118,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
             className="overflow-hidden"
           >
             <div
-              className={cn(
+        className={cn(
                 "flex",
                 orientation === "horizontal" ? "-ml-4" : "-mt-4",
                 orientation === "horizontal" ? "flex-row" : "flex-col"
@@ -128,19 +128,19 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
             </div>
           </div>
         </div>
-      </CarouselContext.Provider>
-    )
+    </CarouselContext.Provider>
+  )
   }
 )
 Carousel.displayName = "Carousel"
 
 const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
+      <div
+        ref={ref}
       className={cn("flex", "-ml-4", className)}
-      {...props}
-    />
+        {...props}
+      />
   )
 )
 CarouselContent.displayName = "CarouselContent"

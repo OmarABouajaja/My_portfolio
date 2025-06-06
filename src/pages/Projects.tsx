@@ -7,45 +7,26 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { ArrowRight, Filter } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/animated-background';
+import { projects, categories, type Category } from '@/data/projects';
+import { cn } from '@/lib/utils';
 
 const Projects = () => {
-  const { t, currentLanguage } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const { t, currentLanguage, isRTL } = useLanguage();
+  const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const categories = useMemo(() => {
-    // Assuming categories are also translated via the t function or directly available
-    // If not, you might need to fetch or define them similarly to projects
-    // For now, let's assume they are available via t or a constant import if needed.
-    // Using a placeholder structure based on common patterns.
-    return [
-      { value: "all", label: t('projectCategories.all') || "All Projects" },
-      { value: "iot", label: t('projectCategories.iot') || "IoT" },
-      { value: "embedded", label: t('projectCategories.embedded') || "Embedded" },
-      { value: "robotics", label: t('projectCategories.robotics') || "Robotik" },
-      { value: "web", label: t('projectCategories.web') || "Web Development" },
-    ];
-  }, [t]);
-
-  // Define the missing 'projects' variable
-  const projects = [
-    { id: 1, title: { en: 'Project 1', fr: 'Projet 1', ar: 'مشروع 1', de: 'Projekt 1' }, description: { en: 'Description 1', fr: 'Description 1', ar: 'وصف 1', de: 'Beschreibung 1' }, category: 'web', stack: ['React', 'TypeScript'], image: '', github: '', demo: '', award: 'Award 1' },
-    { id: 2, title: { en: 'Project 2', fr: 'Projet 2', ar: 'مشروع 2', de: 'Projekt 2' }, description: { en: 'Description 2', fr: 'Description 2', ar: 'وصف 2', de: 'Beschreibung 2' }, category: 'iot', stack: ['Arduino', 'C++'], image: '', github: '', demo: '', award: 'Award 2' },
-    // Add more project objects as needed
-  ];
-
   const filteredProjects = useMemo(() => {
-    return projects.filter((project: typeof projects[number]) => {
+    return projects.filter((project) => {
       const matchesCategory = selectedCategory === 'all' || project.category === selectedCategory;
       const matchesSearch = searchTerm === '' ||
         project.title[currentLanguage].toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.description[currentLanguage].toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.stack.some((tech: string) => tech.toLowerCase().includes(searchTerm.toLowerCase()));
+        project.stack.some((tech) => tech.toLowerCase().includes(searchTerm.toLowerCase()));
       return matchesCategory && matchesSearch;
     });
-  }, [projects, selectedCategory, searchTerm, currentLanguage]);
+  }, [selectedCategory, searchTerm, currentLanguage]);
 
-  const handleCategoryChange = (value: string) => {
+  const handleCategoryChange = (value: Category) => {
     setSelectedCategory(value);
   };
 
@@ -68,10 +49,16 @@ const Projects = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+          <h1 className={cn(
+            "text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent",
+            isRTL && "font-arabic"
+          )}>
             {t('projectsTitle')}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className={cn(
+            "text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed",
+            isRTL && "font-arabic"
+          )}>
             {t('projectsSubtitle')}
           </p>
         </motion.div>
@@ -81,20 +68,27 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 max-w-4xl mx-auto"
+          className={cn(
+            "flex flex-col md:flex-row items-center justify-between gap-6 mb-12 max-w-4xl mx-auto",
+            isRTL && "md:flex-row-reverse"
+          )}
         >
           {/* Category Filter */}
           <div className="w-full md:w-auto flex-shrink-0">
             <Label htmlFor="category-filter" className="sr-only">{t('filterByCategory')}</Label>
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger id="category-filter" className="w-full md:w-[180px] bg-background/50 backdrop-blur-sm">
-                <Filter className="mr-2 h-4 w-4 text-muted-foreground" />
+                <Filter className={cn("h-4 w-4 text-muted-foreground", isRTL ? "ml-2" : "mr-2")} />
                 <SelectValue placeholder={t('selectCategory')} />
               </SelectTrigger>
               <SelectContent className="bg-background/50 backdrop-blur-sm">
                 {categories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
+                  <SelectItem 
+                    key={category.value} 
+                    value={category.value}
+                    className={cn(isRTL && "font-arabic")}
+                  >
+                    {category.label[currentLanguage]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -110,21 +104,24 @@ const Projects = () => {
               placeholder={t('searchProjectsPlaceholder')}
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full bg-background/50 backdrop-blur-sm"
+              className={cn(
+                "w-full bg-background/50 backdrop-blur-sm",
+                isRTL && "text-right font-arabic"
+              )}
             />
           </div>
         </motion.div>
 
         {/* Projects Grid */}
         <motion.div
-          layout // Enable layout animations
+          layout
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           <AnimatePresence>
-            {filteredProjects.map((project: typeof projects[number], index: number) => (
+            {filteredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
-                layout // Enable layout animations for items
+                layout
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -139,33 +136,61 @@ const Projects = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   {project.award && (
-                    <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-md z-10">
+                    <span className={cn(
+                      "absolute top-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-md z-10",
+                      isRTL ? "right-2" : "left-2"
+                    )}>
                       {project.award}
                     </span>
                   )}
                 </div>
                 <div className="p-6 flex flex-col flex-grow space-y-3 relative z-10">
-                  <h3 className="text-xl font-bold">{project.title[currentLanguage]}</h3>
-                  <p className="text-muted-foreground text-sm flex-grow">{project.description[currentLanguage]}</p>
+                  <h3 className={cn(
+                    "text-xl font-bold",
+                    isRTL && "font-arabic"
+                  )}>
+                    {project.title[currentLanguage]}
+                  </h3>
+                  <p className={cn(
+                    "text-muted-foreground text-sm flex-grow",
+                    isRTL && "font-arabic"
+                  )}>
+                    {project.description[currentLanguage]}
+                  </p>
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {project.stack.map((tech: string, techIndex: number) => (
-                      <span key={techIndex} className="bg-muted text-muted-foreground text-xs px-2.5 py-1 rounded-full">
+                    {project.stack.map((tech, techIndex) => (
+                      <span 
+                        key={techIndex} 
+                        className={cn(
+                          "bg-muted text-muted-foreground text-xs px-2.5 py-1 rounded-full",
+                          isRTL && "font-arabic"
+                        )}
+                      >
                         {tech}
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-3 mt-6">
+                  <div className={cn(
+                    "flex gap-3 mt-6",
+                    isRTL && "flex-row-reverse"
+                  )}>
                     {project.github && (
                       <Button asChild variant="outline" size="sm" className="btn-outline-glow">
-                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-                          GitHub <ArrowRight className="w-3 h-3" />
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className={cn(
+                          "flex items-center gap-1",
+                          isRTL && "flex-row-reverse"
+                        )}>
+                          GitHub <ArrowRight className={cn("w-3 h-3", isRTL && "rotate-180")} />
                         </a>
                       </Button>
                     )}
                     {project.demo && (
                       <Button asChild size="sm" className="btn-gradient">
-                        <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-                          Demo <ArrowRight className="w-3 h-3" />
+                        <a href={project.demo} target="_blank" rel="noopener noreferrer" className={cn(
+                          "flex items-center gap-1",
+                          isRTL && "flex-row-reverse"
+                        )}>
+                          Demo <ArrowRight className={cn("w-3 h-3", isRTL && "rotate-180")} />
                         </a>
                       </Button>
                     )}
@@ -184,7 +209,10 @@ const Projects = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="text-center text-muted-foreground py-16"
+              className={cn(
+                "text-center text-muted-foreground py-16",
+                isRTL && "font-arabic"
+              )}
             >
               {t('noProjectsFound')}
             </motion.div>

@@ -165,6 +165,11 @@ export interface TranslationContent {
   softSkillsCerts: string
   activities: string
   resume: string
+  filterByCategory: string
+  selectCategory: string
+  searchProjects: string
+  searchProjectsPlaceholder: string
+  noProjectsFound: string
 }
 
 export type Language = 'en' | 'fr' | 'ar' | 'de';
@@ -492,7 +497,12 @@ const translations: Translations = {
     messageError: 'Error sending message',
     tryAgainLater: 'Please try again later',
     tooManyAttempts: 'Too many attempts, please try again later',
-    resume: 'Resume'
+    resume: 'Resume',
+    filterByCategory: 'Filter by Category',
+    selectCategory: 'Select Category',
+    searchProjects: 'Search Projects',
+    searchProjectsPlaceholder: 'Search by title, description, or technology...',
+    noProjectsFound: 'No projects found matching your criteria'
   },
   fr: {
     // Navigation
@@ -694,7 +704,12 @@ const translations: Translations = {
     messageError: 'Erreur lors de l\'envoi du message',
     tryAgainLater: 'Veuillez réessayer plus tard',
     tooManyAttempts: 'Trop de tentatives, veuillez réessayer plus tard',
-    resume: 'CV'
+    resume: 'CV',
+    filterByCategory: 'Filtrer par Catégorie',
+    selectCategory: 'Sélectionner une Catégorie',
+    searchProjects: 'Rechercher des Projets',
+    searchProjectsPlaceholder: 'Rechercher par titre, description ou technologie...',
+    noProjectsFound: 'Aucun projet ne correspond à vos critères'
   },
   de: {
     // Navigation
@@ -896,7 +911,12 @@ const translations: Translations = {
     messageError: 'Fehler beim Senden der Nachricht',
     tryAgainLater: 'Bitte versuchen Sie es später erneut',
     tooManyAttempts: 'Zu viele Versuche, bitte versuchen Sie es später erneut',
-    resume: 'Lebenslauf'
+    resume: 'Lebenslauf',
+    filterByCategory: 'Nach Kategorie filtern',
+    selectCategory: 'Kategorie auswählen',
+    searchProjects: 'Projekte suchen',
+    searchProjectsPlaceholder: 'Nach Titel, Beschreibung oder Technologie suchen...',
+    noProjectsFound: 'Keine Projekte gefunden, die Ihren Kriterien entsprechen'
   },
   ar: {
     // Navigation
@@ -1082,7 +1102,12 @@ const translations: Translations = {
     messageError: 'خطأ في إرسال الرسالة',
     tryAgainLater: 'يرجى المحاولة مرة أخرى لاحقاً',
     tooManyAttempts: 'محاولات كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً',
-    resume: 'السيرة الذاتية'
+    resume: 'السيرة الذاتية',
+    filterByCategory: 'تصفية حسب الفئة',
+    selectCategory: 'اختر الفئة',
+    searchProjects: 'البحث في المشاريع',
+    searchProjectsPlaceholder: 'البحث حسب العنوان أو الوصف أو التقنية...',
+    noProjectsFound: 'لم يتم العثور على مشاريع تطابق معاييرك'
   }
 };
 
@@ -1098,4 +1123,4 @@ function populateTimelineEntries() {
 // Call the function to populate timeline entries
 populateTimelineEntries();
 
-export default translations;
+export default translations; 
