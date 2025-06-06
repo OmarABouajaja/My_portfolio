@@ -20,6 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "esModuleInterop": true,
 
     /* Path aliases */
     "baseUrl": ".",

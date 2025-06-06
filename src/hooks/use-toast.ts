@@ -1,15 +1,5 @@
 import * as React from "react"
 
-import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast"
-
-// Maximum number of toasts allowed
-const TOAST_LIMIT = 1
-// Delay before removing a toast (in milliseconds)
-const TOAST_REMOVE_DELAY = 1000
-
 /**
  * Extended toast type that includes internal properties
  * Features:
@@ -22,19 +12,19 @@ interface ToasterToast {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
-  action?: ToastActionElement
+  action?: React.ReactNode
   open?: boolean
   onOpenChange?: (open: boolean) => void
   variant?: 'default' | 'destructive'
   duration?: number
   className?: string
   style?: React.CSSProperties
-  onClick?: React.MouseEventHandler<HTMLDivElement>
-  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
-  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
-  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
-  onFocus?: React.FocusEventHandler<HTMLDivElement>
-  onBlur?: React.FocusEventHandler<HTMLDivElement>
+  onClick?: React.MouseEventHandler<HTMLLIElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLLIElement>
+  onMouseEnter?: React.MouseEventHandler<HTMLLIElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLLIElement>
+  onFocus?: React.FocusEventHandler<HTMLLIElement>
+  onBlur?: React.FocusEventHandler<HTMLLIElement>
 }
 
 /**
@@ -46,22 +36,10 @@ interface ToasterToast {
  * - REMOVE_TOAST: Remove a toast from the state
  */
 type ToastActionType =
-  | {
-      type: "ADD_TOAST"
-      toast: ToasterToast
-    }
-  | {
-      type: "UPDATE_TOAST"
-      toast: Partial<ToasterToast>
-    }
-  | {
-      type: "DISMISS_TOAST"
-      toastId?: string
-    }
-  | {
-      type: "REMOVE_TOAST"
-      toastId?: string
-    }
+  | { type: "ADD_TOAST"; toast: ToasterToast }
+  | { type: "UPDATE_TOAST"; toast: Partial<ToasterToast> }
+  | { type: "DISMISS_TOAST"; toastId?: string }
+  | { type: "REMOVE_TOAST"; toastId?: string }
 
 /**
  * State interface for toast management
@@ -78,32 +56,6 @@ const initialState: State = {
   toasts: [],
 }
 
-// Map to store timeouts for toast removal
-const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
-
-/**
- * Add a toast to the removal queue
- * Features:
- * - Prevents duplicate timeouts
- * - Automatically removes toast after delay
- * - Cleans up timeout references
- */
-const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(toastId)) {
-    return
-  }
-
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId)
-    dispatch({
-      type: "REMOVE_TOAST",
-      toastId: toastId,
-    })
-  }, TOAST_REMOVE_DELAY)
-
-  toastTimeouts.set(toastId, timeout)
-}
-
 /**
  * Reducer function for toast state management
  * Features:
@@ -116,7 +68,7 @@ export const reducer = (state: State, action: ToastActionType): State => {
     case "ADD_TOAST":
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: [action.toast, ...state.toasts].slice(0, 5),
       }
 
     case "UPDATE_TOAST":
@@ -132,13 +84,7 @@ export const reducer = (state: State, action: ToastActionType): State => {
 
       // Dismiss all toasts if no ID provided
       if (toastId === undefined) {
-        return {
-          ...state,
-          toasts: state.toasts.map((t) => ({
-            ...t,
-            open: false,
-          })),
-        }
+        return { ...state, toasts: [] }
       }
 
       // Dismiss specific toast
@@ -152,10 +98,7 @@ export const reducer = (state: State, action: ToastActionType): State => {
 
     case "REMOVE_TOAST":
       if (action.toastId === undefined) {
-        return {
-          ...state,
-          toasts: [],
-        }
+        return { ...state, toasts: [] }
       }
       return {
         ...state,

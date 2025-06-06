@@ -1,4 +1,3 @@
-import { EmailIcon } from '@/components/ui/custom-icons';
 import { Github, Linkedin } from 'lucide-react';
 
 export const PERSONAL_INFO = {
@@ -14,62 +13,27 @@ export const PERSONAL_INFO = {
     { name: "French", level: "B2 (TCF 657)" },
     { name: "English", level: "Fluent" },
     { name: "German", level: "Basic" }
-  ]
+  ],
+  email: 'omar.abouajaja@ieee.org',
+  phone: '+216 28 123 456', // Replace with your actual phone number
 };
-
-export const EDUCATION = [
-  {
-    year: "2023",
-    title: {
-      en: "Baccalaureate in Computer Science",
-      fr: "Baccalauréat en Sciences Informatiques"
-    },
-    details: {
-      en: "Algorithms: 19/20, STI: 17/20",
-      fr: "Algorithmes : 19/20, STI : 17/20"
-    }
-  },
-  {
-    year: "2023-2024",
-    title: {
-      en: "IoT Engineering License (ISITCOM)",
-      fr: "Licence en Ingénierie IoT (ISITCOM)"
-    },
-    details: {
-      en: "Focus on IoT and embedded systems (not completed)",
-      fr: "Spécialisation en IoT et systèmes embarqués (non terminé)"
-    }
-  }
-];
-
-export const ACHIEVEMENTS = [
-  {
-    year: "2022",
-    title: {
-      en: "Smart Home - National IoT Congress Winner",
-      fr: "Maison Intelligente - Vainqueur du Congrès National IoT"
-    }
-  },
-  {
-    year: "2019",
-    title: {
-      en: "Smart Parking - Gabès Science Fair",
-      fr: "Parking Intelligent - Foire des Sciences de Gabès"
-    }
-  }
-];
 
 export const SOCIAL_LINKS = {
   linkedin: {
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/omar-abouajaja',
     icon: Linkedin,
-    label: "LinkedIn",
-    url: "https://linkedin.com/in/omar-abouajaja"
   },
   github: {
+    label: 'GitHub',
+    url: 'https://github.com/omar-abouajaja',
     icon: Github,
-    label: "GitHub",
-    url: "https://github.com/OmarABouajaja "
-  }
+  },
+  twitter: {
+    label: 'Twitter',
+    url: 'https://twitter.com/omar_abouajaja',
+    icon: null, // Replace with Twitter icon if available
+  },
 };
 
 export const SUPPORT_LINKS = {
@@ -82,47 +46,15 @@ export const SUPPORT_LINKS = {
       ar: "اشترِ لي روبوتًا"
     },
     url: "https://buymeacoffee.com/omarabouajab"
-  }
-};
-
-export const techStack = {
-  languages: ["JavaScript", "Python", "C", "C++", "PHP"],
-  frameworks: ["React.js", "Firebase", "Tailwind CSS"],
-  tools: ["ESP32", "Arduino IDE", "Sim800L", "Figma", "Photoshop", "GitHub"],
-  categories: [
-    {
-      name: "IoT & Embedded",
-      skills: ["ESP32", "Arduino", "Sensors", "C/C++", "Firebase"]
-    },
-    {
-      name: "Web Development",
-      skills: ["React", "JavaScript", "Tailwind CSS", "Node.js"]
-    },
-    {
-      name: "Design",
-      skills: ["Figma", "UI/UX", "Photoshop", "Web Design"]
-    },
-    {
-      name: "Robotics",
-      skills: ["Arduino", "Motors", "Sensors", "3D Printing"]
-    }
-  ]
-};
-
-export const socialLinks = [
-  {
-    name: "LinkedIn",
-    url: "https://www.linkedin.com/in/omar-abouajaja",
-    icon: "linkedin"
   },
-  {
-    name: "GitHub",
-    url: "https://github.com/OmarABouajaja",
-    icon: "github"
+  calendly: {
+    label: {
+      en: 'Schedule a Call',
+      fr: 'Planifier un appel',
+      ar: 'جدولة مكالمة',
+      de: 'Anruf planen',
+    },
+    url: 'https://calendly.com/your-calendly-link', // Replace with your Calendly link
+    icon: null, // Replace with appropriate icon if available
   },
-  {
-    name: "Email",
-    url: "mailto:omarbouajaja48@gmail.com",
-    icon: "mail"
-  }
-]; 
+}; 

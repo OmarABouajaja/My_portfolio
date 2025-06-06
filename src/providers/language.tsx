@@ -1,14 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import translations, { TranslationContent } from '@/data/translations';
-
-export type Language = keyof typeof translations;
+import translations, { Language } from '@/data/translations';
 
 export interface LanguageContextType {
   language: Language;
   currentLanguage: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof TranslationContent) => string | Record<string, any>;
+  t: (key: string) => any;
   isRTL: boolean;
 }
 
@@ -19,14 +17,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage) {
+    if (savedLanguage && savedLanguage in translations) {
       setLanguage(savedLanguage);
     }
   }, []);
 
-  const t = (key: keyof TranslationContent): string | Record<string, any> => {
-    const translation = translations[language][key];
-    return translation || key;
+  const t = (key: string): any => {
+    const keys = key.split('.');
+    let translation: any = translations[language];
+    
+    for (const k of keys) {
+      if (translation && typeof translation === 'object') {
+        translation = translation[k];
+      } else {
+        return key;
+      }
+    }
+    
+    return translation;
   };
 
   const isRTL = language === 'ar';

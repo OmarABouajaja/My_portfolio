@@ -9,17 +9,17 @@ export function Navigation() {
   return (
     <nav className="flex items-center justify-between p-4">
       <div className="flex items-center space-x-4">
-        <Link to="/" className="text-lg font-bold">
-          {t('home') as string}
+        <Link to="/" className="nav-link">
+          {t('home')}
         </Link>
-        <Link to="/about" className="text-lg">
-          {t('about') as string}
+        <Link to="/about" className="nav-link">
+          {t('about')}
         </Link>
-        <Link to="/projects" className="text-lg">
-          {t('projects') as string}
+        <Link to="/projects" className="nav-link">
+          {t('projects')}
         </Link>
-        <Link to="/contact" className="text-lg">
-          {t('contact') as string}
+        <Link to="/contact" className="nav-link">
+          {t('contact')}
         </Link>
       </div>
       <div className="flex items-center space-x-4">

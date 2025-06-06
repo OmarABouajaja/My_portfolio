@@ -16,13 +16,13 @@ import { AnimatedBackground } from '@/components/ui/animated-background';
 const Layout = () => {
   const { t } = useLanguage();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   // Define navigation items with translated labels
   const navItems = [
-    { href: '/', label: t('home') as string },
-    { href: '/projects', label: t('projects') as string },
-    { href: '/contact', label: t('contact') as string },
+    { href: '/', label: t('home') },
+    { href: '/projects', label: t('projects') },
+    { href: '/contact', label: t('contact') },
   ];
 
   // Helper function to check if a navigation item is active
@@ -107,39 +107,10 @@ const Layout = () => {
             </div>
           </div>
         </nav>
-
-        {/* Mobile navigation drawer */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ y: -30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -30, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed top-0 left-0 w-full h-full z-40 bg-background/95 backdrop-blur-xl flex flex-col items-center pt-24 gap-6 shadow-2xl"
-            >
-              {navItems.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  to={href}
-                  className={cn(
-                    "text-xl font-semibold flex items-center gap-3 px-6 py-3 rounded-lg transition-all duration-200 hover:bg-primary/10 focus:bg-primary/20 outline-none",
-                    isActive(href) && "text-primary bg-primary/10"
-                  )}
-                  aria-current={isActive(href) ? 'page' : undefined}
-                  tabIndex={0}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {label}
-                </Link>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </header>
 
       {/* Main content area with page transitions */}
-      <main className="pt-16">
+      <main className="pt-16 w-screen overflow-x-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -157,7 +128,7 @@ const Layout = () => {
       <footer className="border-t">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2024 Omar Abouajaja. {t('allRightsReserved') as string}</p>
+            <p>© 2024 Omar Abouajaja. {t('allRightsReserved')}</p>
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/OmarABouajaja "
@@ -179,6 +150,35 @@ const Layout = () => {
           </div>
         </div>
       </footer>
+
+      {/* Mobile navigation drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -30, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-0 left-0 w-full h-full z-[100] bg-background/95 backdrop-blur-xl flex flex-col items-center pt-24 gap-6 shadow-2xl bg-background"
+          >
+            {navItems.map(({ href, label }) => (
+              <Link
+                key={href}
+                to={href}
+                className={cn(
+                  "text-xl font-semibold flex items-center gap-3 px-6 py-3 rounded-lg transition-all duration-200 hover:bg-primary/10 focus:bg-primary/20 outline-none",
+                  isActive(href) && "text-primary bg-primary/10"
+                )}
+                aria-current={isActive(href) ? 'page' : undefined}
+                tabIndex={0}
+                onClick={() => setMobileOpen(false)}
+              >
+                {label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

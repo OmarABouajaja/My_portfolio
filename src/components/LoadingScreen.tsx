@@ -1,22 +1,23 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/providers/language';
 import { loadingScreenContainer, loadingScreenItem, loadingScreenGlow } from '@/utils/animations';
 
-const LoadingScreen = () => {
+const LoadingScreen = React.memo(() => {
   const { language } = useLanguage();
 
   return (
     <AnimatePresence>
-    <motion.div
+      <motion.div
         variants={loadingScreenContainer}
         initial="initial"
         animate="animate"
         exit="exit"
         className="fixed inset-0 z-50 flex items-center justify-center bg-background overflow-hidden select-none"
-    >
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
+      >
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
             variants={loadingScreenGlow}
             initial="initial"
             animate="animate"
@@ -24,72 +25,72 @@ const LoadingScreen = () => {
           />
           <motion.div
             className="absolute -inset-8 bg-gradient-blue-violet opacity-5 blur-3xl"
-          animate={{ 
+            animate={{ 
               rotate: 360,
               scale: [1, 1.1, 1],
-          }}
-          transition={{
+            }}
+            transition={{
               rotate: { duration: 20, repeat: Infinity, ease: "linear" },
               scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          }}
-        />
-      </div>
+            }}
+          />
+        </div>
 
-      {/* Content Container */}
-      <motion.div
+        {/* Content Container */}
+        <motion.div
           variants={loadingScreenItem}
           className="relative z-10 max-w-3xl mx-auto px-6 text-center"
-      >
-        {/* Logo/Brand */}
-        <motion.div 
+        >
+          {/* Logo/Brand */}
+          <motion.div 
             className="mb-10 relative"
             variants={loadingScreenItem}
-        >
+          >
             <motion.div className="relative space-y-4">
               <motion.p 
                 className="text-xl md:text-2xl font-medium tracking-wider uppercase text-blue-300"
-            animate={{ 
+                animate={{ 
                   y: [0, -2, 0]
-            }}
-            transition={{
+                }}
+                transition={{
                   duration: 3, 
-              repeat: Infinity,
+                  repeat: Infinity,
                   ease: "easeInOut" 
-            }}
+                }}
               >
                 Hi, I'm
               </motion.p>
-          <motion.h1
+              <motion.h1
                 className="text-6xl md:text-7xl font-bold tracking-tight text-white"
-            animate={{ 
+                animate={{ 
                   y: [0, -2, 0]
-            }}
-            transition={{
+                }}
+                transition={{
                   duration: 3,
-              repeat: Infinity,
+                  repeat: Infinity,
                   ease: "easeInOut"
                 }}
                 style={{
                   letterSpacing: '-0.02em'
-            }}
-          >
-            Omar Abouajaja
-          </motion.h1>
+                }}
+              >
+                Omar Abouajaja
+              </motion.h1>
             </motion.div>
-        </motion.div>
+          </motion.div>
 
-        {/* Title/Role */}
-        <motion.div
+          {/* Title/Role */}
+          <motion.div
             variants={loadingScreenItem}
             className="mb-14 relative"
           >
             <motion.div
               className="relative"
               initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <motion.p 
+            >
+              <motion.p 
                 className="text-3xl md:text-4xl font-semibold tracking-wide text-slate-200"
                 animate={{ 
                   y: [0, -2, 0]
@@ -99,13 +100,13 @@ const LoadingScreen = () => {
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-          >
-            {language === 'fr' 
+              >
+                {language === 'fr' 
                   ? "Passionné IoT & Robotique"
                   : "IoT & Robotics Enthusiast"
-            }
-          </motion.p>
-          <motion.p
+                }
+              </motion.p>
+              <motion.p
                 className="text-xl mt-4 font-medium tracking-wider text-blue-300"
                 animate={{
                   y: [0, -1, 0]
@@ -115,58 +116,60 @@ const LoadingScreen = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-          >
-            {language === 'fr'
-              ? "Innovation • Automatisation • Excellence"
-              : "Innovation • Automation • Excellence"
-            }
-          </motion.p>
+              >
+                {language === 'fr'
+                  ? "Innovation • Automatisation • Excellence"
+                  : "Innovation • Automation • Excellence"
+                }
+              </motion.p>
             </motion.div>
-        </motion.div>
+          </motion.div>
 
-        {/* Loading Indicator */}
-        <motion.div 
+          {/* Loading Indicator */}
+          <motion.div 
             variants={loadingScreenItem}
-          className="flex flex-col items-center gap-4"
-        >
-          {/* Progress Bar */}
+            className="flex flex-col items-center gap-4"
+          >
+            {/* Progress Bar */}
             <div className="w-56 h-1.5 bg-slate-800 rounded-full overflow-hidden shadow-lg">
-            <motion.div
+              <motion.div
                 className="h-full w-full origin-left bg-blue-400"
-              animate={{
+                animate={{
                   scaleX: [0, 1, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
                   ease: "easeInOut"
-              }}
-            />
-          </div>
+                }}
+              />
+            </div>
 
-          {/* Loading Text */}
-          <motion.p
+            {/* Loading Text */}
+            <motion.p
               className="text-base font-medium tracking-wide text-blue-300"
               animate={{ 
                 y: [0, -1, 0],
                 opacity: [0.7, 1, 0.7]
               }}
-            transition={{
+              transition={{
                 duration: 2,
-              repeat: Infinity,
+                repeat: Infinity,
                 ease: "easeInOut"
-            }}
-          >
-            {language === 'fr' 
-              ? "Préparation de l'expérience..."
-              : "Preparing experience..."
-            }
-          </motion.p>
+              }}
+            >
+              {language === 'fr' 
+                ? "Préparation de l'expérience..."
+                : "Preparing experience..."
+              }
+            </motion.p>
+          </motion.div>
         </motion.div>
       </motion.div>
-    </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+LoadingScreen.displayName = 'LoadingScreen';
 
 export default LoadingScreen; 

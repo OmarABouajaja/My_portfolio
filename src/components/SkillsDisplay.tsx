@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/providers/language';
@@ -131,7 +132,7 @@ const getSkillDescription = (name: string) => {
 };
 
 // SkillIcon component to display individual skills
-const SkillIcon = ({ icon: Icon, name, className, index, category, translationKey }: SkillIconProps) => {
+const SkillIcon = React.memo(({ icon: Icon, name, className, index, category, translationKey }: SkillIconProps) => {
   const { t } = useLanguage();
   const description = getSkillDescription(name);
   
@@ -184,7 +185,9 @@ const SkillIcon = ({ icon: Icon, name, className, index, category, translationKe
       </motion.div>
     </motion.div>
   );
-};
+});
+
+SkillIcon.displayName = 'SkillIcon';
 
 // Define skills by category
 const skillsByCategory = {
@@ -231,7 +234,7 @@ const skillsByCategory = {
 } as const;
 
 // Main SkillsDisplay component
-const SkillsDisplay = () => {
+const SkillsDisplay = React.memo(() => {
   const { t } = useLanguage();
   const skills = t('skills') as Skills;
   const categories = Object.keys(skillsByCategory);
@@ -255,29 +258,28 @@ const SkillsDisplay = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold text-center mb-12">{String(t('journeyTitle'))}</h2>
-      <div className="space-y-16">
-        {categories.map((category) => (
-          <div key={category} className="space-y-8">
-            <h3 className="text-2xl font-semibold text-center">{getCategoryTitle(category)}</h3>
-            <div className="flex flex-wrap justify-center gap-8">
-              {skillsByCategory[category as keyof typeof skillsByCategory].map((skill, index) => (
-                <SkillIcon
-                  key={skill.name}
-                  icon={skill.icon}
-                  name={skill.name}
-                  index={index}
-                  category={category}
-                  translationKey={'translationKey' in skill ? skill.translationKey : undefined}
-                />
-              ))}
-            </div>
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {categories.map((category) => (
+        <div key={category} className="mb-16 last:mb-0">
+          <h2 className="text-2xl font-bold mb-8 text-center">{getCategoryTitle(category)}</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+            {skillsByCategory[category as keyof typeof skillsByCategory].map((skill, index) => (
+              <SkillIcon
+                key={skill.name}
+                icon={skill.icon}
+                name={skill.name}
+                index={index}
+                category={category}
+                translationKey={'translationKey' in skill ? skill.translationKey : undefined}
+              />
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
-};
+});
+
+SkillsDisplay.displayName = 'SkillsDisplay';
 
 export default SkillsDisplay;

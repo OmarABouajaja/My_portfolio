@@ -1,5 +1,5 @@
-import { useTheme, Theme } from "@/providers/theme"
 import { Toaster as Sonner } from "sonner"
+import { useTheme } from "@/providers/theme"
 
 // Type definition for Toaster component props, extending Sonner's props
 type ToasterProps = React.ComponentProps<typeof Sonner>

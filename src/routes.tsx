@@ -1,22 +1,43 @@
-import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import Layout from '@/components/Layout';
-import Home from '@/pages/Home';
-import About from '@/pages/About';
-import Projects from '@/pages/Projects';
-import Contact from '@/pages/Contact';
-import NotFound from '@/pages/NotFound';
+import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import type { ComponentType } from 'react';
+import Home from './pages/Home';
+import Projects from './pages/Projects';
+import Contact from './pages/Contact';
+import Layout from './components/Layout';
+import NotFound from './pages/NotFound';
+import About from './pages/About';
 import { ProjectsIcon, ContactIcon } from '@/components/ui/icons';
 
-// Define application routes and their components
-export const routes = [
+// Navigation item type
+interface NavigationItem {
+  path: string;
+  icon: ComponentType;
+  label: string;
+}
+
+// Navigation data with icons
+export const navigationItems: NavigationItem[] = [
+  {
+    path: 'projects',
+    icon: ProjectsIcon,
+    label: 'Projects',
+  },
+  {
+    path: 'contact',
+    icon: ContactIcon,
+    label: 'Contact',
+  },
+];
+
+// Define application routes
+export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Layout />, // Main layout wrapper
+    element: <Layout />,
     children: [
       {
         index: true,
-        element: <Home />, // Home page
+        element: <Home />,
       },
       {
         path: 'about',
@@ -24,17 +45,15 @@ export const routes = [
       },
       {
         path: 'projects',
-        element: <Projects />, // Projects page
-        icon: ProjectsIcon, // Icon for navigation
+        element: <Projects />,
       },
       {
         path: 'contact',
-        element: <Contact />, // Contact page
-        icon: ContactIcon, // Icon for navigation
+        element: <Contact />,
       },
       {
         path: '*',
-        element: <NotFound />, // 404 page
+        element: <NotFound />,
       },
     ],
   },

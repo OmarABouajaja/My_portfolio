@@ -1,65 +1,78 @@
-import { useLanguage } from '@/providers/language';
-import { DeviceIcon, RobotIcon, ParkingIcon, MedalIcon, RocketIcon, PaletteIcon } from '@/components/ui/custom-icons';
-import { TranslationContent } from '@/data/translations';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Award } from 'lucide-react';
 
-interface TimelineItem {
-  year: number;
-  icon: React.FC<{ className?: string }>;
-  titleKey: keyof TranslationContent;
+// Define a type for timeline entries, matching the structure in translations.ts
+interface TimelineEntry {
+  title: string;
+  description: string;
+  year: string;
+  award?: string;
 }
 
-const timelineItems: TimelineItem[] = [
-  { year: 2018, icon: DeviceIcon, titleKey: 'timeline2018' },
-  { year: 2019, icon: RobotIcon, titleKey: 'timeline2019' },
-  { year: 2020, icon: ParkingIcon, titleKey: 'timeline2020' },
-  { year: 2022, icon: MedalIcon, titleKey: 'timeline2022' },
-  { year: 2023, icon: RocketIcon, titleKey: 'timeline2023' },
-  { year: 2024, icon: PaletteIcon, titleKey: 'timeline2024' },
-];
+interface TimelineProps {
+  entries: TimelineEntry[];
+}
 
-const Timeline = () => {
-  const { t } = useLanguage();
-
+const Timeline: React.FC<TimelineProps> = ({ entries }) => {
   return (
-    <div className="relative container mx-auto px-6">
-      <h2 className="text-3xl font-bold text-center mb-12">{String(t('timelineTitle'))}</h2>
-      
-      {/* Timeline Line */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary/20" />
-      
-      {/* Timeline Items */}
-      <div className="relative space-y-12">
-        {timelineItems.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.year}
-              className={`flex items-center ${
-                index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-              }`}
-            >
-              {/* Content */}
-              <div className="w-5/12">
-                <div className={`p-4 bg-card rounded-lg shadow-md ${
-                  index % 2 === 0 ? 'text-right' : 'text-left'
-                }`}>
-                  <span className="text-sm text-muted-foreground">{item.year}</span>
-                  <h3 className="text-lg font-semibold mt-1">{String(t(item.titleKey))}</h3>
-                </div>
-              </div>
+    <div className="relative mt-12">
+      {/* Vertical Timeline Line with Gradient and Glow */}
+      <div className="absolute left-8 top-0 bottom-0 w-0.5">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/50" />
+        <div className="absolute inset-0 bg-primary/20 blur-sm" />
+      </div>
 
-              {/* Icon */}
-              <div className="w-2/12 flex justify-center">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-primary" />
-                </div>
+      <div className="space-y-12">
+        {entries.map((entry, index) => (
+          <motion.div
+            key={entry.year} // Using year as key, assuming years are unique enough or handle duplicates if necessary
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="relative flex gap-8 items-start group"
+          >
+            {/* Year Circle with Enhanced Design */}
+            <div className="relative z-10 flex-shrink-0 w-16 h-16 flex items-center justify-center">
+              {/* Outer Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full blur-md animate-pulse" />
+              {/* Inner Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full blur-sm" />
+              {/* Main Circle */}
+              <div className="w-12 h-12 rounded-full bg-background/80 backdrop-blur-sm border-2 border-primary/50 flex items-center justify-center group-hover:border-primary/80 transition-colors duration-300">
+                <span className="text-sm font-semibold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                  {entry.year}
+                </span>
               </div>
-
-              {/* Empty space for alternating layout */}
-              <div className="w-5/12" />
+              {/* Connecting Line */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />
             </div>
-          );
-        })}
+
+            {/* Content Card with Enhanced Design */}
+            <div className="flex-grow">
+              <div className="glass-effect rounded-xl p-6 space-y-3 group-hover:border-primary/50 transition-all duration-300 relative overflow-hidden">
+                {/* Card Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 relative">
+                  <h3 className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                    {entry.title}
+                  </h3>
+                  {entry.award && (
+                    <span className="flex items-center gap-1 text-xs font-medium text-primary">
+                      <Award className="w-4 h-4" />
+                      {entry.award}
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground relative">
+                  {entry.description}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );

@@ -60,6 +60,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center space-y-6"
+          style={{ width: '100%', overflow: 'hidden' }}
         >
           {/* Main Title */}
           <motion.h1 

@@ -66,11 +66,15 @@ export interface Timeline {
   intro: string;
   entries: {
     [key: string]: {
-      fr: string;
       en: string;
+      fr: string;
+      ar: string;
+      de: string;
       description: {
-        fr: string;
         en: string;
+        fr: string;
+        ar: string;
+        de: string;
       };
     };
   };
@@ -160,18 +164,6 @@ export interface TranslationContent {
   educationCerts: string;
   softSkillsCerts: string;
   all: string;
-
-  // Timeline Section
-  timelineTitle: string;
-  journeyTitle: string;
-  timeline2018: string;
-  timeline2019: string;
-  timeline2020: string;
-  timeline2021: string;
-  timeline2022: string;
-  timeline2023: string;
-  timeline2024: string;
-  journeySubtitle: string;
 
   // Other sections
   viewAll: string;

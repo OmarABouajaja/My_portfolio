@@ -1,4 +1,5 @@
-import { useLanguage, Language } from '@/providers/language';
+import { useLanguage } from '@/providers/language';
+import { Language } from '@/data/translations';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -31,7 +32,7 @@ const languageCodes: Record<Language, string> = {
  */
 export const LanguageSwitcher = ({ className }: { className?: string }) => {
   // Get current language, language setter, and RTL status from language context
-  const { currentLanguage, setLanguage, isRTL } = useLanguage();
+  const { language, setLanguage, isRTL } = useLanguage();
 
   return (
     <DropdownMenu>
@@ -46,17 +47,17 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
           {/* Animate language code transition */}
           <AnimatePresence mode="wait">
             <motion.span
-              key={currentLanguage}
+              key={language}
               className={`font-extrabold text-base sm:text-lg transition-colors duration-200 ${
-                currentLanguage === 'ar' ? 'font-arabic' : ''
+                language === 'ar' ? 'font-arabic' : ''
               }`}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              aria-label={languageNames[currentLanguage]}
+              aria-label={languageNames[language]}
             >
-              {languageCodes[currentLanguage]}
+              {languageCodes[language]}
             </motion.span>
           </AnimatePresence>
           {/* Dropdown arrow with RTL support */}
@@ -93,9 +94,9 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
             key={code}
             onClick={() => setLanguage(code)}
             className={`${
-              currentLanguage === code ? 'bg-primary/10 text-primary' : ''
+              language === code ? 'bg-primary/10 text-primary' : ''
             } ${code === 'ar' ? 'font-arabic text-right' : ''}`}
-            aria-selected={currentLanguage === code}
+            aria-selected={language === code}
           >
             <span className="flex items-center gap-2">
               <span className="font-bold">{languageCodes[code]}</span>

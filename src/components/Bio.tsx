@@ -2,16 +2,16 @@ import { useLanguage } from '@/providers/language';
 
 const Bio = () => {
   const { t } = useLanguage();
-  const bioTitle = t('bioTitle') as string;
-  const bioSubtitle = t('bioSubtitle') as string;
-  const bioSkills = t('bioSkills') as string;
-  const technologies = t('technologies') as string;
-  const iotDescription = t('iotDescription') as string;
-  const roboticsDescription = t('roboticsDescription') as string;
-  const embeddedDescription = t('embeddedDescription') as string;
-  const uiuxDescription = t('uiuxDescription') as string;
-  const webdevDescription = t('webdevDescription') as string;
-  const teachingDescription = t('teachingDescription') as string;
+  const bioTitle = t('bioTitle');
+  const bioSubtitle = t('bioSubtitle');
+  const bioSkills = t('bioSkills');
+  const technologies = t('technologies');
+  const iotDescription = t('iotDescription');
+  const roboticsDescription = t('roboticsDescription');
+  const embeddedDescription = t('embeddedDescription');
+  const uiuxDescription = t('uiuxDescription');
+  const webdevDescription = t('webdevDescription');
+  const teachingDescription = t('teachingDescription');
 
   return (
     <section className="py-16 bg-background">

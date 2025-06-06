@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Send, Loader2, AlertTriangle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { TranslationContent } from '@/data/translations';
 
 const ContactForm = () => {
   const { t } = useLanguage();
@@ -28,15 +27,15 @@ const ContactForm = () => {
       // Simulate form submission
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast({
-        title: t('messageSent') as string,
-        description: t('responseTime') as string,
+        title: t('messageSent'),
+        description: t('responseTime'),
       });
       setFormData({ name: '', email: '', message: '' });
       setSubmitStatus('success');
     } catch (error) {
       toast({
-        title: t('messageError') as string,
-        description: t('tryAgainLater') as string,
+        title: t('messageError'),
+        description: t('tryAgainLater'),
         variant: 'destructive',
       });
       setSubmitStatus('error');
@@ -49,8 +48,8 @@ const ContactForm = () => {
   if (submitCount >= 3) {
     return (
       <div className="text-center">
-        <p className="text-lg font-medium">{t('tooManyAttempts') as string}</p>
-        <p className="text-sm text-muted-foreground">{t('tryAgainLater') as string}</p>
+        <p className="text-lg font-medium">{t('tooManyAttempts')}</p>
+        <p className="text-sm text-muted-foreground">{t('tryAgainLater')}</p>
       </div>
     );
   }
@@ -72,7 +71,7 @@ const ContactForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
-                {t('name') as string} *
+                {t('name')} *
               </label>
               <Input
                 id="name"
@@ -82,7 +81,7 @@ const ContactForm = () => {
                 required
                 minLength={2}
                 maxLength={50}
-                placeholder={t('name') as string}
+                placeholder={t('name')}
                 className="glass-input"
                 autoComplete="name"
               />
@@ -90,7 +89,7 @@ const ContactForm = () => {
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                {t('email') as string} *
+                {t('email')} *
               </label>
               <Input
                 id="email"
@@ -99,7 +98,7 @@ const ContactForm = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                placeholder={t('email') as string}
+                placeholder={t('email')}
                 className="glass-input"
                 pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                 autoComplete="email"
@@ -109,7 +108,7 @@ const ContactForm = () => {
 
           <div className="space-y-2">
             <label htmlFor="message" className="text-sm font-medium">
-              {t('message') as string} *
+              {t('message')} *
             </label>
             <Textarea
               id="message"
@@ -119,7 +118,7 @@ const ContactForm = () => {
               required
               minLength={10}
               maxLength={1000}
-              placeholder={t('message') as string}
+              placeholder={t('message')}
               className="glass-input min-h-[150px]"
               autoComplete="off"
             />
@@ -128,7 +127,7 @@ const ContactForm = () => {
 
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {t('responseTime') as string}
+            {t('responseTime')}
           </p>
           <Button
             type="submit"
@@ -140,7 +139,7 @@ const ContactForm = () => {
             ) : (
               <Send className="w-4 h-4 mr-2" />
             )}
-            {isSubmitting ? t('sending') as string : t('send') as string}
+            {isSubmitting ? t('sending') : t('send')}
           </Button>
         </div>
 
@@ -153,19 +152,19 @@ const ContactForm = () => {
           {submitStatus === 'success' && (
             <p className="text-green-500 text-sm mt-4 flex items-center">
               <span className="mr-2">✅</span>
-              {t('messageSent') as string}
+              {t('messageSent')}
             </p>
           )}
           {submitStatus === 'error' && (
             <p className="text-red-500 text-sm mt-4 flex items-center">
               <AlertTriangle className="w-4 h-4 mr-2" />
-              {t('messageError') as string} {t('tryAgainLater') as string}
+              {t('messageError')} {t('tryAgainLater')}
             </p>
           )}
           {submitStatus === 'rateLimit' && (
             <p className="text-yellow-500 text-sm mt-4 flex items-center">
               <AlertTriangle className="w-4 h-4 mr-2" />
-              {t('tooManyAttempts') as string} {t('tryAgainLater') as string}
+              {t('tooManyAttempts')} {t('tryAgainLater')}
             </p>
           )}
         </motion.div>
