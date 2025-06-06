@@ -53,7 +53,7 @@ export const importIcon = (category: string, name: string) => {
         )}
       >
         <img 
-          src={`/src/data/icons/${category}/${name}.svg`}
+          src={`/icons/${category}/${name}.svg`}
           alt={`${name} icon`}
           className={cn(
             'w-full h-full',
