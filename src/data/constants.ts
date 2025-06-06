@@ -5,17 +5,17 @@ export const PERSONAL_INFO = {
   birth: "April 28, 2004",
   location: "Zarzis, Tunisia",
   linkedin: "https://www.linkedin.com/in/omar-abouajaja",
-  github: "https://github.com/OmarABouajaja ",
-  buymeacoffee: "https://buymeacoffee.com/omarabouajaja",
-  paypal: "https://paypal.me/omarabouajaja",
+  github: "https://github.com/OmarABouajaja",
+  buymeacoffee: "https://coff.ee/omarbouajab",
+  paypal: "",
   languages: [
     { name: "Arabic", level: "Native" },
     { name: "French", level: "B2 (TCF 657)" },
     { name: "English", level: "Fluent" },
     { name: "German", level: "Basic" }
   ],
-  email: 'omar.abouajaja@ieee.org',
-  phone: '+216 28 123 456', // Replace with your actual phone number
+  email: 'omarbouajaja48@gmail.com',
+  phone: '+216 26 313 145', // Replace with your actual phone number
 };
 
 export const SOCIAL_LINKS = {
@@ -26,14 +26,10 @@ export const SOCIAL_LINKS = {
   },
   github: {
     label: 'GitHub',
-    url: 'https://github.com/omar-abouajaja',
+    url: 'https://github.com/OmarABouajaja',
     icon: Github,
   },
-  twitter: {
-    label: 'Twitter',
-    url: 'https://twitter.com/omar_abouajaja',
-    icon: null, // Replace with Twitter icon if available
-  },
+
 };
 
 export const SUPPORT_LINKS = {
@@ -43,9 +39,9 @@ export const SUPPORT_LINKS = {
       en: "Buy me a robot",
       fr: "Offrez-moi un robot",
       de: "Kauf mir einen Roboter",
-      ar: "اشترِ لي روبوتًا"
+      ar: "اهدي لي روبوتًا"
     },
-    url: "https://buymeacoffee.com/omarabouajab"
+    url: "https://coff.ee/omarbouajab"
   },
   calendly: {
     label: {
@@ -54,7 +50,7 @@ export const SUPPORT_LINKS = {
       ar: 'جدولة مكالمة',
       de: 'Anruf planen',
     },
-    url: 'https://calendly.com/your-calendly-link', // Replace with your Calendly link
+    url: 'https://calendly.com/omarbouajaja48/30min', // Replace with your Calendly link
     icon: null, // Replace with appropriate icon if available
   },
 }; 
