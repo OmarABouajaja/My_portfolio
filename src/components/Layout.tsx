@@ -14,7 +14,7 @@ import { AnimatedBackground } from '@/components/ui/animated-background';
  * Includes responsive header, navigation, and footer
  */
 const Layout = () => {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
@@ -29,100 +29,64 @@ const Layout = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Animated background effect */}
-      <AnimatedBackground />
-      
-      {/* Sticky header with navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 shadow-md transition-shadow">
-        <nav className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            {/* Logo and brand name */}
-            <Link to="/" className="flex items-center gap-2 group">
-              <motion.div
-                whileHover={{ scale: 1.08, rotate: 3 }}
-                whileTap={{ scale: 0.95, rotate: -3 }}
-                className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet-600 shadow-lg flex items-center justify-center transition-all duration-300"
-              >
-                <span className="text-white font-bold text-base tracking-widest">OB</span>
-              </motion.div>
-              <motion.span 
-                className="text-lg font-extrabold bg-gradient-to-r from-primary via-violet-500 to-primary bg-clip-text text-transparent tracking-wide group-hover:tracking-wider transition-all duration-300"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                OMAR ABOUAJAJA
-              </motion.span>
-            </Link>
+    <div className="min-h-screen flex flex-col">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center">
+          <div className="mr-4 flex">
+            <Button
+              variant="ghost"
+              className="md:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
 
-            {/* Desktop navigation menu */}
-            <div className="hidden sm:flex items-center gap-2">
-              <nav className="flex items-center gap-1">
-                {navItems.map(({ href, label }) => (
-                  <Button
-                    key={href}
-                    variant="ghost"
-                    asChild
-                    className={cn(
-                      "nav-item relative px-4 py-2 font-medium text-base flex items-center gap-2 transition-all duration-200",
-                      isActive(href) && "text-primary"
-                    )}
-                    aria-current={isActive(href) ? 'page' : undefined}
-                  >
-                    <Link to={href} tabIndex={0}>
-                      <span>{label}</span>
-                      {/* Active page indicator */}
-                      {isActive(href) && (
-                        <motion.div
-                          layoutId="nav-underline"
-                          className="absolute left-2 right-2 -bottom-1 h-1 rounded-full bg-gradient-to-r from-primary via-violet-500 to-primary"
-                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                        />
-                      )}
-                    </Link>
-                  </Button>
-                ))}
-              </nav>
-              {/* Language and theme controls */}
-              <div className="flex items-center gap-2 ml-4">
-                <LanguageSwitcher className="font-bold" />
-                <ThemeToggle />
-              </div>
-            </div>
+          <div className="flex flex-1 items-center justify-between">
+            <nav className={cn(
+              "flex items-center space-x-6 text-sm font-medium",
+              isRTL ? "space-x-reverse" : ""
+            )}>
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "transition-colors hover:text-foreground/80",
+                    isActive(item.href) ? "text-foreground" : "text-foreground/60",
+                    isRTL ? "font-arabic" : ""
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
 
-            {/* Mobile navigation controls */}
-            <div className="sm:hidden flex items-center gap-2">
-              <LanguageSwitcher className="font-bold" />
+            <div className={cn(
+              "flex items-center space-x-4",
+              isRTL ? "space-x-reverse" : ""
+            )}>
               <ThemeToggle />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="ml-1"
-                aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                onClick={() => setMobileOpen((v) => !v)}
-              >
-                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </Button>
+              <LanguageSwitcher />
             </div>
           </div>
-        </nav>
+        </div>
       </header>
 
-      {/* Main content area with page transitions */}
-      <main className="pt-16 w-screen overflow-x-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="flex-1"
+        >
+          <AnimatedBackground />
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
 
       {/* Footer with copyright and social links */}
       <footer className="border-t">

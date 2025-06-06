@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from '@/lib/utils';
 
 // Map of language codes to their full names
 const languageNames: Record<Language, string> = {
@@ -39,7 +40,11 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className={`lang-switcher relative overflow-hidden group px-2 min-w-[48px] flex items-center gap-1 ${className}`}
+          className={cn(
+            "lang-switcher relative overflow-hidden group px-2 min-w-[48px] flex items-center gap-1",
+            isRTL && "font-arabic",
+            className
+          )}
           aria-label="Select Language"
           aria-expanded="false"
           aria-haspopup="true"
@@ -48,9 +53,10 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
           <AnimatePresence mode="wait">
             <motion.span
               key={language}
-              className={`font-extrabold text-base sm:text-lg transition-colors duration-200 ${
-                language === 'ar' ? 'font-arabic' : ''
-              }`}
+              className={cn(
+                "font-extrabold text-base sm:text-lg transition-colors duration-200",
+                language === 'ar' && "font-arabic"
+              )}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
@@ -62,9 +68,10 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
           </AnimatePresence>
           {/* Dropdown arrow with RTL support */}
           <ChevronDown 
-            className={`w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180 ${
-              isRTL ? 'rotate-180' : ''
-            }`} 
+            className={cn(
+              "w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180",
+              isRTL && "rotate-180"
+            )} 
           />
           {/* Hover effect with gradient background */}
           <motion.div
@@ -93,9 +100,10 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
           <DropdownMenuItem
             key={code}
             onClick={() => setLanguage(code)}
-            className={`${
-              language === code ? 'bg-primary/10 text-primary' : ''
-            } ${code === 'ar' ? 'font-arabic text-right' : ''}`}
+            className={cn(
+              language === code && "bg-primary/10 text-primary",
+              code === 'ar' && "font-arabic text-right"
+            )}
             aria-selected={language === code}
           >
             <span className="flex items-center gap-2">
