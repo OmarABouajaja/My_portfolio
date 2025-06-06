@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Award } from 'lucide-react';
+import { useLanguage } from '@/providers/language';
 
 // Define a type for timeline entries, matching the structure in translations.ts
 interface TimelineEntry {
@@ -15,10 +16,12 @@ interface TimelineProps {
 }
 
 const Timeline: React.FC<TimelineProps> = ({ entries }) => {
+  const { isRTL } = useLanguage();
+
   return (
     <div className="relative mt-12">
       {/* Vertical Timeline Line with Gradient and Glow */}
-      <div className="absolute left-8 top-0 bottom-0 w-0.5">
+      <div className={`absolute ${isRTL ? 'right-8' : 'left-8'} top-0 bottom-0 w-0.5`}>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/50" />
         <div className="absolute inset-0 bg-primary/20 blur-sm" />
       </div>
@@ -26,12 +29,12 @@ const Timeline: React.FC<TimelineProps> = ({ entries }) => {
       <div className="space-y-12">
         {entries.map((entry, index) => (
           <motion.div
-            key={entry.year} // Using year as key, assuming years are unique enough or handle duplicates if necessary
-            initial={{ opacity: 0, x: -20 }}
+            key={entry.year}
+            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="relative flex gap-8 items-start group"
+            className={`relative flex gap-8 items-start group ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             {/* Year Circle with Enhanced Design */}
             <div className="relative z-10 flex-shrink-0 w-16 h-16 flex items-center justify-center">
@@ -46,7 +49,7 @@ const Timeline: React.FC<TimelineProps> = ({ entries }) => {
                 </span>
               </div>
               {/* Connecting Line */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />
+              <div className={`absolute ${isRTL ? 'right-1/2' : 'left-1/2'} top-1/2 -translate-y-1/2 ${isRTL ? 'translate-x-1/2' : '-translate-x-1/2'} w-8 h-0.5 bg-gradient-to-r ${isRTL ? 'from-transparent to-primary/50' : 'from-primary/50 to-transparent'}`} />
             </div>
 
             {/* Content Card with Enhanced Design */}

@@ -336,15 +336,13 @@ const Home: React.FC = () => {
             >
               {String(t('timeline.intro'))}
             </motion.p>
+
+            {/* Vertical Timeline Line with Gradient and Glow */}
             
-            <div className="relative mt-12">
-              {/* Vertical Timeline Line with Gradient and Glow */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5">
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/50" />
-                <div className="absolute inset-0 bg-primary/20 blur-sm" />
-              </div>
+            
+
+            
               
-              <div className="space-y-12">
                 {/* Explicitly type entry */}
                 {Object.entries(t('timeline.entries') as TranslationContent['timeline']['entries'])
                   .sort(([keyA], [keyB]) => {
@@ -410,8 +408,10 @@ const Home: React.FC = () => {
                   </motion.div>
                     );
                   })}
-              </div>
-            </div>
+              
+            
+            {/* The Timeline component should be rendered here */}
+
           </motion.div>
         </div>
       </Section>

@@ -165,11 +165,6 @@ export interface TranslationContent {
   softSkillsCerts: string
   activities: string
   resume: string
-  filterByCategory: string
-  selectCategory: string
-  searchProjects: string
-  searchProjectsPlaceholder: string
-  noProjectsFound: string
 }
 
 export type Language = 'en' | 'fr' | 'ar' | 'de';
@@ -265,7 +260,7 @@ const translations: Translations = {
           description: "Between 2021 and 2023, I was an active member of JCI Zarzis. I participated in citizen-focused actions, awareness campaigns in schools, local events, and solidarity programs. My contributions included visual communication, logistics, and group collaboration within a structured nonprofit environment."
         },
         english: {
-          title: "Facilitator – English Fan Club ZZ (2020 – 2022)",
+          title: "Active Member – English Fan Club ZZ (2020 – 2022)",
           description: "I helped lead oral discussions, role-plays, and cultural exchange sessions in English. It was a space where we practiced confidently and supported each other in improving language skills."
         }
       },
@@ -497,12 +492,7 @@ const translations: Translations = {
     messageError: 'Error sending message',
     tryAgainLater: 'Please try again later',
     tooManyAttempts: 'Too many attempts, please try again later',
-    resume: 'Resume',
-    filterByCategory: 'Filter by Category',
-    selectCategory: 'Select Category',
-    searchProjects: 'Search Projects',
-    searchProjectsPlaceholder: 'Search by title, description, or technology...',
-    noProjectsFound: 'No projects found matching your criteria'
+    resume: 'Resume'
   },
   fr: {
     // Navigation
@@ -593,7 +583,7 @@ const translations: Translations = {
           description: "Entre 2021 et 2023, j'ai été un membre actif de JCI Zarzis. J'ai participé à des actions citoyennes, des campagnes de sensibilisation dans les écoles, des événements locaux et des programmes de solidarité. Mes contributions incluaient la communication visuelle, la logistique et la collaboration en groupe dans un environnement associatif structuré."
         },
         english: {
-          title: "Facilitateur – English Fan Club ZZ (2020 – 2022)",
+          title: "Membre Actif – English Fan Club ZZ (2020 – 2022)",
           description: "J'ai aidé à animer des discussions orales, des jeux de rôle et des sessions d'échange culturel en anglais. C'était un espace où nous pratiquions en toute confiance et nous soutenions mutuellement dans l'amélioration de nos compétences linguistiques."
         }
       },
@@ -704,12 +694,7 @@ const translations: Translations = {
     messageError: 'Erreur lors de l\'envoi du message',
     tryAgainLater: 'Veuillez réessayer plus tard',
     tooManyAttempts: 'Trop de tentatives, veuillez réessayer plus tard',
-    resume: 'CV',
-    filterByCategory: 'Filtrer par Catégorie',
-    selectCategory: 'Sélectionner une Catégorie',
-    searchProjects: 'Rechercher des Projets',
-    searchProjectsPlaceholder: 'Rechercher par titre, description ou technologie...',
-    noProjectsFound: 'Aucun projet ne correspond à vos critères'
+    resume: 'CV'
   },
   de: {
     // Navigation
@@ -800,7 +785,7 @@ const translations: Translations = {
           description: "Between 2021 and 2023, jahte ich ein aktives Mitglied von JCI Zarzis. Ich nahm an bürgerorientierten Aktionen, Aufklärungskampagnen in Schulen, lokalen Veranstaltungen und Solidaritätsprogrammen teil. Meine Beiträge umfassten visuelle Kommunikation, Logistik und Gruppenarbeit in einer strukturierten Non-Profit-Umgebung."
         },
         english: {
-          title: "Moderator – English Fan Club ZZ (2020 – 2022)",
+          title: "Aktives Mitglied – English Fan Club ZZ (2020 – 2022)",
           description: "Ich half bei der Leitung mündlicher Diskussionen, Rollenspielen und kulturellen Austauschsitzungen in englischer Sprache. Es war ein Raum, in dem wir selbstbewusst übten und uns gegenseitig bei der Verbesserung unserer Sprachkenntnisse unterstützten."
         }
       },
@@ -911,12 +896,7 @@ const translations: Translations = {
     messageError: 'Fehler beim Senden der Nachricht',
     tryAgainLater: 'Bitte versuchen Sie es später erneut',
     tooManyAttempts: 'Zu viele Versuche, bitte versuchen Sie es später erneut',
-    resume: 'Lebenslauf',
-    filterByCategory: 'Nach Kategorie filtern',
-    selectCategory: 'Kategorie auswählen',
-    searchProjects: 'Projekte suchen',
-    searchProjectsPlaceholder: 'Nach Titel, Beschreibung oder Technologie suchen...',
-    noProjectsFound: 'Keine Projekte gefunden, die Ihren Kriterien entsprechen'
+    resume: 'Lebenslauf'
   },
   ar: {
     // Navigation
@@ -992,23 +972,23 @@ const translations: Translations = {
     },
     community: {
       title: "التأثير المجتمعي",
-      description: "Depuis mes premières expériences, j'ai toujours appris le mieux en partageant. Au fil des années, j'ai été impliqué dans plusieurs initiatives locales et bénévoles qui m'ont aidé à grandir techniquement et personnellement.",
+      description: "منذ تجاربي الأولى، كنت دائمًا أتعلم بشكل أفضل من خلال المشاركة. على مر السنين، شاركت في عدة مبادرات محلية وتطوعية ساعدتني على النمو تقنيًا وشخصيًا.",
       activities: {
         robotics: {
           title: "مدرب روبوتات – AJIZ / AJSZ (2023)",
-          description: "En 2023, j'ai dirigé des ateliers de robotique pour les jeunes à Zarzis. Je leur ai enseigné les bases de la programmation Arduino, le câblage des capteurs والمحركات، والمنطق المدمج. Ayant été formé à l'AJSZ between 2018 and 2020, je suis revenu comme formateur pour transmettre ce que j'avais appris."
+          description: "في عام 2023، قُدت ورشات روبوتات لفائدة الشباب في جرجيس. علمتهم أساسيات برمجة Arduino، توصيل المستشعرات والمحركات، والمنطق المدمج. بعد أن تدربت في AJSZ بين 2018 و2020، عدت كمدرب لأشارك ما تعلمته."
         },
         injaz: {
-          title: "Mentor Jeunesse – INJAZ Tunisia (2022)",
-          description: "Grâce au programme d'entrepreneuriat d'INJAZ, j'ai aidé des équipes d'étudiants à transformer des idées en mini-projets structurés. Nous avons travaillé sur la résolution de problèmes, la validation d'idées et la présentation. Cette expérience a amélioré mes compétences d'enseignement et de facilitation."
+          title: "موجه شباب – إنجاز تونس (2022)",
+          description: "من خلال برنامج ريادة الأعمال التابع لـ INJAZ، ساعدت فرقًا من الطلاب على تحويل أفكارهم إلى مشاريع مصغرة منظمة. عملنا على حل المشكلات، والتحقق من صحة الأفكار، وتقديمها. عززت هذه التجربة مهاراتي في التيسير والتدريب."
         },
         jci: {
-          title: "عضو نشط – JCI Zarzis (2021 – 2023)",
-          description: "Entre 2021 et 2023, j'ai été un membre actif de JCI Zarzis. J'ai participé à des actions citoyennes, des campagnes de sensibilisation dans les écoles, des événements locaux وبرامج تضامن. شملت مساهماتي التواصل المرئي، والخدمات اللوجستية، والتعاون الجماعي في بيئة غير ربحية منظمة."
+          title: "عضو نشط – JCI جرجيس (2021 – 2023)",
+          description: "بين 2021 و2023، كنت عضوًا نشطًا في JCI جرجيس. شاركت في أعمال مواطنية، حملات توعوية في المدارس، فعاليات محلية وبرامج تضامنية. شملت مساهماتي التصميم المرئي، التنظيم اللوجستي، والعمل الجماعي في بيئة غير ربحية منظمة."
         },
         english: {
-          title: "ميسر – English Fan Club ZZ (2020 – 2022)",
-          description: "J'ai aidé à animer des discussions orales, des jeux de rôle وجلسات التبادل الثقافي باللغة الإنجليزية. C'était un espace où nous pratiquions en toute confiance ودعمنا بعضنا البعض في تحسين مهارات اللغة."
+          title: "عضو نشط - English Fan Club ZZ (2020 – 2022)",
+          description: "ساهمت في تنشيط حلقات النقاش، ألعاب الأدوار، وجلسات التبادل الثقافي باللغة الإنجليزية. كان فضاءً نمارس فيه اللغة بثقة وندعم بعضنا البعض لتحسين مهاراتنا."
         }
       },
       conclusion: "شكلت هذه التجارب شخصيتي بقدر ما شكلها عملي التقني. عززت مهاراتي الناعمة: التدريس، والتواصل، والمبادرة، والعمل الجماعي، والتكيف."
@@ -1102,12 +1082,7 @@ const translations: Translations = {
     messageError: 'خطأ في إرسال الرسالة',
     tryAgainLater: 'يرجى المحاولة مرة أخرى لاحقاً',
     tooManyAttempts: 'محاولات كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً',
-    resume: 'السيرة الذاتية',
-    filterByCategory: 'تصفية حسب الفئة',
-    selectCategory: 'اختر الفئة',
-    searchProjects: 'البحث في المشاريع',
-    searchProjectsPlaceholder: 'البحث حسب العنوان أو الوصف أو التقنية...',
-    noProjectsFound: 'لم يتم العثور على مشاريع تطابق معاييرك'
+    resume: 'السيرة الذاتية'
   }
 };
 
