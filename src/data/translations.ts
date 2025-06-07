@@ -150,6 +150,8 @@ export interface TranslationContent {
   projectsPageIntro: string
   projectsPageGithub: string
   projectsPageLinkedin: string
+  checkOutMore: string
+  viewLinkedIn: string
   resumeTitle: string
   resumeSubtitle: string
   downloadResume: string
@@ -492,7 +494,9 @@ const translations: Translations = {
     messageError: 'Error sending message',
     tryAgainLater: 'Please try again later',
     tooManyAttempts: 'Too many attempts, please try again later',
-    resume: 'Resume'
+    resume: 'Resume',
+    checkOutMore: 'Check out more of my work:',
+    viewLinkedIn: 'View LinkedIn'
   },
   fr: {
     // Navigation
@@ -694,12 +698,14 @@ const translations: Translations = {
     messageError: 'Erreur lors de l\'envoi du message',
     tryAgainLater: 'Veuillez réessayer plus tard',
     tooManyAttempts: 'Trop de tentatives, veuillez réessayer plus tard',
-    resume: 'CV'
+    resume: 'CV',
+    checkOutMore: 'Découvrez plus de mes travaux:',
+    viewLinkedIn: 'Voir LinkedIn'
   },
   de: {
     // Navigation
     home: 'Startseite',
-    about: 'Über Mich',
+    about: 'Über mich',
     projects: 'Projekte',
     journey: 'Reise',
     contact: 'Kontakt',
@@ -896,7 +902,9 @@ const translations: Translations = {
     messageError: 'Fehler beim Senden der Nachricht',
     tryAgainLater: 'Bitte versuchen Sie es später erneut',
     tooManyAttempts: 'Zu viele Versuche, bitte versuchen Sie es später erneut',
-    resume: 'Lebenslauf'
+    resume: 'Lebenslauf',
+    checkOutMore: 'Weitere meiner Arbeiten ansehen:',
+    viewLinkedIn: 'LinkedIn anzeigen'
   },
   ar: {
     // Navigation
@@ -1015,7 +1023,7 @@ const translations: Translations = {
     timeline2023: 'ESP32 CallBox + عمل حر في UI/UX',
     timeline2024: 'تأسيس M&O Studio',
     projectsTitle: 'مشاريع مميزة',
-    projectsSubtitle: 'مجموعة من أعمالي الأكثر تأثيراً، من أنظمة إنترنت الأشياء إلى تطبيقات الويب',
+    projectsSubtitle: 'مجموعة من أعمالي الأكثر تأثيراً، من أنظمة المنزل الذكي إلى منصات الروبوتات التعليمية',
     viewGithub: 'عرض الكود',
     viewDemo: 'عرض حي',
     smartHomeDesc: 'أتمتة المنزل القائمة على إنترنت الأشياء مع ESP32 وFirebase - الفائز بالميدالية الذهبية',
@@ -1066,10 +1074,10 @@ const translations: Translations = {
     notFoundTitle: 'الصفحة غير موجودة',
     notFoundMessage: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
     goHome: 'العودة إلى الرئيسية',
-    projectsPageTitle: 'مشاريعي',
-    projectsPageIntro: "منذ عام 2018، أنشأت مشاريع عملية في إنترنت الأشياء والأنظمة المدمجة والروبوتات وتطوير الويب. تم تنفيذ هذه المشاريع في بيئات شخصية أو تنافسية أو مجتمعية، وتعكس نموي وفضولي وقدرتي على تحويل الأفكار إلى حلول عملية.",
-    projectsPageGithub: 'عرض جميع المشاريع على GitHub',
-    projectsPageLinkedin: 'تواصل معي على LinkedIn',
+    projectsPageTitle: 'المشاريع',
+    projectsPageIntro: 'اكتشف مشاريعي المميزة في إنترنت الأشياء، الروبوتات، وتطوير الويب. من أنظمة المنزل الذكي إلى منصات الروبوتات التعليمية.',
+    projectsPageGithub: 'ملف GitHub الشخصي',
+    projectsPageLinkedin: 'ملف LinkedIn الشخصي',
     projectsPageContact: 'اتصل بي',
     activities: 'النشاطات التطوعية',
     name: 'الاسم',
@@ -1082,7 +1090,9 @@ const translations: Translations = {
     messageError: 'خطأ في إرسال الرسالة',
     tryAgainLater: 'يرجى المحاولة مرة أخرى لاحقاً',
     tooManyAttempts: 'محاولات كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً',
-    resume: 'السيرة الذاتية'
+    resume: 'السيرة الذاتية',
+    checkOutMore: 'اكتشف المزيد من أعمالي:',
+    viewLinkedIn: 'عرض LinkedIn'
   }
 };
 
