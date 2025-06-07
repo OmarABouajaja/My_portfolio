@@ -14,7 +14,7 @@ interface ContactConfig {
 
 export const contactConfig: ContactConfig = {
   // Replace with your Formspree form ID
-  formspreeEndpoint: 'https://formspree.io/f/YOUR_FORM_ID',
+  formspreeEndpoint: 'https://formspree.io/f/xgvkjoqd',
   
   // Your contact email
   emailTo: 'omarbouajaja48@gmail.com',
