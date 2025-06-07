@@ -36,7 +36,7 @@ export const defaultSEO: SEOConfig = {
     description: 'IoT Developer and Robotics Trainer from Tunisia, specializing in smart automation systems, embedded development, and robotics education.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://ob.m-and-o-studio.com.tn/persoimg.jpg',
         width: 1200,
         height: 630,
         alt: 'Omar Abouajaja Portfolio'
@@ -77,7 +77,7 @@ export const structuredData = {
     '@type': 'Person',
     name: 'Omar Abouajaja',
     url: 'https://ob.m-and-o-studio.com.tn',
-    image: '/profile.jpg',
+    image: 'https://ob.m-and-o-studio.com.tn/persoimg.jpg',
     sameAs: [
       'https://www.linkedin.com/in/omar-abouajaja',
       'https://github.com/OmarABouajaja '
