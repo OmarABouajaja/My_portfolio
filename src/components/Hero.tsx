@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/providers/language';
-import { ChevronDown, FileText, Rocket } from 'lucide-react';
+import { FileText, Rocket } from 'lucide-react';
 import { TranslationContent } from '@/data/translations';
 
 const Hero = () => {
