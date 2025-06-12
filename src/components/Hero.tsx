@@ -127,27 +127,6 @@ const Hero = () => {
               {downloadCV}
             </Button>
           </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="text-muted-foreground cursor-pointer"
-              onClick={() => document.querySelector('#bio')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <ChevronDown className="w-8 h-8" />
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
     </section>

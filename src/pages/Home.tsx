@@ -205,33 +205,33 @@ const Home: React.FC = () => {
             </motion.div>
           </motion.div>
         </motion.div>
+      </section>
 
-        {/* Scroll Indicator */}
-        <motion.button
-          onClick={scrollToNextSection}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer focus:outline-none group"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+      {/* Scroll Indicator */}
+      <motion.button
+        onClick={scrollToNextSection}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="block mx-auto mt-16 mb-16 cursor-pointer focus:outline-none group"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <motion.div
+          className="w-12 h-16 rounded-full border-2 border-primary/50 flex items-center justify-center backdrop-blur-sm relative overflow-hidden"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
         >
           <motion.div
-            className="w-12 h-16 rounded-full border-2 border-primary/50 flex items-center justify-center backdrop-blur-sm relative overflow-hidden"
-            animate={{ y: [0, 10, 0] }}
+            className="text-primary relative z-10"
+            animate={{ opacity: [0.5, 1, 0.5], y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <motion.div
-              className="text-primary relative z-10"
-              animate={{ opacity: [0.5, 1, 0.5], y: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              <ChevronDown className="h-6 w-6" />
-            </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <ChevronDown className="h-6 w-6" />
           </motion.div>
-        </motion.button>
-      </section>
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </motion.div>
+      </motion.button>
 
       {/* Motivation Section */}
       <Section id="motivation-section" className="bg-gradient-to-b from-muted/5 to-transparent relative">
