@@ -6,14 +6,15 @@ const languageCodes: Record<Language, string> = {
   en: 'EN',
   fr: 'FR',
   ar: 'عر',
-  de: 'DE'
+  de: 'DE',
+  es: 'ES'
 };
 
 export default function LanguageToggle() {
   const { language, setLanguage } = useLanguage()
 
   const toggleLanguage = () => {
-    const languages: Language[] = ['en', 'fr', 'ar', 'de'];
+    const languages: Language[] = ['en', 'fr', 'ar', 'de', 'es'];
     const currentIndex = languages.indexOf(language);
     const nextIndex = (currentIndex + 1) % languages.length;
     setLanguage(languages[nextIndex]);

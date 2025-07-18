@@ -1,4 +1,4 @@
-export type Language = 'en' | 'fr' | 'ar' | 'de';
+export type Language = 'en' | 'fr' | 'ar' | 'de' | 'es';
 
 export interface Stats {
   title: string;

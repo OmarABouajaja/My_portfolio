@@ -39,7 +39,8 @@ export const SUPPORT_LINKS = {
       en: "Buy me a robot",
       fr: "Offrez-moi un robot",
       de: "Kauf mir einen Roboter",
-      ar: "اهدي لي روبوتًا"
+      ar: "اهدي لي روبوتًا",
+      es: "Cómprame un robot"
     },
     url: "https://coff.ee/omarbouajab"
   },
@@ -49,6 +50,7 @@ export const SUPPORT_LINKS = {
       fr: 'Planifier un appel',
       ar: 'جدولة مكالمة',
       de: 'Anruf planen',
+      es: 'Agendar una llamada'
     },
     url: 'https://calendly.com/omarbouajaja48/30min', // Replace with your Calendly link
     icon: null, // Replace with appropriate icon if available

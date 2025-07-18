@@ -113,11 +113,13 @@ export interface TranslationContent {
       fr: string
       ar: string
       de: string
+      es: string
       description: {
         en: string
         fr: string
         ar: string
         de: string
+        es: string
       }
     }>
   }
@@ -167,9 +169,11 @@ export interface TranslationContent {
   softSkillsCerts: string
   activities: string
   resume: string
+  buyMeARobot: string
+  scheduleCall: string
 }
 
-export type Language = 'en' | 'fr' | 'ar' | 'de';
+export type Language = 'en' | 'fr' | 'ar' | 'de' | 'es';
 export type Translations = Record<Language, TranslationContent>
 
 const translations: Translations = {
@@ -284,11 +288,13 @@ const translations: Translations = {
           fr: "Premiers pas – Club informatique pour enfants (CIIPEWEB)",
           ar: "الخطوات الأولى - نادي الكمبيوتر للأطفال (CIIPEWEB)",
           de: "Erste Schritte – Computerclub für Kinder (CIIPEWEB)",
+          es: "Primeros pasos – Club de informática para niños (CIIPEWEB)",
           description: {
             en: "Introduction to computing and programming basics",
             fr: "Découverte de l'informatique et des bases de la programmation",
             ar: "مقدمة في الحوسبة وأساسيات البرمجة",
-            de: "Einführung in Computer und Programmiergrundlagen"
+            de: "Einführung in Computer und Programmiergrundlagen",
+            es: "Introducción a la informática y programación básica"
           }
         },
         "2011-2013": {
@@ -296,11 +302,13 @@ const translations: Translations = {
           fr: "Activité hebdomadaire : découverte de logiciels éducatifs, clavier, logique, etc.",
           ar: "جلسات أسبوعية: الكتابة، الألعاب التعليمية، التفكير المنطقي",
           de: "Wöchentliche Sitzungen: Tippen, Lernspiele, logisches Denken",
+          es: "Sesiones semanales: escritura, juegos educativos, pensamiento lógico",
           description: {
             en: "Development of fundamental digital skills",
             fr: "Développement des compétences numériques fondamentales",
             ar: "تطوير المهارات الرقمية الأساسية",
-            de: "Entwicklung grundlegender digitaler Fähigkeiten"
+            de: "Entwicklung grundlegender digitaler Fähigkeiten",
+            es: "Desarrollo de habilidades digitales básicas"
           }
         },
         "2018": {
@@ -308,11 +316,13 @@ const translations: Translations = {
           fr: "Fondations – Maîtrise Arduino & Électronique",
           ar: "الأساسيات - إتقان Arduino والإلكترونيات",
           de: "Grundlagen – Arduino & Elektronik Beherrschung",
+          es: "Fundamentos – Maestría en Arduino y electrónica",
           description: {
             en: "Learning embedded systems and electronics",
             fr: "Apprentissage des systèmes embarqués et de l'électronique",
             ar: "تعلم الأنظمة المدمجة والإلكترونيات",
-            de: "Lernen von eingebetteten Systemen und Elektronik"
+            de: "Lernen von eingebetteten Systemen und Elektronik",
+            es: "Aprendiendo sistemas embebidos y electrónica"
           }
         },
         "2019": {
@@ -320,11 +330,13 @@ const translations: Translations = {
           fr: "Leadership – Ateliers robotiques Jeunes Sciences Zarzis",
           ar: "القيادة - ورش عمل الروبوتات (شباب العلوم زارزيس)",
           de: "Führung – Robotik-Workshops (Jeunes Sciences Zarzis)",
+          es: "Liderazgo – Talleres de robótica (Jeunes Sciences Zarzis)",
           description: {
             en: "Mentoring youth in robotics and electronics",
             fr: "Encadrement de jeunes dans la robotique et l'électronique",
             ar: "توجيه الشباب في مجال الروبوتات والإلكترونيات",
-            de: "Mentoring von Jugendlichen in Robotik und Elektronik"
+            de: "Mentoring von Jugendlichen in Robotik und Elektronik",
+            es: "Mentoría de jóvenes en robótica y electrónica"
           }
         },
         "2020": {
@@ -332,11 +344,13 @@ const translations: Translations = {
           fr: "Innovation – Système Smart Parking à Gabès (foire régionale)",
           ar: "الابتكار - نظام موقف ذكي في قابس (معرض إقليمي)",
           de: "Innovation – Smart-Parking-System (Gabès Messe)",
+          es: "Innovación – Sistema inteligente de estacionamiento (Feria regional de Gabès)",
           description: {
             en: "First complete IoT project with license plate recognition",
             fr: "Premier projet IoT complet avec reconnaissance de plaques",
             ar: "أول مشروع إنترنت الأشياء كامل مع التعرف على لوحات الترخيص",
-            de: "Erstes vollständiges IoT-Projekt mit Kennzeichenerkennung"
+            de: "Erstes vollständiges IoT-Projekt mit Kennzeichenerkennung",
+            es: "Primer proyecto IoT completo con reconocimiento de matrículas"
           }
         },
         "2021": {
@@ -344,11 +358,13 @@ const translations: Translations = {
           fr: "Expansion digitale – Web & Community (HTML, CSS, JS)",
           ar: "التوسع الرقمي - الويب والمجتمع (HTML، CSS، JS)",
           de: "Digitale Expansion – Web & Community (HTML, CSS, JS)",
+          es: "Expansión digital – Web y comunidad (HTML, CSS, JS)",
           description: {
             en: "Web development and community engagement",
             fr: "Développement web et engagement communautaire",
             ar: "تطوير الويب والمشاركة المجتمعية",
-            de: "Webentwicklung und Community-Engagement"
+            de: "Webentwicklung und Community-Engagement",
+            es: "Desarrollo web y participación comunitaria"
           }
         },
         "2022": {
@@ -356,11 +372,13 @@ const translations: Translations = {
           fr: "Reconnaissance – Médaille d'or Congrès National IoT",
           ar: "الاعتراف - الميدالية الذهبية في المؤتمر الوطني للإنترنت الأشياء",
           de: "Anerkennung – Goldmedaille Nationaler IoT-Kongress",
+          es: "Reconocimiento – Medalla de oro Congreso Nacional de IoT",
           description: {
             en: "Award-winning smart home project at national level",
             fr: "Projet de domotique intelligent primé au niveau national",
             ar: "مشروع منزل ذكي حائز على جائزة على المستوى الوطني",
-            de: "Ausgezeichnetes Smart-Home-Projekt auf nationaler Ebene"
+            de: "Ausgezeichnetes Smart-Home-Projekt auf nationaler Ebene",
+            es: "Proyecto de hogar inteligente premiado a nivel nacional"
           }
         },
         "2023": {
@@ -368,11 +386,13 @@ const translations: Translations = {
           fr: "Innovation – ESP32 CallBox (alerte industrielle + interface web)",
           ar: "الابتكار - ESP32 CallBox (تنبيه صناعي + واجهة ويب)",
           de: "Innovation – ESP32 CallBox (Industriealarm + Weboberfläche)",
+          es: "Innovación – ESP32 CallBox (alerta industrial + interfaz web)",
           description: {
             en: "Connected industrial alert system",
             fr: "Système d'alerte industriel connecté",
             ar: "نظام تنبيه صناعي متصل",
-            de: "Vernetztes industrielles Alarmsystem"
+            de: "Vernetztes industrielles Alarmsystem",
+            es: "Sistema de alarma industrial conectado"
           }
         },
         "2023-2": {
@@ -380,11 +400,13 @@ const translations: Translations = {
           fr: "Bénévolat – Formateur Robotique chez AJIZ/AJSZ",
           ar: "التطوع - مدرب الروبوتات في AJIZ/AJSZ",
           de: "Ehrenamt – Robotik-Trainer bei AJIZ/AJSZ",
+          es: "Voluntariado – Instructor de robótica en AJIZ/AJSZ",
           description: {
             en: "Training youth in emerging technologies",
             fr: "Formation des jeunes aux technologies émergentes",
             ar: "تدريب الشباب على التقنيات الناشئة",
-            de: "Schulung von Jugendlichen in aufstrebenden Technologien"
+            de: "Schulung von Jugendlichen in aufstrebenden Technologien",
+            es: "Formación de jóvenes en tecnologías emergentes"
           }
         },
         "2024": {
@@ -392,11 +414,13 @@ const translations: Translations = {
           fr: "Entrepreneuriat – Co-fondateur de M&O Studio (menus digitaux / UI design / intégration web)",
           ar: "ريادة الأعمال - الشريك المؤسس لاستوديو M&O (القوائم الرقمية / تصميم واجهة المستخدم / تكامل الويب)",
           de: "Unternehmertum – Mitbegründer von M&O Studio (digitale Menüs / UI-Design / Web-Integration)",
+          es: "Emprendimiento – Co-fundador de M&O Studio (menús digitales / diseño de interfaz de usuario / integración web)",
           description: {
             en: "Launching a digital design company",
             fr: "Lancement d'une entreprise de design numérique",
             ar: "إطلاق شركة تصميم رقمية",
-            de: "Gründung eines digitalen Designunternehmens"
+            de: "Gründung eines digitalen Designunternehmens",
+            es: "Lanzamiento de una compañía de diseño digital"
           }
         }
       }
@@ -496,7 +520,9 @@ const translations: Translations = {
     tooManyAttempts: 'Too many attempts, please try again later',
     resume: 'Resume',
     checkOutMore: 'Check out more of my work:',
-    viewLinkedIn: 'View LinkedIn'
+    viewLinkedIn: 'View LinkedIn',
+    buyMeARobot: 'Cómprame un robot',
+    scheduleCall: 'Agendar una llamada'
   },
   fr: {
     // Navigation
@@ -625,7 +651,7 @@ const translations: Translations = {
     smartHomeDesc: 'Domotique basée sur IoT avec ESP32 et Firebase – Lauréat de la Médaille d\'Or',
     callboxDesc: 'Boîte SOS usine (SIM800L – email/SMS)',
     rallyCarDesc: 'Voiture robotique tout-terrain télécommandée',
-    studioDesc: 'Studio de design de menus numériques et d\'interfaces web',
+    studioDesc: 'Digitales Menü und Web-UI-Design-Studio',
 
     // Contact Section
     contactTitle: "Créons Quelque Chose d'Extraordinaire",
@@ -647,7 +673,7 @@ const translations: Translations = {
     bioTitle: 'À Propos de Moi',
     bioSubtitle: 'Développeur IoT & Éducateur Tech de Tunisie',
     bioSkills: 'Compétences Clés',
-    technologies: 'Technologies',
+    technologies: 'Technologie-Stack',
     iotDescription: 'Développement de solutions intelligentes et connectées utilisant ESP32, Arduino et divers capteurs.',
     roboticsDescription: 'Construction et programmation de robots autonomes pour diverses applications.',
     embeddedDescription: 'Création de systèmes embarqués fiables pour l\'automatisation et le contrôle.',
@@ -700,7 +726,9 @@ const translations: Translations = {
     tooManyAttempts: 'Trop de tentatives, veuillez réessayer plus tard',
     resume: 'CV',
     checkOutMore: 'Découvrez plus de mes travaux:',
-    viewLinkedIn: 'Voir LinkedIn'
+    viewLinkedIn: 'Voir LinkedIn',
+    buyMeARobot: 'Cómprame un robot',
+    scheduleCall: 'Agendar una llamada'
   },
   de: {
     // Navigation
@@ -904,7 +932,9 @@ const translations: Translations = {
     tooManyAttempts: 'Zu viele Versuche, bitte versuchen Sie es später erneut',
     resume: 'Lebenslauf',
     checkOutMore: 'Weitere meiner Arbeiten ansehen:',
-    viewLinkedIn: 'LinkedIn anzeigen'
+    viewLinkedIn: 'LinkedIn anzeigen',
+    buyMeARobot: 'Cómprame un robot',
+    scheduleCall: 'Agendar una llamada'
   },
   ar: {
     // Navigation
@@ -1092,9 +1122,225 @@ const translations: Translations = {
     tooManyAttempts: 'محاولات كثيرة جداً، يرجى المحاولة مرة أخرى لاحقاً',
     resume: 'السيرة الذاتية',
     checkOutMore: 'اكتشف المزيد من أعمالي:',
-    viewLinkedIn: 'عرض LinkedIn'
+    viewLinkedIn: 'عرض LinkedIn',
+    buyMeARobot: 'Cómprame un robot',
+    scheduleCall: 'Agendar una llamada'
+  },
+  es: {
+    // Navigation
+    home: 'Inicio',
+    about: 'Sobre mí',
+    projects: 'Proyectos',
+    journey: 'Trayectoria',
+    contact: 'Contacto',
+    certifications: 'Certificaciones',
+    allRightsReserved: 'Todos los derechos reservados',
+    lightMode: 'Modo claro',
+    darkMode: 'Modo oscuro',
+
+    // Hero Section
+    intro: "Hola, soy Omar Abouajaja",
+    heroTitle: "Innovando en la intersección de IoT, Robótica y Diseño Digital",
+    heroSubtitle: "Desde 2018, he convertido ideas en realidad — desde prototipos de Arduino hasta interfaces UI/UX pulidas. Mi trayectoria abarca sistemas embebidos, desarrollo web y diseño creativo, impulsado por la curiosidad y la pasión por crear soluciones significativas. Me enorgullece haber contribuido a comunidades tecnológicas como Jeunes Sciences Zarzis, AJIZ, INJAZ Tunisia y JCI Zarzis.",
+    shortPitch: "Desde circuitos simples hasta sistemas complejos, creo tecnología que importa.",
+    exploreProjects: 'Explorar proyectos',
+    downloadCV: 'Descargar CV',
+
+    // Motivation
+    motivation: {
+      title: "Qué me motiva",
+      description: "Creo en el poder de la innovación práctica. Cada proyecto es una oportunidad para resolver problemas reales, aprender algo nuevo y compartir conocimientos. Mi objetivo es crear tecnología que marque una diferencia significativa en la vida de las personas."
+    },
+
+    // Skills
+    skills: {
+      title: "Habilidades técnicas",
+      design: {
+        title: "Diseño digital",
+        items: ["Figma", "Canva", "Adobe Photoshop", "Blender"]
+      },
+      programming: {
+        title: "Desarrollo de software",
+        items: ["C", "C++", "C#", "Python", "Java"]
+      },
+      web: {
+        title: "Tecnologías web",
+        items: [
+          "HTML5 / CSS3 / JavaScript",
+          "PHP moderno",
+          "React.js",
+          "Vite",
+          "Tailwind CSS",
+          "Git",
+          "GitHub",
+          "Servicios en la nube"
+        ]
+      },
+      embedded: {
+        title: "IoT y sistemas embebidos",
+        items: [
+          "Desarrollo con Arduino",
+          "Soluciones ESP32",
+          "Raspberry Pi",
+          "Prototipado rápido"
+        ]
+      },
+      soft: {
+        title: "Habilidades profesionales",
+        items: [
+          "Liderazgo estratégico y gestión de proyectos",
+          "Colaboración en equipos multidisciplinarios",
+          "Formación técnica y transferencia de conocimiento",
+          "Oratoria y presentaciones",
+          "Ejecución ágil de proyectos",
+          "Optimización y planificación de recursos",
+          "Compromiso e impacto comunitario",
+          "Resolución adaptativa de problemas",
+          "Aprendizaje y desarrollo continuo"
+        ]
+      }
+    },
+
+    // Community
+    community: {
+      title: "Comunidad",
+      description: "Participación activa en comunidades tecnológicas y voluntariado.",
+      activities: {
+        robotics: {
+          title: "Robótica – AJIZ / AJSZ (2023)",
+          description: "En 2023, dirigí talleres de robótica para jóvenes en Zarzis, enseñando programación con Arduino, cableado de sensores y motores, y lógica embebida. Tras haberme formado en AJSZ entre 2018 y 2020, regresé como formador para compartir lo aprendido."
+        },
+        injaz: {
+          title: "Mentor de Juventud – INJAZ Tunisia (2022)",
+          description: "Como mentor en el programa de emprendimiento de INJAZ, ayudé a equipos de estudiantes a transformar ideas en mini-proyectos estructurados. Trabajamos en la resolución de problemas, validación de ideas y presentaciones, fortaleciendo mis habilidades de enseñanza y facilitación."
+        },
+        jci: {
+          title: "Miembro Activo – JCI Zarzis (2021 – 2023)",
+          description: "Entre 2021 y 2023, fui miembro activo de JCI Zarzis, participando en acciones ciudadanas, campañas de sensibilización en escuelas, eventos locales y programas solidarios. Mis aportes incluyeron comunicación visual, logística y colaboración en equipo dentro de un entorno asociativo estructurado."
+        },
+        english: {
+          title: "Miembro Activo – English Fan Club ZZ (2020 – 2022)",
+          description: "Colaboré en la organización de debates orales, juegos de rol y sesiones de intercambio cultural en inglés. Era un espacio donde practicábamos con confianza y nos apoyábamos mutuamente para mejorar nuestras competencias lingüísticas."
+        }
+      },
+      conclusion: "Estas experiencias me han formado tanto como mi trabajo técnico. Han fortalecido mis habilidades interpersonales: enseñanza, comunicación, iniciativa, trabajo en equipo y adaptabilidad."
+    },
+
+    // Stats
+    stats: {
+      title: "📊 Logros",
+      projects: "🔧 10+ Proyectos Innovadores Entregados",
+      medal: "🏅 Medalla de Oro – Congreso Nacional IoT 2022",
+      olympiad: "🧠 Top 50 Finalista – Olimpiada Nacional de Programación 2022",
+      experience: "💼 7+ Años de Experiencia Combinada"
+    },
+
+    // Timeline
+    timeline: {
+      title: "Línea de tiempo",
+      intro: "Un recorrido por mis logros y experiencias desde 2018.",
+      entries: {} // Se rellena automáticamente
+    },
+    timelineTitle: 'Línea de tiempo',
+    journeyTitle: 'Mi Trayectoria',
+    timeline2018: 'Comienzos en electrónica y sensores',
+    timeline2019: 'Talleres de robótica juvenil (AJSZ)',
+    timeline2020: 'Smart Parking en feria tecnológica de Gabès',
+    timeline2021: 'Expansión digital - Web y comunidad',
+    timeline2022: 'Medalla de oro – Proyecto Smart Home IoT',
+    timeline2023: 'ESP32 CallBox + trabajo freelance en UI/UX',
+    timeline2024: 'Co-fundador de M&O Studio',
+
+    // Projects
+    projectsTitle: 'Proyectos Destacados',
+    projectsSubtitle: 'Una colección de mis trabajos más impactantes, desde sistemas IoT hasta aplicaciones web innovadoras',
+    viewGithub: 'Ver código',
+    viewDemo: 'Ver demo',
+    smartHomeDesc: 'Un sistema completo de automatización del hogar premiado en el Congreso Nacional de IoT. Permite el control remoto de luces, detección de movimiento, alertas y monitoreo energético.',
+    callboxDesc: 'Caja de emergencia industrial que envía alertas por SMS y correo electrónico usando un módulo SIM800L. Registra eventos críticos y se reinicia automáticamente cuando es necesario.',
+    rallyCarDesc: 'Coche robótico todoterreno controlado a distancia con GPS, detección de obstáculos y video en vivo. Construido como parte de un desafío de robótica.',
+    studioDesc: 'Estudio de diseño de menús digitales y UI web',
+
+    // Contact
+    contactTitle: 'Crea Conmigo Algo Increíble',
+    contactDesc: '¿Tienes una idea? Convirtámosla en realidad juntos',
+    contactMe: 'Iniciar una Conversación',
+    contactSuccess: '¡Mensaje recibido! Responderé en breve.',
+    nameLabel: 'Nombre',
+    emailLabel: 'Correo electrónico',
+    messageLabel: 'Tu Mensaje',
+    sendMessage: 'Enviar Mensaje',
+
+    // Education
+    educationTitle: 'Educación',
+    bacInfo: 'Bachillerato en Informática',
+    bacScores: 'Algoritmos: 19/20, STI: 17/20',
+    licenseIot: 'Licenciatura en Ingeniería de Sistemas IoT',
+
+    // Bio
+    bioTitle: 'Sobre mí',
+    bioSubtitle: 'Desarrollador IoT y Educador Tecnológico de Túnez',
+    bioSkills: 'Competencias Clave',
+    technologies: 'Stack Tecnológico',
+    iotDescription: 'Creando soluciones inteligentes y conectadas con tecnologías IoT de vanguardia.',
+    roboticsDescription: 'Desarrollando sistemas robóticos autónomos para aplicaciones reales.',
+    embeddedDescription: 'Construyendo sistemas embebidos confiables para automatización y control.',
+    uiuxDescription: 'Diseñando experiencias digitales intuitivas y atractivas.',
+    webdevDescription: 'Desarrollando aplicaciones web modernas con las últimas tecnologías.',
+    teachingDescription: 'Compartiendo conocimiento a través de talleres y sesiones de formación interactivas.',
+
+    // Resume
+    resumeTitle: 'Trayectoria Profesional',
+    resumeSubtitle: 'Educación y Experiencia',
+    downloadResume: 'Descargar CV Completo',
+    education: 'Educación',
+    experience: 'Experiencia',
+    skillsSection: 'Habilidades',
+    languages: 'Idiomas',
+
+    // Certifications
+    certificationsTitle: 'Certificaciones y Logros',
+    certificationsSubtitle: 'Desarrollo profesional y reconocimiento de habilidades a través de diversas certificaciones y premios',
+    viewCertificate: 'Ver Certificado',
+    roboticsCerts: 'Robótica',
+    educationCerts: 'Educación',
+    softSkillsCerts: 'Habilidades Blandas y Certificaciones',
+
+    // Other
+    viewAll: 'Ver todos los proyectos',
+    sourceCode: 'Código fuente',
+    viewProject: 'Ver proyecto',
+    viewMoreProjects: 'Ver más proyectos en GitHub',
+    all: 'Todos los proyectos',
+    awardWinning: 'Proyecto premiado',
+    notFoundTitle: 'Página no encontrada',
+    notFoundMessage: 'La página que buscas no existe o ha sido movida.',
+    goHome: 'Ir al inicio',
+    projectsPageTitle: 'Mis Proyectos',
+    projectsPageIntro: 'Desde 2018, he estado creando proyectos prácticos en IoT, sistemas embebidos, robótica y desarrollo web. Estos proyectos reflejan mi crecimiento, curiosidad y capacidad para convertir ideas en soluciones funcionales.',
+    projectsPageGithub: 'Ver todos los proyectos en GitHub',
+    projectsPageLinkedin: 'Conectar en LinkedIn',
+    projectsPageContact: 'Contáctame',
+    activities: 'Actividades de voluntariado',
+    name: 'Nombre',
+    email: 'Correo electrónico',
+    message: 'Mensaje',
+    responseTime: 'Tiempo de respuesta',
+    sending: 'Enviando...',
+    send: 'Enviar',
+    messageSent: '¡Mensaje enviado con éxito!',
+    messageError: 'Error al enviar el mensaje',
+    tryAgainLater: 'Por favor, inténtalo de nuevo más tarde',
+    tooManyAttempts: 'Demasiados intentos, por favor inténtalo de nuevo más tarde',
+    resume: 'CV',
+    checkOutMore: 'Descubre más de mi trabajo:',
+    viewLinkedIn: 'Ver LinkedIn',
+    buyMeARobot: 'Cómprame un robot',
+    scheduleCall: 'Agendar una llamada'
   }
 };
+
+export default translations;
 
 // Populate timeline entries for all languages
 function populateTimelineEntries() {
@@ -1106,6 +1352,30 @@ function populateTimelineEntries() {
 }
 
 // Call the function to populate timeline entries
-populateTimelineEntries();
+populateTimelineEntries(); 
 
-export default translations; 
+// --- AUTO-FIX: Add Spanish (es) fields to timeline.entries ---
+Object.keys(translations.en.timeline.entries).forEach((key) => {
+  const entry = translations.en.timeline.entries[key];
+  if (!entry.es) entry.es = entry.en; // Use English as base if Spanish missing
+  if (!entry.description.es) entry.description.es = entry.description.en;
+});
+// --- END AUTO-FIX --- 
+
+// --- AUTO-FIX: Fill missing/empty Spanish translations with English fallback ---
+Object.keys(translations.en).forEach((key) => {
+  if (key === 'timeline' || key === 'motivation' || key === 'skills' || key === 'community' || key === 'stats') return;
+  if (!(key in translations.es) || (translations.es as any)[key] === '' || (translations.es as any)[key] === undefined) {
+    (translations.es as any)[key] = (translations.en as any)[key];
+  }
+});
+['motivation', 'stats', 'community', 'skills'].forEach((section) => {
+  if (!(section in translations.es)) (translations.es as any)[section] = (translations.en as any)[section];
+  Object.keys((translations.en as any)[section]).forEach((k) => {
+    if (!(k in (translations.es as any)[section]) || (translations.es as any)[section][k] === '' || (translations.es as any)[section][k] === undefined) {
+      (translations.es as any)[section][k] = (translations.en as any)[section][k];
+    }
+  });
+});
+// Timeline entries are already auto-populated
+// --- END AUTO-FIX ---
