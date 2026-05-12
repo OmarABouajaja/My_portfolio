@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => ({
       manifest: false, // Tell VitePWA to use the existing public/manifest.json
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+        maximumFileSizeToCacheInBytes: 5000000, // Increased to 5MB to handle large libraries like three.js
       },
     }),
   ],

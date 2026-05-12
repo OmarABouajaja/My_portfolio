@@ -11,7 +11,13 @@ lerna-debug.log*
 node_modules/
 dist/
 dist-ssr/
+dev-dist/
+.vite/
 *.local
+
+# Cache and build info
+.eslintcache
+*.tsbuildinfo
 
 # Editor directories and files
 .vscode/*
