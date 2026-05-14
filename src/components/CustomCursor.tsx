@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-// Checked once at module load — avoids per-render matchMedia calls.
-// hasFinePointer is false on touch-only devices (phones/tablets).
+// Checked once at module load — no per-render overhead.
 const hasFinePointer =
   typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
 
@@ -11,85 +10,102 @@ export const CustomCursor = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
 
+  // Raw position — updated every mousemove via rAF, zero lag
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Outer ring spring — slower, more fluid trail
-  const cursorXSpring = useSpring(cursorX, { damping: 25, stiffness: 300, mass: 0.5 });
-  const cursorYSpring = useSpring(cursorY, { damping: 25, stiffness: 300, mass: 0.5 });
+  // Ring trails with a very light spring for the glow-ring effect.
+  // High stiffness + low mass keeps it close to real position.
+  const ringX = useSpring(cursorX, { stiffness: 600, damping: 40, mass: 0.08 });
+  const ringY = useSpring(cursorY, { stiffness: 600, damping: 40, mass: 0.08 });
 
-  // Inner dot spring — snappier, tightly bound
-  const dotXSpring = useSpring(cursorX, { damping: 20, stiffness: 400, mass: 0.2 });
-  const dotYSpring = useSpring(cursorY, { damping: 20, stiffness: 400, mass: 0.2 });
+  // rafId ref to cancel pending frames on cleanup
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Skip wiring listeners completely on touch-only devices
     if (!hasFinePointer) return;
 
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
-      setIsVisible(true);
+    const onMove = (e: MouseEvent) => {
+      // Cancel any pending frame so we don't stack them
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
 
-      const target = e.target as HTMLElement;
-      const interactive =
-        target.closest("a") ||
-        target.closest("button") ||
-        target.closest("[role='button']") ||
-        target.closest(".group") ||
-        target.closest("select") ||
-        target.closest("label[for]");
-      setIsHovering(!!interactive);
+      rafRef.current = requestAnimationFrame(() => {
+        // Ring offset — center the 32px ring on the cursor tip
+        cursorX.set(e.clientX - 16);
+        cursorY.set(e.clientY - 16);
+        setIsVisible(true);
+
+        const t = e.target as HTMLElement;
+        setIsHovering(
+          !!(
+            t.closest("a") ||
+            t.closest("button") ||
+            t.closest("[role='button']") ||
+            t.closest("label") ||
+            t.closest("select") ||
+            t.closest(".group")
+          )
+        );
+      });
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const onDown = () => setIsClicking(true);
+    const onUp = () => setIsClicking(false);
+    const onLeave = () => setIsVisible(false);
+    const onEnter = () => setIsVisible(true);
 
-    window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
-    document.documentElement.addEventListener("mouseenter", handleMouseEnter);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mousedown", onDown, { passive: true });
+    window.addEventListener("mouseup", onUp, { passive: true });
+    document.documentElement.addEventListener("mouseleave", onLeave);
+    document.documentElement.addEventListener("mouseenter", onEnter);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
-      document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
+      document.documentElement.removeEventListener("mouseenter", onEnter);
     };
   }, [cursorX, cursorY]);
 
-  // Don't render anything on touch devices or before first mouse move
   if (!hasFinePointer || !isVisible) return null;
 
   return (
     <>
-      {/* Outer Glow Ring */}
+      {/* ── Outer glow ring — trails slightly behind for depth ── */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] h-8 w-8 rounded-full border border-primary/50 mix-blend-screen shadow-[0_0_15px_rgba(34,211,238,0.4)] backdrop-blur-[2px]"
-        style={{ x: cursorXSpring, y: cursorYSpring }}
+        className="pointer-events-none fixed left-0 top-0 z-[9999] h-8 w-8 rounded-full border border-primary/50 mix-blend-screen shadow-[0_0_14px_rgba(34,211,238,0.35)]"
+        style={{ x: ringX, y: ringY }}
         animate={{
-          scale: isClicking ? 0.8 : isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? "rgba(34,211,238,0.2)" : "rgba(34,211,238,0.1)",
+          scale: isClicking ? 0.75 : isHovering ? 1.55 : 1,
+          backgroundColor: isHovering
+            ? "rgba(34,211,238,0.18)"
+            : "rgba(34,211,238,0.06)",
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
       />
-      {/* Inner Precision Dot */}
+
+      {/* ── Inner precision dot — pixel-perfect, zero lag ── */}
+      {/*
+          Uses raw cursorX/cursorY (no spring), so it sits exactly on the
+          hot-spot. translateX/Y 13 = (32 - 6) / 2 to center the 6px dot
+          inside the 32px ring element.
+      */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[10000] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_#22d3ee]"
+        className="pointer-events-none fixed left-0 top-0 z-[10000] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_hsl(187_95%_55%)]"
         style={{
-          x: dotXSpring,
-          y: dotYSpring,
-          translateX: 13, // center the 6px dot inside the 32px ring
+          x: cursorX,
+          y: cursorY,
+          translateX: 13,
           translateY: 13,
         }}
         animate={{
-          scale: isClicking ? 0 : isHovering ? 0 : 1,
+          scale: isClicking ? 2.5 : isHovering ? 0 : 1,
           opacity: isHovering ? 0 : 1,
         }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     </>
   );

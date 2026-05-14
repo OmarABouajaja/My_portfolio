@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import type { FetchState } from "@/hooks/useSiteMetadata";
@@ -23,6 +23,37 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
   const [cursorVisible, setCursorVisible] = useState(true);
   const [telemetry, setTelemetry] = useState<ClientTelemetry | null>(null);
   const [botBlocked, setBotBlocked] = useState(false);
+
+  // Scale-to-fit: keeps the whole panel visible without scrolling on any screen
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [panelScale, setPanelScale] = useState(1);
+
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+
+    let rafId: number;
+    const recalc = () => {
+      rafId = requestAnimationFrame(() => {
+        const panelH = el.scrollHeight;
+        const margin = 24; // px breathing room top+bottom
+        const maxH = window.innerHeight - margin;
+        setPanelScale(Math.min(1, maxH / panelH));
+      });
+    };
+
+    // Re-run whenever panel content changes height (lines printing in)
+    const ro = new ResizeObserver(recalc);
+    ro.observe(el);
+    window.addEventListener("resize", recalc, { passive: true });
+    recalc(); // initial
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", recalc);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   useEffect(() => {
     const tel = gatherClientTelemetry();
@@ -208,9 +239,19 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.6)_100%)]" />
 
-        {/* Constrain panel to viewport height so it never clips on short screens */}
-        <div className="relative z-10 w-full max-w-3xl px-4 sm:px-6 max-h-[90svh] flex flex-col">
-          <div className="glass-panel rounded-xl overflow-hidden shadow-elevated border border-primary/20 flex flex-col min-h-0">
+        {/* Scale-to-fit wrapper — shrinks panel as a unit so it's always
+            100% visible with no scroll needed on any device */}
+        <div
+          className="relative z-10 w-full max-w-3xl px-4 sm:px-6"
+          style={{
+            transform: `scale(${panelScale})`,
+            transformOrigin: "center center",
+          }}
+        >
+          <div
+            ref={panelRef}
+            className="glass-panel rounded-xl overflow-hidden shadow-elevated border border-primary/20"
+          >
             {/* Title bar */}
             <div className="flex items-center gap-2 border-b border-border bg-[hsl(222_47%_5%)] px-4 py-2.5 shrink-0">
               <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -225,8 +266,8 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
               </div>
             </div>
 
-            {/* Scrollable content — ensures ENGAGE button always reachable */}
-            <div className="overflow-y-auto hide-scrollbar flex-1 p-4 sm:p-6 terminal-text text-[13px] leading-7 bg-[hsl(222_47%_3%)]">
+            {/* Content — no overflow scroll; scale keeps everything in view */}
+            <div className="p-4 sm:p-6 terminal-text text-[13px] leading-7 bg-[hsl(222_47%_3%)]">
               <div className="mt-1 animate-flicker opacity-50 flex items-center justify-center gap-2">
                 <div className="h-1 w-4 bg-primary rounded-full"></div>
                 <div className="h-1 w-1 bg-primary rounded-full animate-ping"></div>

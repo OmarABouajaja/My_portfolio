@@ -160,15 +160,6 @@
   ::-webkit-scrollbar-track { background: hsl(var(--background)); }
   ::-webkit-scrollbar-thumb { background: hsl(var(--primary) / 0.4); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.7); }
-
-  /* ── Custom Cursor: hide native pointer on mouse devices ── */
-  /* Drag handles get grab cursor (overrides cursor:none so user has feedback). */
-  @media (pointer: fine) {
-    *, *::before, *::after { cursor: none !important; }
-    /* Exception: drag handle elements in reorder mode keep grab feedback */
-    .cursor-grab, .cursor-grab * { cursor: grab !important; }
-    .cursor-grabbing, .cursor-grabbing * { cursor: grabbing !important; }
-  }
 }
 
 @layer components {
@@ -296,7 +287,38 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hide large ASCII art on very short screens so boot loader fits without clipping */
-@media (max-height: 680px) {
-  .boot-ascii-full { display: none !important; }
+/*
+ * ── CUSTOM CURSOR ─────────────────────────────────────────────────────────────
+ * Placed OUTSIDE all @layer blocks so it has the highest cascade position.
+ * This guarantees no component or Tailwind utility can accidentally restore
+ * the native cursor on pointer-driven devices (desktops / laptops).
+ *
+ * The browser's text-insertion caret is a separate UA mechanism and is
+ * NOT affected by cursor:none — inputs remain fully usable.
+ *
+ * .cursor-grab / .cursor-grabbing are EXEMPT so drag handles still show
+ * the grab cursor (see Admin navbar reorder mode).
+ */
+@media (pointer: fine) {
+  html,
+  html *,
+  html *::before,
+  html *::after {
+    cursor: none !important;
+  }
+
+  /* Drag handle exceptions — shows OS grab cursor in navbar reorder mode */
+  .cursor-grab,
+  .cursor-grab *,
+  .cursor-grab *::before,
+  .cursor-grab *::after {
+    cursor: grab !important;
+  }
+
+  .cursor-grabbing,
+  .cursor-grabbing *,
+  .cursor-grabbing *::before,
+  .cursor-grabbing *::after {
+    cursor: grabbing !important;
+  }
 }
