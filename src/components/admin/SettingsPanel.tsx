@@ -7,6 +7,42 @@ import { toast } from "sonner";
 import { Save, Loader2, ExternalLink, Lock, Eye, EyeOff, ShieldCheck, AlertTriangle, LogOut } from "lucide-react";
 import { useThemeEngine } from "@/hooks/useThemeEngine";
 
+// ── Password Strength Indicator ──────────────────────────────────────────────
+const PasswordStrength = ({ password }: { password: string }) => {
+  const checks = [
+    { label: "6+ chars", ok: password.length >= 6 },
+    { label: "Uppercase", ok: /[A-Z]/.test(password) },
+    { label: "Number", ok: /[0-9]/.test(password) },
+    { label: "Symbol", ok: /[^a-zA-Z0-9]/.test(password) },
+  ];
+  const score = checks.filter(c => c.ok).length;
+  const colors = ["bg-destructive", "bg-destructive", "bg-warning", "bg-warning", "bg-success"];
+  const labels = ["", "Weak", "Fair", "Good", "Strong"];
+  const textColors = ["text-destructive", "text-destructive", "text-warning", "text-warning", "text-success"];
+
+  if (!password) return null;
+
+  return (
+    <div className="mt-2 space-y-1.5">
+      <div className="flex gap-1">
+        {[0, 1, 2, 3].map(i => (
+          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i < score ? colors[score] : "bg-muted/40"}`} />
+        ))}
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2 flex-wrap">
+          {checks.map(c => (
+            <span key={c.label} className={`text-[9px] terminal-text ${c.ok ? "text-success" : "text-muted-foreground/50"}`}>
+              {c.ok ? "✓" : "○"} {c.label}
+            </span>
+          ))}
+        </div>
+        <span className={`text-[9px] terminal-text uppercase tracking-widest font-bold ${textColors[score]}`}>{labels[score]}</span>
+      </div>
+    </div>
+  );
+};
+
 export const SettingsPanel = ({ setActiveTab }: { setActiveTab?: (tab: string) => void }) => {
   const { currentTheme, applyTheme, themes } = useThemeEngine();
   const [meta, setMeta] = useState<SiteMetadata | null>(null);
@@ -280,6 +316,7 @@ export const SettingsPanel = ({ setActiveTab }: { setActiveTab?: (tab: string) =
                 </button>
               </div>
             </div>
+            <PasswordStrength password={newPassword} />
             <div>
               <label className="terminal-text text-[10px] uppercase tracking-widest text-muted-foreground">Confirm Password</label>
               <div className="relative mt-1.5">

@@ -208,9 +208,11 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.6)_100%)]" />
 
-        <div className="relative z-10 w-full max-w-3xl px-4 sm:px-6">
-          <div className="glass-panel rounded-xl overflow-hidden shadow-elevated border border-primary/20">
-            <div className="flex items-center gap-2 border-b border-border bg-[hsl(222_47%_5%)] px-4 py-2.5">
+        {/* Constrain panel to viewport height so it never clips on short screens */}
+        <div className="relative z-10 w-full max-w-3xl px-4 sm:px-6 max-h-[90svh] flex flex-col">
+          <div className="glass-panel rounded-xl overflow-hidden shadow-elevated border border-primary/20 flex flex-col min-h-0">
+            {/* Title bar */}
+            <div className="flex items-center gap-2 border-b border-border bg-[hsl(222_47%_5%)] px-4 py-2.5 shrink-0">
               <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
               <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
               <span className="h-3 w-3 rounded-full bg-[#28c840]" />
@@ -223,18 +225,20 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
               </div>
             </div>
 
-            <div className="mt-4 animate-flicker opacity-50 flex items-center justify-center gap-2">
-              <div className="h-1 w-4 bg-primary rounded-full"></div>
-              <div className="h-1 w-1 bg-primary rounded-full animate-ping"></div>
-              <div className="h-1 w-4 bg-primary rounded-full"></div>
-            </div>
-            
-            <div className="mt-4 text-center text-[9px] text-muted-foreground uppercase tracking-widest animate-pulse">
-              Click or press ENTER to engage
-            </div>
+            {/* Scrollable content — ensures ENGAGE button always reachable */}
+            <div className="overflow-y-auto hide-scrollbar flex-1 p-4 sm:p-6 terminal-text text-[13px] leading-7 bg-[hsl(222_47%_3%)]">
+              <div className="mt-1 animate-flicker opacity-50 flex items-center justify-center gap-2">
+                <div className="h-1 w-4 bg-primary rounded-full"></div>
+                <div className="h-1 w-1 bg-primary rounded-full animate-ping"></div>
+                <div className="h-1 w-4 bg-primary rounded-full"></div>
+              </div>
+              
+              <div className="mt-3 text-center text-[9px] text-muted-foreground uppercase tracking-widest animate-pulse">
+                Click or press ENTER to engage
+              </div>
 
-            <div className="p-5 sm:p-7 terminal-text text-[13px] leading-7 bg-[hsl(222_47%_3%)]">
-              <div className="mb-5 text-primary/50 text-[10px] leading-[1.3] hidden sm:block">
+              {/* Full ASCII — hidden on very short screens (< ~680px height) */}
+              <div className="mb-5 text-primary/50 text-[10px] leading-[1.3] hidden sm:block boot-ascii-full">
                 <pre>{`╔════════════════════════════════════════════════════════════╗
 ║   ████████╗██╗  ██╗███████╗    ██████╗  ██████╗ ██████╗    ║
 ║   ╚══██╔══╝██║  ██║██╔════╝    ██╔══██╗██╔═══██╗╚════██╗   ║
@@ -308,7 +312,7 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="mt-6 flex flex-col items-center gap-2"
+                  className="mt-6 flex flex-col items-center gap-2 pb-2"
                 >
                   <div className="text-center text-[11px] uppercase tracking-[0.35em] text-primary">
                     {"> "}SYSTEM READY
@@ -330,3 +334,4 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
     </AnimatePresence>
   );
 };
+

@@ -11,6 +11,7 @@ export interface ChatMessage {
   text: string;
   read: boolean;
   created_at: string;
+  timestamp?: number; // local-only for offline mode
 }
 
 const SEED: ChatMessage[] = [
@@ -19,40 +20,58 @@ const SEED: ChatMessage[] = [
   { id: "m3", sender: "omar", text: "Absolutely. I'll scope that into the Dashboard UI Polish milestone. ETA: end of this sprint.", read: true, created_at: new Date(Date.now() - 900000).toISOString() },
 ];
 
-const LS_KEY = "bo3_client_chat";
 const isOffline = () => !hasSupabase || isDemoMode();
-const getTokenId = () => sessionStorage.getItem("nexus_client_token_id") || "ct-1";
+const getSessionTokenId = () => sessionStorage.getItem("nexus_client_token_id") || "ct-1";
 
-export function useClientChat(role: "client" | "omar") {
+/**
+ * useClientChat — bidirectional chat between client portal and admin.
+ *
+ * @param role - "client" (client portal) or "omar" (admin side)
+ * @param overrideTokenId - optional: admin side passes the selected client's token ID
+ *                          to switch channels. Clients use their session token.
+ */
+export function useClientChat(role: "client" | "omar", overrideTokenId?: string | null) {
+  const tokenId = overrideTokenId ?? getSessionTokenId();
+  const lsKey = `bo3_client_chat_${tokenId}`;
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const channelRef = useRef<any>(null);
-  const tokenId = getTokenId();
 
   // --- Load ---
   useEffect(() => {
     let live = true;
+    setMessages([]); // reset on channel switch
 
     (async () => {
       if (isOffline()) {
-        const saved = localStorage.getItem(LS_KEY);
-        if (saved) { try { setMessages(JSON.parse(saved)); return; } catch { /* corrupt */ } }
-        setMessages(SEED);
+        const saved = localStorage.getItem(lsKey);
+        if (saved) {
+          try { setMessages(JSON.parse(saved)); return; } catch { /* corrupt */ }
+        }
+        // Show seed only for the first/default channel
+        if (tokenId === "ct-1") setMessages(SEED);
         return;
       }
       const rows = await safeFetchAll<ChatMessage>("chat_messages", {
         order: "created_at", ascending: true, filter: { client_token_id: tokenId },
       });
-      if (live) setMessages(rows.length ? rows : SEED);
+      if (live) setMessages(rows.length ? rows : tokenId === "ct-1" ? SEED : []);
     })();
 
     return () => { live = false; };
-  }, [tokenId]);
+  }, [tokenId, lsKey]);
 
   // --- Realtime / localStorage sync ---
   useEffect(() => {
+    // Tear down any previous channel
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+
     if (isOffline()) {
       const onStorage = (e: StorageEvent) => {
-        if (e.key === LS_KEY && e.newValue) {
+        if (e.key === lsKey && e.newValue) {
           try { setMessages(JSON.parse(e.newValue)); } catch { /* ignore */ }
         }
       };
@@ -61,7 +80,7 @@ export function useClientChat(role: "client" | "omar") {
     }
 
     const ch = supabase
-      .channel(`chat-${tokenId}`)
+      .channel(`chat-${tokenId}-${role}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages", filter: `client_token_id=eq.${tokenId}` },
         ({ new: row }) => {
           const msg = row as ChatMessage;
@@ -75,8 +94,10 @@ export function useClientChat(role: "client" | "omar") {
       .subscribe();
 
     channelRef.current = ch;
-    return () => { if (channelRef.current) supabase.removeChannel(channelRef.current); };
-  }, [tokenId]);
+    return () => {
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
+    };
+  }, [tokenId, role, lsKey]);
 
   // --- Send ---
   const sendMessage = useCallback(async (text: string) => {
@@ -90,12 +111,13 @@ export function useClientChat(role: "client" | "omar") {
       text: trimmed,
       read: false,
       created_at: new Date().toISOString(),
+      timestamp: Date.now(),
     };
 
     if (isOffline()) {
       setMessages(prev => {
         const next = [...prev, optimistic];
-        localStorage.setItem(LS_KEY, JSON.stringify(next));
+        localStorage.setItem(lsKey, JSON.stringify(next));
         return next;
       });
       return;
@@ -112,7 +134,7 @@ export function useClientChat(role: "client" | "omar") {
       toast.error("Failed to send message");
       setMessages(prev => prev.filter(m => m.id !== optimistic.id));
     }
-  }, [role, tokenId]);
+  }, [role, tokenId, lsKey]);
 
   // --- Mark read ---
   const markAllAsRead = useCallback(async () => {
@@ -123,7 +145,7 @@ export function useClientChat(role: "client" | "omar") {
       const next = prev.map(m => m.sender !== role ? { ...m, read: true } : m);
 
       if (isOffline()) {
-        localStorage.setItem(LS_KEY, JSON.stringify(next));
+        localStorage.setItem(lsKey, JSON.stringify(next));
       } else {
         dbBulkUpdate("chat_messages",
           { client_token_id: tokenId, sender: role === "client" ? "omar" : "client", read: false },
@@ -132,7 +154,7 @@ export function useClientChat(role: "client" | "omar") {
       }
       return next;
     });
-  }, [role, tokenId]);
+  }, [role, tokenId, lsKey]);
 
   return { messages, sendMessage, markAllAsRead };
 }

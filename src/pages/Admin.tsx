@@ -38,9 +38,15 @@ import { TimeWarpProvider } from "@/hooks/useTimeWarp";
 import { TimeWarpScrubber } from "@/components/admin/TimeWarpScrubber";
 import { Layers, MessageSquare, Star, BookOpen, Command, Cpu, DollarSign, Activity, Terminal, Share2, Smartphone, HardDrive, Menu, X, ChevronLeft, ChevronRight, ActivitySquare, Lock, Hexagon } from "lucide-react";
 
-const NavItem = ({ value, icon: Icon, label, isCollapsed, colorClass = "text-primary", onClick, isActive, onSelect, reorderMode, onDragStart, onDragOver, onDrop, onDragEnd, onTouchStart, onTouchMove, onTouchEnd, flatIdx }: any) => {
+const NavItem = ({
+  value, icon: Icon, label, isCollapsed, colorClass = "text-primary",
+  onClick, isActive, onSelect, reorderMode,
+  onDragStart, onDragOver, onDrop, onDragEnd,
+  onTouchStart, onTouchMove, onTouchEnd,
+  flatIdx, isDragOver, isDragging,
+}: any) => {
   const btn = (
-    <button 
+    <button
       onClick={() => { if (!reorderMode) { onSelect?.(value); onClick?.(); } }}
       data-nav-idx={flatIdx}
       draggable={reorderMode}
@@ -51,14 +57,40 @@ const NavItem = ({ value, icon: Icon, label, isCollapsed, colorClass = "text-pri
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className={`flex items-center justify-start px-3 py-2.5 h-auto text-sm font-medium w-full rounded-md transition-colors group ${reorderMode ? "touch-none" : ""} ${
-        reorderMode ? "cursor-grab active:cursor-grabbing border border-dashed border-border/60 hover:border-primary/40" :
-        isActive ? `bg-primary/10 ${colorClass}` : "text-muted-foreground hover:bg-background-elevated hover:text-foreground"
-      }`}
+      className={[
+        "relative flex items-center justify-start px-3 py-2.5 h-auto text-sm font-medium w-full rounded-md transition-all group",
+        reorderMode ? "touch-none" : "",
+        reorderMode
+          ? isDragging
+            ? "opacity-40 border border-dashed border-primary/60 bg-primary/5"
+            : isDragOver
+            ? "border border-primary/70 bg-primary/10 ring-1 ring-primary/30 scale-[0.99]"
+            : "border border-dashed border-border/60 hover:border-primary/40 cursor-grab active:cursor-grabbing"
+          : isActive
+          ? `bg-primary/10 ${colorClass}`
+          : "text-muted-foreground hover:bg-background-elevated hover:text-foreground",
+      ].join(" ")}
     >
-      {reorderMode && !isCollapsed && <GripVertical className="h-3 w-3 mr-2 text-muted-foreground shrink-0" />}
-      <Icon className={`h-4 w-4 shrink-0 ${isCollapsed ? "mx-auto" : reorderMode ? "mr-2" : "mr-3"} ${isActive ? colorClass : `${colorClass}/70`} transition-transform group-hover:scale-110 duration-200`} />
-      <span className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100 block"}`}>
+      {/* Drop-target indicator bar */}
+      {reorderMode && isDragOver && (
+        <span className="absolute inset-x-0 top-0 h-0.5 rounded-t-full bg-primary shadow-[0_0_6px_rgba(59,130,246,0.8)]" />
+      )}
+      {reorderMode && !isCollapsed && (
+        <GripVertical className="h-3 w-3 mr-2 text-muted-foreground shrink-0 cursor-grab" />
+      )}
+      <Icon
+        className={[
+          "h-4 w-4 shrink-0",
+          isCollapsed ? "mx-auto" : reorderMode ? "mr-2" : "mr-3",
+          isActive ? colorClass : `${colorClass}/70`,
+          "transition-transform group-hover:scale-110 duration-200",
+        ].join(" ")}
+      />
+      <span
+        className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${
+          isCollapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100 block"
+        }`}
+      >
         {label}
       </span>
     </button>
@@ -130,6 +162,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
   const [reorderMode, setReorderMode] = useState(false);
   const [navOrder, setNavOrder] = useLocalStorage<string[]>("bo3_nav_order", DEFAULT_NAV.map(n => n.value));
   const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
   const handleMobileNav = () => {
     setIsMobileMenuOpen(false);
@@ -166,35 +199,60 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
 
   const handleDragStart = (flatIdx: number) => (e: React.DragEvent) => {
     setDragIdx(flatIdx);
+    setDragOverIdx(flatIdx);
     e.dataTransfer.effectAllowed = "move";
+    // Semi-transparent ghost image
+    if (e.dataTransfer.setDragImage) {
+      const el = e.currentTarget as HTMLElement;
+      e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
+    }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (targetFlatIdx: number) => (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
+    setDragOverIdx(targetFlatIdx);
   };
 
-  const handleDrop = (targetFlatIdx: number) => (e: React.DragEvent | React.TouchEvent) => {
+  const handleDrop = (targetFlatIdx: number) => (e: React.DragEvent) => {
     e.preventDefault();
-    if (dragIdx === null || dragIdx === targetFlatIdx) return;
+    if (dragIdx === null || dragIdx === targetFlatIdx) {
+      setDragIdx(null); setDragOverIdx(null); return;
+    }
     const newOrder = [...orderedNav.map(n => n.value)];
     const [moved] = newOrder.splice(dragIdx, 1);
     newOrder.splice(targetFlatIdx, 0, moved);
     setNavOrder(newOrder);
     setDragIdx(null);
+    setDragOverIdx(null);
   };
 
-  const handleDragEnd = () => setDragIdx(null);
+  const handleDragEnd = () => {
+    setDragIdx(null);
+    setDragOverIdx(null);
+  };
 
-  // Mobile Touch Handlers
+  const handleResetOrder = () => {
+    setNavOrder(DEFAULT_NAV.map(n => n.value));
+  };
+
+  // ── Mobile Touch Handlers ──
   const handleTouchStart = (flatIdx: number) => (e: React.TouchEvent) => {
     if (!reorderMode) return;
     setDragIdx(flatIdx);
+    setDragOverIdx(flatIdx);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!reorderMode || dragIdx === null) return;
     e.preventDefault(); // Prevent scrolling while dragging
+    const touch = e.touches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    const btn = el?.closest("button[data-nav-idx]");
+    if (btn) {
+      const idx = parseInt(btn.getAttribute("data-nav-idx") || "-1", 10);
+      if (idx !== -1) setDragOverIdx(idx);
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -212,6 +270,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
       }
     }
     setDragIdx(null);
+    setDragOverIdx(null);
   };
 
   // Flatten for index tracking
@@ -269,8 +328,10 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                         onClick={handleMobileNav}
                         reorderMode={reorderMode}
                         flatIdx={fi}
+                        isDragging={reorderMode && dragIdx === fi}
+                        isDragOver={reorderMode && dragOverIdx === fi && dragIdx !== fi}
                         onDragStart={handleDragStart(fi)}
-                        onDragOver={handleDragOver}
+                        onDragOver={handleDragOver(fi)}
                         onDrop={handleDrop(fi)}
                         onDragEnd={handleDragEnd}
                         onTouchStart={handleTouchStart(fi)}
@@ -287,20 +348,37 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
           </div>
 
           {/* Desktop Collapse Toggle + Reorder Toggle */}
-          <div className="hidden lg:flex h-12 border-t border-border/40 shrink-0 items-center justify-between px-4">
-            <button
-              onClick={() => setReorderMode(!reorderMode)}
-              className={`p-1.5 rounded-md transition-colors ${reorderMode ? "bg-primary/20 text-primary" : "text-muted-foreground hover:bg-background-elevated hover:text-foreground"}`}
-              title={reorderMode ? "Lock navigation order" : "Reorder navigation"}
-            >
-              {reorderMode ? <Unlock className="w-4 h-4" /> : <GripVertical className="w-4 h-4" />}
-            </button>
-            <button 
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="p-1.5 rounded-md text-muted-foreground hover:bg-background-elevated hover:text-foreground transition-colors"
-            >
-              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-            </button>
+          <div className="hidden lg:flex h-auto border-t border-border/40 shrink-0 flex-col gap-0">
+            {/* Reorder mode action bar */}
+            {reorderMode && (
+              <div className="flex items-center justify-between px-3 py-2 bg-primary/5 border-b border-primary/20 animate-in slide-in-from-bottom duration-200">
+                <span className="terminal-text text-[9px] uppercase tracking-widest text-primary/80">Drag to reorder</span>
+                <button
+                  onClick={handleResetOrder}
+                  className="text-[9px] terminal-text uppercase tracking-widest text-muted-foreground hover:text-destructive transition px-1.5 py-0.5 rounded hover:bg-destructive/10"
+                >
+                  Reset
+                </button>
+              </div>
+            )}
+            <div className="flex items-center justify-between px-4 h-12">
+              <button
+                onClick={() => { setReorderMode(!reorderMode); if (isCollapsed) setIsCollapsed(false); }}
+                className={`flex items-center gap-1.5 p-1.5 rounded-md transition-colors text-xs ${
+                  reorderMode ? "bg-primary/20 text-primary" : "text-muted-foreground hover:bg-background-elevated hover:text-foreground"
+                }`}
+                title={reorderMode ? "Lock navigation order" : "Reorder navigation"}
+              >
+                {reorderMode ? <Unlock className="w-4 h-4" /> : <GripVertical className="w-4 h-4" />}
+                {!isCollapsed && <span className="text-[9px] terminal-text uppercase tracking-widest">{reorderMode ? "Lock" : "Order"}</span>}
+              </button>
+              <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="p-1.5 rounded-md text-muted-foreground hover:bg-background-elevated hover:text-foreground transition-colors"
+              >
+                {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </aside>
 
