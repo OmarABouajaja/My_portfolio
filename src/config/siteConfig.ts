@@ -15,20 +15,20 @@ export const SITE = {
   brandHandle: "ABOUAJAJA_OMAR/",
 
   /** Primary job title */
-  jobTitle: "Robotics, IoT & Full-Stack Engineer",
+  jobTitle: "Full-Stack Developer | Freelancer | IoT & Robotics Innovator",
 
   /** Resume PDF job title (may differ slightly) */
-  resumeTitle: "Senior Full-Stack & 3D Web Engineer",
+  resumeTitle: "Full-Stack Developer & IoT Engineer",
 
   /** Public-facing email (fallback when DB is offline) */
-  email: "omar.abouajaja@gmail.com",
+  email: "omarbouajaja48@gmail.com",
 
   /** Canonical website URL */
-  url: "https://omarabouajaja.com",
+  url: "https://ob.m-and-o-studio.com.tn",
 
   /** Social links */
-  github: "https://github.com/omarabouajaja",
-  linkedin: "https://linkedin.com/in/omarabouajaja",
+  github: "https://github.com/Omar-ABouajaja",
+  linkedin: "https://linkedin.com/in/omar-abouajaja",
 
   /** Default resume file path (relative to public/) */
   resumePath: "/docs/Omar Abouajaja Resume.pdf",
@@ -43,24 +43,27 @@ export const SITE = {
 
   /** Known technical competencies (for SEO + resume) */
   competencies: [
-    "Robotics", "IoT", "Embedded Systems", "Full-Stack Web Development",
-    "React", "Node.js", "Arduino", "ESP32", "MQTT", "PostgreSQL",
-    "TypeScript", "TailwindCSS", "Supabase", "Cloud Architecture",
+    "Full-Stack Web Development", "IoT", "Embedded Systems", "Robotics",
+    "React", "Next.js", "FastAPI", "Python", "TypeScript", "JavaScript",
+    "Node.js", "Supabase", "SQL", "C++", "Arduino", "ESP32",
+    "Tailwind CSS", "PHP", "Figma", "Blender", "Adobe Photoshop",
+    "UI/UX Design", "Brand Identity", "Digital Marketing",
   ],
 
   /** Resume skill matrix */
   skills: {
-    frontend: "React, Three.js, WebGL, TailwindCSS, TypeScript, Framer Motion",
-    backend: "Node.js, Supabase, PostgreSQL, REST APIs, Web Crypto",
-    hardware: "IoT, ESP32, Serial Comms, Python",
+    frontend: "TypeScript, React.js, Next.js, Tailwind CSS, JavaScript, Framer Motion",
+    backend: "Python, FastAPI, PHP, Node.js, Supabase, PostgreSQL, SQL, REST APIs",
+    hardware: "C++, Arduino, ESP32, Embedded Systems, Robotics, Circuit Design, IoT",
+    design: "Figma, Adobe Photoshop, Canva, Blender, UI/UX, Brand Identity",
   },
 
   /** Resume summary */
   resumeSummary:
-    "A highly driven engineer specializing in building hyper-futuristic operating systems, immersive 3D web applications, and robust full-stack architectures. Passionate about merging industrial cyber aesthetics with extreme utility.",
+    "Passionate about computing since childhood, I built a self-taught path merging advanced software development with hardware innovation. Operating as a freelance developer since 2023, I deliver concrete digital solutions, from operational optimization to dynamic e-commerce ecosystems. My software engineering is backed by deep expertise in embedded systems, recognized by a Gold Medal at the National IoT Congress.",
 
   /** Resume contact line */
-  resumeContact: "omar.abouajaja@gmail.com  |  github.com/omarabouajaja  |  omarabouajaja.com",
+  resumeContact: "omarbouajaja48@gmail.com  |  github.com/Omar-ABouajaja  |  linkedin.com/in/omar-abouajaja",
 
   /** Admin panel branding */
   adminTitle: "Command Center",

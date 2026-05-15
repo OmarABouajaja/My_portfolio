@@ -43,12 +43,13 @@ const NavItem = ({
   onClick, isActive, onSelect, reorderMode,
   onDragStart, onDragOver, onDrop, onDragEnd,
   onTouchStart, onTouchMove, onTouchEnd,
-  flatIdx, isDragOver, isDragging,
+  isDragOver, isDragging, catParent,
 }: any) => {
   const btn = (
     <button
       onClick={() => { if (!reorderMode) { onSelect?.(value); onClick?.(); } }}
-      data-nav-idx={flatIdx}
+      data-item={value}
+      data-cat-parent={catParent}
       draggable={reorderMode}
       onDragStart={onDragStart}
       onDragOver={onDragOver}
@@ -161,8 +162,11 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [reorderMode, setReorderMode] = useState(false);
   const [navOrder, setNavOrder] = useLocalStorage<string[]>("bo3_nav_order", DEFAULT_NAV.map(n => n.value));
-  const [dragIdx, setDragIdx] = useState<number | null>(null);
-  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [categoryOrder, setCategoryOrder] = useLocalStorage<string[]>("bo3_category_order", ["Core", "Ecosystem", "Freelance", "Personal", "System"]);
+  
+  const [dragType, setDragType] = useState<"category" | "item" | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const handleMobileNav = () => {
     setIsMobileMenuOpen(false);
@@ -183,98 +187,146 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
     return result;
   })();
 
-  // Group items while preserving custom order within groups
-  const groups = (() => {
-    const groupOrder: string[] = [];
-    const groupMap: Record<string, NavItemDef[]> = {};
-    for (const item of orderedNav) {
-      if (!groupMap[item.group]) {
-        groupMap[item.group] = [];
-        groupOrder.push(item.group);
-      }
-      groupMap[item.group].push(item);
-    }
-    return groupOrder.map(g => ({ name: g, items: groupMap[g] }));
-  })();
+  // Group items by checking categoryOrder.
+  const groups = categoryOrder.map(cat => ({
+    name: cat,
+    items: orderedNav.filter(n => n.group === cat)
+  })).filter(g => g.items.length > 0);
 
-  const handleDragStart = (flatIdx: number) => (e: React.DragEvent) => {
-    setDragIdx(flatIdx);
-    setDragOverIdx(flatIdx);
+  // --- Category Drag Handlers ---
+  const handleCatDragStart = (cat: string) => (e: React.DragEvent) => {
+    setDragType("category"); setDragId(cat); setDragOverId(cat);
     e.dataTransfer.effectAllowed = "move";
-    // Semi-transparent ghost image
     if (e.dataTransfer.setDragImage) {
       const el = e.currentTarget as HTMLElement;
       e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
     }
   };
-
-  const handleDragOver = (targetFlatIdx: number) => (e: React.DragEvent) => {
+  const handleCatDragOver = (cat: string) => (e: React.DragEvent) => {
+    if (dragType !== "category") return;
+    e.preventDefault(); setDragOverId(cat);
+  };
+  const handleCatDrop = (targetCat: string) => (e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setDragOverIdx(targetFlatIdx);
+    if (dragType !== "category" || !dragId || dragId === targetCat) {
+      setDragType(null); setDragId(null); setDragOverId(null); return;
+    }
+    const newOrder = [...categoryOrder];
+    const fromIdx = newOrder.indexOf(dragId);
+    const toIdx = newOrder.indexOf(targetCat);
+    if (fromIdx > -1 && toIdx > -1) {
+      newOrder.splice(fromIdx, 1);
+      newOrder.splice(toIdx, 0, dragId);
+      setCategoryOrder(newOrder);
+    }
+    setDragType(null); setDragId(null); setDragOverId(null);
   };
 
-  const handleDrop = (targetFlatIdx: number) => (e: React.DragEvent) => {
-    e.preventDefault();
-    if (dragIdx === null || dragIdx === targetFlatIdx) {
-      setDragIdx(null); setDragOverIdx(null); return;
+  // --- Item Drag Handlers ---
+  const handleItemDragStart = (value: string) => (e: React.DragEvent) => {
+    setDragType("item"); setDragId(value); setDragOverId(value);
+    e.dataTransfer.effectAllowed = "move";
+    if (e.dataTransfer.setDragImage) {
+      const el = e.currentTarget as HTMLElement;
+      e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
     }
-    const newOrder = [...orderedNav.map(n => n.value)];
-    const [moved] = newOrder.splice(dragIdx, 1);
-    newOrder.splice(targetFlatIdx, 0, moved);
-    setNavOrder(newOrder);
-    setDragIdx(null);
-    setDragOverIdx(null);
+  };
+  const handleItemDragOver = (value: string, cat: string) => (e: React.DragEvent) => {
+    if (dragType !== "item") return;
+    const draggedItem = orderedNav.find(n => n.value === dragId);
+    if (draggedItem?.group === cat) {
+      e.preventDefault(); // Valid drop target (same category)
+      setDragOverId(value);
+    }
+  };
+  const handleItemDrop = (targetValue: string) => (e: React.DragEvent) => {
+    e.preventDefault();
+    if (dragType !== "item" || !dragId || dragId === targetValue) {
+      setDragType(null); setDragId(null); setDragOverId(null); return;
+    }
+    const newOrder = [...navOrder];
+    const fromIdx = newOrder.indexOf(dragId);
+    const toIdx = newOrder.indexOf(targetValue);
+    if (fromIdx > -1 && toIdx > -1) {
+      newOrder.splice(fromIdx, 1);
+      newOrder.splice(toIdx, 0, dragId);
+      setNavOrder(newOrder);
+    }
+    setDragType(null); setDragId(null); setDragOverId(null);
   };
 
   const handleDragEnd = () => {
-    setDragIdx(null);
-    setDragOverIdx(null);
+    setDragType(null); setDragId(null); setDragOverId(null);
   };
 
   const handleResetOrder = () => {
     setNavOrder(DEFAULT_NAV.map(n => n.value));
+    setCategoryOrder(["Core", "Ecosystem", "Freelance", "Personal", "System"]);
   };
 
   // ── Mobile Touch Handlers ──
-  const handleTouchStart = (flatIdx: number) => (e: React.TouchEvent) => {
+  const handleTouchStart = (type: "category" | "item", id: string) => (e: React.TouchEvent) => {
     if (!reorderMode) return;
-    setDragIdx(flatIdx);
-    setDragOverIdx(flatIdx);
+    setDragType(type); setDragId(id); setDragOverId(id);
   };
-
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!reorderMode || dragIdx === null) return;
-    e.preventDefault(); // Prevent scrolling while dragging
+    if (!reorderMode || !dragId || !dragType) return;
+    e.preventDefault();
     const touch = e.touches[0];
     const el = document.elementFromPoint(touch.clientX, touch.clientY);
-    const btn = el?.closest("button[data-nav-idx]");
-    if (btn) {
-      const idx = parseInt(btn.getAttribute("data-nav-idx") || "-1", 10);
-      if (idx !== -1) setDragOverIdx(idx);
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!reorderMode || dragIdx === null) return;
-    const touch = e.changedTouches[0];
-    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-    const dropBtn = targetElement?.closest("button[data-nav-idx]");
-    if (dropBtn) {
-      const targetIdx = parseInt(dropBtn.getAttribute("data-nav-idx") || "-1", 10);
-      if (targetIdx !== -1 && targetIdx !== dragIdx) {
-        const newOrder = [...orderedNav.map(n => n.value)];
-        const [moved] = newOrder.splice(dragIdx, 1);
-        newOrder.splice(targetIdx, 0, moved);
-        setNavOrder(newOrder);
+    
+    if (dragType === "category") {
+      const catHeader = el?.closest("div[data-cat]");
+      if (catHeader) setDragOverId(catHeader.getAttribute("data-cat"));
+    } else {
+      const itemBtn = el?.closest("button[data-item]");
+      const draggedItem = orderedNav.find(n => n.value === dragId);
+      if (itemBtn) {
+        const targetCat = itemBtn.getAttribute("data-cat-parent");
+        if (targetCat === draggedItem?.group) setDragOverId(itemBtn.getAttribute("data-item"));
       }
     }
-    setDragIdx(null);
-    setDragOverIdx(null);
   };
-
-  // Flatten for index tracking
-  let flatIndex = -1;
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!reorderMode || !dragId || !dragType) return;
+    const touch = e.changedTouches[0];
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (dragType === "category") {
+      const catHeader = targetElement?.closest("div[data-cat]");
+      if (catHeader) {
+        const targetCat = catHeader.getAttribute("data-cat");
+        if (targetCat && targetCat !== dragId) {
+          const newOrder = [...categoryOrder];
+          const fromIdx = newOrder.indexOf(dragId);
+          const toIdx = newOrder.indexOf(targetCat);
+          if (fromIdx > -1 && toIdx > -1) {
+            newOrder.splice(fromIdx, 1);
+            newOrder.splice(toIdx, 0, dragId);
+            setCategoryOrder(newOrder);
+          }
+        }
+      }
+    } else {
+      const itemBtn = targetElement?.closest("button[data-item]");
+      const draggedItem = orderedNav.find(n => n.value === dragId);
+      if (itemBtn) {
+        const targetItem = itemBtn.getAttribute("data-item");
+        const targetCat = itemBtn.getAttribute("data-cat-parent");
+        if (targetItem && targetItem !== dragId && targetCat === draggedItem?.group) {
+          const newOrder = [...navOrder];
+          const fromIdx = newOrder.indexOf(dragId);
+          const toIdx = newOrder.indexOf(targetItem);
+          if (fromIdx > -1 && toIdx > -1) {
+            newOrder.splice(fromIdx, 1);
+            newOrder.splice(toIdx, 0, dragId);
+            setNavOrder(newOrder);
+          }
+        }
+      }
+    }
+    setDragType(null); setDragId(null); setDragOverId(null);
+  };
 
   return (
     <TimeWarpProvider>
@@ -307,14 +359,33 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
           <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col h-auto w-full justify-start items-stretch p-3 space-y-1 bg-transparent rounded-none hide-scrollbar">
             
             {groups.map((group) => {
+              const isCatDragging = reorderMode && dragType === "category" && dragId === group.name;
+              const isCatDragOver = reorderMode && dragType === "category" && dragOverId === group.name && dragId !== group.name;
+              
               return (
-                <div key={group.name}>
-                  <div className={`px-3 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 mb-1 transition-all ${isCollapsed ? "text-center" : ""}`}>
+                <div key={group.name} className="relative">
+                  <div 
+                    data-cat={group.name}
+                    draggable={reorderMode}
+                    onDragStart={handleCatDragStart(group.name)}
+                    onDragOver={handleCatDragOver(group.name)}
+                    onDrop={handleCatDrop(group.name)}
+                    onDragEnd={handleDragEnd}
+                    onTouchStart={handleTouchStart("category", group.name)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    className={[
+                      "px-3 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 mb-1 transition-all flex items-center gap-2",
+                      isCollapsed ? "justify-center" : "",
+                      reorderMode ? "cursor-grab active:cursor-grabbing hover:bg-background-elevated rounded-md" : "",
+                      isCatDragging ? "opacity-30" : "",
+                      isCatDragOver ? "border-t-2 border-primary bg-primary/10 rounded-t-md" : "",
+                    ].join(" ")}
+                  >
+                    {reorderMode && !isCollapsed && <GripVertical className="h-3 w-3 shrink-0" />}
                     {isCollapsed ? GROUP_ABBREV[group.name] || group.name[0] : group.name}
                   </div>
                   {group.items.map((item) => {
-                    flatIndex++;
-                    const fi = flatIndex;
                     return (
                       <NavItem
                         key={item.value}
@@ -327,14 +398,14 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                         onSelect={setActiveTab}
                         onClick={handleMobileNav}
                         reorderMode={reorderMode}
-                        flatIdx={fi}
-                        isDragging={reorderMode && dragIdx === fi}
-                        isDragOver={reorderMode && dragOverIdx === fi && dragIdx !== fi}
-                        onDragStart={handleDragStart(fi)}
-                        onDragOver={handleDragOver(fi)}
-                        onDrop={handleDrop(fi)}
+                        catParent={group.name}
+                        isDragging={reorderMode && dragType === "item" && dragId === item.value}
+                        isDragOver={reorderMode && dragType === "item" && dragOverId === item.value && dragId !== item.value}
+                        onDragStart={handleItemDragStart(item.value)}
+                        onDragOver={handleItemDragOver(item.value, group.name)}
+                        onDrop={handleItemDrop(item.value)}
                         onDragEnd={handleDragEnd}
-                        onTouchStart={handleTouchStart(fi)}
+                        onTouchStart={handleTouchStart("item", item.value)}
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                       />

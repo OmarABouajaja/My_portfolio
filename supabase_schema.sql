@@ -27,7 +27,7 @@ CREATE TABLE public.site_metadata (
     hiring_status BOOLEAN DEFAULT true,
     primary_theme_color TEXT DEFAULT '#22d3ee',
     resume_url TEXT,
-    contact_email TEXT DEFAULT 'omar.abouajaja@gmail.com',
+    contact_email TEXT DEFAULT 'omarbouajaja48@gmail.com',
     enable_projects BOOLEAN DEFAULT true,
     enable_timeline BOOLEAN DEFAULT true,
     enable_tech_stack BOOLEAN DEFAULT true,
@@ -54,6 +54,7 @@ CREATE TABLE public.projects (
     image_url TEXT,
     live_url TEXT,
     github_url TEXT,
+    drive_url TEXT,
     featured BOOLEAN DEFAULT false,
     display_order INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
@@ -396,11 +397,11 @@ CREATE POLICY "Admin full access visitor_logs" ON public.visitor_logs USING (pub
 -- ─── 9. SEED DATA ───
 
 INSERT INTO public.site_metadata (id, active_projects_count, system_status, hiring_status, primary_theme_color, contact_email)
-VALUES ('config', 6, 'online', true, '#22d3ee', 'omar.abouajaja@gmail.com') ON CONFLICT (id) DO NOTHING;
+VALUES ('config', 4, 'online', true, '#22d3ee', 'omarbouajaja48@gmail.com') ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.social_links (platform, label, url, icon, display_order) VALUES
-  ('email', 'omar.abouajaja@gmail.com', 'mailto:omar.abouajaja@gmail.com', 'Mail', 1),
-  ('github', '@omar-abouajaja', 'https://github.com/omar-abouajaja', 'Github', 2),
+  ('email', 'omarbouajaja48@gmail.com', 'mailto:omarbouajaja48@gmail.com', 'Mail', 1),
+  ('github', '@Omar-ABouajaja', 'https://github.com/Omar-ABouajaja', 'Github', 2),
   ('linkedin', 'Omar Abouajaja', 'https://linkedin.com/in/omar-abouajaja', 'Linkedin', 3)
 ON CONFLICT DO NOTHING;
 

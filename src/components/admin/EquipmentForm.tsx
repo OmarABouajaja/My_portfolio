@@ -91,6 +91,7 @@ export const EquipmentForm = ({ draftNode, onChange, onSave, onCancel }: Equipme
       <div className="pt-2">
         <label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground terminal-text">Visual Asset</label>
         <ImageUploader 
+          bucket="equipment-images"
           value={draftNode?.image_url || null}
           onChange={(url) => onChange({ ...draftNode, image_url: url })}
         />

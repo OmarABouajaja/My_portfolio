@@ -16,6 +16,7 @@ type Project = {
   image_url: string | null;
   live_url: string | null;
   github_url: string | null;
+  drive_url: string | null;
   featured: boolean;
   display_order: number;
 };
@@ -213,6 +214,16 @@ export const ProjectsManager = () => {
               className="w-full rounded-md border border-border bg-background/50 px-3 py-2 text-sm focus:border-primary transition outline-none"
             />
           </div>
+          <div>
+            <label className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground terminal-text">Google Drive URL</label>
+            <input
+              type="url"
+              value={editingProject?.drive_url || ""}
+              onChange={(e) => setEditingProject(prev => ({ ...prev, drive_url: e.target.value || null }))}
+              placeholder="https://drive.google.com/..."
+              className="w-full rounded-md border border-border bg-background/50 px-3 py-2 text-sm focus:border-primary transition outline-none"
+            />
+          </div>
         </div>
 
         {/* Tech Stack Tags */}
@@ -255,6 +266,7 @@ export const ProjectsManager = () => {
         <div className="pt-2">
           <label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground terminal-text">Project Image (Drag & Drop)</label>
           <ImageUploader 
+            bucket="project-images"
             value={editingProject?.image_url || null}
             onChange={(url) => setEditingProject(prev => ({ ...prev, image_url: url }))}
           />

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Cpu, Github, Server, Wifi, Database, Cog } from "lucide-react";
+import { ArrowUpRight, Cpu, Github, Server, Wifi, Database, Cog, Cloud } from "lucide-react";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { useLocalized } from "@/hooks/useLocalized";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { SiteMetadata } from "@/hooks/useSiteMetadata";
 
 type Project = {
@@ -16,6 +17,7 @@ type Project = {
   image_url: string | null;
   live_url: string | null;
   github_url: string | null;
+  drive_url: string | null;
   featured: boolean;
 };
 
@@ -25,6 +27,7 @@ export const BentoSection = ({ meta }: Props) => {
   const { t } = useTranslation();
   const { pick } = useLocalized();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     safeFetchAll<Project>("projects", { order: "display_order", ascending: true }).then(
@@ -46,7 +49,10 @@ export const BentoSection = ({ meta }: Props) => {
       <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6 md:auto-rows-[180px]">
         {/* Featured project 1 — large */}
         {featured[0] && (
-          <BentoCard className="md:col-span-4 md:row-span-2 group">
+          <BentoCard 
+            className="md:col-span-4 md:row-span-2 group"
+            onClick={featured[0].image_url ? () => setSelectedProject(featured[0]) : undefined}
+          >
             <ProjectCardContent project={featured[0]} pick={pick} large />
           </BentoCard>
         )}
@@ -87,7 +93,10 @@ export const BentoSection = ({ meta }: Props) => {
 
         {/* Featured project 2 */}
         {featured[1] && (
-          <BentoCard className="md:col-span-3 md:row-span-2 group">
+          <BentoCard 
+            className="md:col-span-3 md:row-span-2 group"
+            onClick={featured[1].image_url ? () => setSelectedProject(featured[1]) : undefined}
+          >
             <ProjectCardContent project={featured[1]} pick={pick} />
           </BentoCard>
         )}
@@ -96,16 +105,69 @@ export const BentoSection = ({ meta }: Props) => {
         {projects
           .filter((p) => !p.featured)
           .map((p) => (
-            <BentoCard key={p.id} className="md:col-span-3 group">
+            <BentoCard 
+              key={p.id} 
+              className="md:col-span-3 group"
+              onClick={p.image_url ? () => setSelectedProject(p) : undefined}
+            >
               <ProjectCardContent project={p} pick={pick} compact />
             </BentoCard>
           ))}
       </div>
+
+      {/* Cyber Effect Modal for Projects with Images */}
+      <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
+        <DialogContent className="max-w-4xl border-primary/40 bg-background/95 backdrop-blur-xl shadow-glow-primary p-0 overflow-hidden sm:rounded-2xl">
+          {selectedProject && (
+            <div className="relative">
+              {/* Cyber Image Header */}
+              <div className="relative h-64 md:h-[400px] w-full bg-background-elevated overflow-hidden group/modal">
+                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10 pointer-events-none group-hover/modal:opacity-40 transition-opacity"></div>
+                {/* Animated Scanline Overlay */}
+                <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+                  <div className="w-full h-3 bg-primary/30 blur-[2px] animate-[scan_3s_ease-in-out_infinite]" />
+                </div>
+                
+                <img 
+                  src={selectedProject.image_url!} 
+                  alt={pick(selectedProject, "title")} 
+                  className="w-full h-full object-cover object-center group-hover/modal:scale-105 transition-transform duration-700 ease-out"
+                />
+              </div>
+
+              {/* Content Body */}
+              <div className="p-6 md:p-8 space-y-6">
+                <DialogHeader>
+                  <div className="flex items-center gap-2 terminal-text text-[10px] uppercase tracking-widest text-primary mb-2">
+                    <Cog className="h-4 w-4" />
+                    {selectedProject.category}
+                  </div>
+                  <DialogTitle className="text-3xl md:text-4xl font-display font-bold">
+                    {pick(selectedProject, "title")}
+                  </DialogTitle>
+                </DialogHeader>
+                
+                <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+                  {pick(selectedProject, "description")}
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-border/40">
+                  {selectedProject.tech_stack.map((tech) => (
+                    <span key={tech} className="terminal-text text-[10px] uppercase font-bold rounded border border-primary/40 bg-primary/10 px-3 py-1.5 text-primary shadow-[0_0_8px_rgba(34,211,238,0.2)]">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
 
-const BentoCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+const BentoCard = ({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -140,12 +202,13 @@ const BentoCard = ({ children, className = "" }: { children: React.ReactNode; cl
       transition={{ duration: 0.5 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={onClick}
       style={{
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      className={`spotlight-container glass-panel relative rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow-primary ${className}`}
+      className={`spotlight-container glass-panel relative rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow-primary ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-cyber opacity-0 transition group-hover:opacity-[0.08]"
@@ -183,13 +246,18 @@ const ProjectCardContent = ({ project, pick, large, compact }: PCProps) => (
       </div>
       <div className="flex gap-1">
         {project.github_url && (
-          <a aria-label="GitHub" href={project.github_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary">
+          <a onClick={(e) => e.stopPropagation()} aria-label="GitHub" href={project.github_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary">
             <Github className="h-3.5 w-3.5" />
           </a>
         )}
         {project.live_url && (
-          <a aria-label="Live" href={project.live_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary">
+          <a onClick={(e) => e.stopPropagation()} aria-label="Live" href={project.live_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary transition-colors">
             <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        )}
+        {project.drive_url && (
+          <a onClick={(e) => e.stopPropagation()} aria-label="Google Drive" href={project.drive_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-[#008744] hover:text-[#008744] transition-colors">
+            <Cloud className="h-3.5 w-3.5" />
           </a>
         )}
       </div>
@@ -203,7 +271,7 @@ const ProjectCardContent = ({ project, pick, large, compact }: PCProps) => (
 
     <div className="mt-auto pt-4 flex flex-wrap gap-1.5">
       {project.tech_stack.slice(0, large ? 8 : 4).map((tech) => (
-        <span key={tech} className="terminal-text text-[10px] uppercase rounded border border-primary/20 bg-gradient-to-br from-background-elevated to-background px-1.5 py-0.5 text-muted-foreground shadow-sm">
+        <span key={tech} className="terminal-text text-[10px] uppercase font-bold rounded border border-primary/40 bg-primary/10 px-2 py-1 text-primary shadow-[0_0_8px_rgba(34,211,238,0.2)]">
           {tech}
         </span>
       ))}

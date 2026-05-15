@@ -33,6 +33,14 @@ type Skill = {
   display_order: number;
 };
 
+const renderIcon = (iconStr: string) => {
+  if (!iconStr) return <Code2 className="h-4 w-4" />;
+  if (iconStr.startsWith("/") || iconStr.startsWith("http")) {
+    return <img src={iconStr} alt="icon" className="h-5 w-5 object-contain" />;
+  }
+  return ICON_MAP[iconStr] ?? <Code2 className="h-4 w-4" />;
+};
+
 
 
 const COPY = {
@@ -72,10 +80,10 @@ export const TechMarquee = () => {
           {row.map((s, i) => (
             <div
               key={`${s.name}-${i}`}
-              className="glass-panel flex shrink-0 items-center gap-2 rounded-full px-4 py-2 transition hover:border-primary/60 hover:shadow-glow-primary shadow-[inset_0_0_12px_rgba(34,211,238,0.03)]"
+              className="glass-panel flex shrink-0 items-center gap-3 rounded-full px-5 py-2.5 transition hover:border-primary/60 hover:shadow-glow-primary shadow-[inset_0_0_12px_rgba(34,211,238,0.03)]"
             >
-              <div className="text-primary">{ICON_MAP[s.icon] || ICON_MAP.code}</div>
-              <span className="terminal-text text-xs uppercase tracking-wider text-foreground">
+              <div className="text-primary flex items-center justify-center">{renderIcon(s.icon)}</div>
+              <span className="terminal-text text-sm uppercase tracking-wider text-foreground font-semibold">
                 {s.name}
               </span>
             </div>
@@ -86,10 +94,10 @@ export const TechMarquee = () => {
           {row.reverse().map((s, i) => (
             <div
               key={`r-${s.name}-${i}`}
-              className="glass-panel flex shrink-0 items-center gap-2 rounded-full px-4 py-2 transition hover:border-secondary/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] shadow-[inset_0_0_12px_rgba(168,85,247,0.03)]"
+              className="glass-panel flex shrink-0 items-center gap-3 rounded-full px-5 py-2.5 transition hover:border-secondary/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] shadow-[inset_0_0_12px_rgba(168,85,247,0.03)]"
             >
-              <div className="text-secondary">{ICON_MAP[s.icon] || ICON_MAP.code}</div>
-              <span className="terminal-text text-xs uppercase tracking-wider text-foreground">
+              <div className="text-secondary flex items-center justify-center">{renderIcon(s.icon)}</div>
+              <span className="terminal-text text-sm uppercase tracking-wider text-foreground font-semibold">
                 {s.name}
               </span>
             </div>

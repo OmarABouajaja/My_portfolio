@@ -145,6 +145,7 @@ export type Database = {
           display_order: number
           featured: boolean
           github_url: string | null
+          drive_url: string | null
           id: string
           image_url: string | null
           live_url: string | null
@@ -166,6 +167,7 @@ export type Database = {
           display_order?: number
           featured?: boolean
           github_url?: string | null
+          drive_url?: string | null
           id?: string
           image_url?: string | null
           live_url?: string | null
@@ -187,6 +189,7 @@ export type Database = {
           display_order?: number
           featured?: boolean
           github_url?: string | null
+          drive_url?: string | null
           id?: string
           image_url?: string | null
           live_url?: string | null

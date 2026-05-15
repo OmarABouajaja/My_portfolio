@@ -101,6 +101,10 @@ export default {
             height: "0",
           },
         },
+        "scan": {
+          "0%": { transform: "translateY(-10px)" },
+          "100%": { transform: "translateY(500px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

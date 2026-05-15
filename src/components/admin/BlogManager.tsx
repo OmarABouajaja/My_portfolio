@@ -176,6 +176,7 @@ export const BlogManager = () => {
         <div className="pt-2">
           <label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground terminal-text">Cover Image (Drag & Drop)</label>
           <ImageUploader 
+            bucket="blog-images"
             value={editingPost?.image_url || null}
             onChange={(url) => setEditingPost(prev => ({ ...prev, image_url: url }))}
           />
