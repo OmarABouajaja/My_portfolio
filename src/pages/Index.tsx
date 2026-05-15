@@ -1,12 +1,9 @@
 import { useState } from "react";
 
-// Core System Overlays
 import { BootLoader } from "@/components/BootLoader";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import { CustomCursor } from "@/components/CustomCursor";
-import { CommandMenu } from "@/components/CommandMenu";
 import { SEOJsonLd } from "@/components/SEOJsonLd";
 
 // Content Modules
@@ -31,8 +28,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <CustomCursor />
-      <CommandMenu />
       <SEOJsonLd />
       
       {!isBootSequenceComplete && (

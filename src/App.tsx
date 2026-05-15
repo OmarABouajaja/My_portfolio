@@ -9,7 +9,8 @@ import Admin from "./pages/Admin.tsx";
 import ClientPortal from "./pages/ClientPortal.tsx";
 
 import { useThemeEngine } from "@/hooks/useThemeEngine";
-
+import { CustomCursor } from "@/components/CustomCursor";
+import { CommandMenu } from "@/components/CommandMenu";
 const queryClient = new QueryClient();
 
 const ThemeInit = () => {
@@ -21,6 +22,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeInit />
     <TooltipProvider>
+      <CustomCursor />
+      <CommandMenu />
       <Toaster />
       <Sonner />
       <BrowserRouter>
