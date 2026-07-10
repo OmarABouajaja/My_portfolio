@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { SEOJsonLd } from "@/components/SEOJsonLd";
+import { MobileNotice } from "@/components/MobileNotice";
 
 // Content Modules
 import { Hero } from "@/components/Hero";
@@ -16,6 +17,7 @@ import { BlogSection } from "@/components/BlogSection";
 import { ContactSection } from "@/components/ContactSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { EquipmentSection } from "@/components/EquipmentSection";
+import { CertificationsSection } from "@/components/CertificationsSection";
 
 import { useSiteMetadata } from "@/hooks/useSiteMetadata";
 
@@ -41,6 +43,7 @@ const Index = () => {
       {isDOMPreloading && (
         <>
           <ScrollProgress isOffline={metadataState.status !== "online"} />
+          <MobileNotice />
           <SiteNav />
           <main>
             <Hero meta={siteConfig} />
@@ -49,6 +52,7 @@ const Index = () => {
             <ServicesSection />
             {siteConfig?.enable_timeline !== false && <Timeline />}
             <EquipmentSection />
+            <CertificationsSection />
             {siteConfig?.enable_testimonials !== false && <Testimonials />}
             {siteConfig?.enable_blog !== false && <BlogSection />}
             {siteConfig?.enable_contact !== false && <ContactSection />}

@@ -24,7 +24,7 @@ export const SITE = {
   email: "omarbouajaja48@gmail.com",
 
   /** Canonical website URL */
-  url: "https://ob.m-and-o-studio.com.tn",
+  url: "https://omarabouajaja.site",
 
   /** Social links */
   github: "https://github.com/Omar-ABouajaja",

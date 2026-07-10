@@ -89,7 +89,7 @@ export const EquipmentSection = () => {
                       {pick(item, "description")}
                     </p>
                     {item.link_url && (
-                      <a href={item.link_url} target="_blank" rel="noreferrer" className="text-[10px] uppercase tracking-widest terminal-text text-primary mt-3 hover:underline">
+                      <a href={item.link_url} target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest terminal-text text-primary mt-3 hover:underline">
                         {t("equipmentSection.link")} ↗
                       </a>
                     )}

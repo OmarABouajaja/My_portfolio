@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Edge Function: notify-chat
  * Webhook on chat_messages INSERT → emails the opposite party via Resend.
@@ -6,18 +7,18 @@
 const RESEND_KEY = Deno.env.get("RESEND_API_KEY") || "";
 const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL") || "omar.abouajaja@gmail.com";
 const FROM = "Abouajaja_Omar/ <notifications@nexusengine.dev>";
-const SITE = Deno.env.get("SITE_URL") || "https://omarabouajaja.dev";
+const SITE = Deno.env.get("SITE_URL") || "https://omarabouajaja.site";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const CORS = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://omarabouajaja.site",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...CORS } });
 
 interface Payload {
   type: "INSERT";

@@ -41,9 +41,8 @@ const EmptyState = () => (
         This is a private, end-to-end encrypted channel between you and Omar. Send your first message to get started.
       </p>
     </div>
-    <div className="flex items-center gap-2 text-[10px] terminal-text text-success uppercase tracking-widest">
-      <Wifi className="w-3 h-3" />
-      End-to-End Encrypted
+    <div className="flex items-center gap-1.5 px-3 py-1 bg-background-elevated/40 border border-border/30 rounded-full terminal-text text-[9px] uppercase tracking-widest text-primary">
+      <Lock className="w-3 h-3" /> Private Secure Channel
     </div>
   </div>
 );

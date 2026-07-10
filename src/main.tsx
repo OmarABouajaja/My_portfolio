@@ -13,7 +13,7 @@ const originalLog = window.console.log;
 originalLog(`%cWelcome to my space -${SITE.brandHandle}`, style);
 
 // Production hardening: Hide all console outputs for a clean black-box feel
-if (import.meta.env.PROD || true) {
+if (import.meta.env.PROD) {
   const noop = () => {};
   window.console.log = noop;
   window.console.info = noop;

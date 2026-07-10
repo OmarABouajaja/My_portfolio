@@ -213,7 +213,7 @@ export const SocialLinksManager = () => {
                   )}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <a href={link.url} target="_blank" rel="noreferrer" className="p-1.5 text-muted-foreground hover:text-primary transition mr-1 inline-block">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="p-1.5 text-muted-foreground hover:text-primary transition mr-1 inline-block">
                     <ExternalLink className="h-4 w-4" />
                   </a>
                   <button onClick={() => { setEditing(link); setShowForm(true); }} className="p-1.5 text-muted-foreground hover:text-primary transition mr-1">

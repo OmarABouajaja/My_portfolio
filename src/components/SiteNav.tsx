@@ -13,6 +13,16 @@ export const SiteNav = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileMenuOpen]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -33,6 +43,7 @@ export const SiteNav = () => {
     { id: "projects", label: t("nav.projects") },
     { id: "timeline", label: t("nav.timeline") },
     { id: "services", label: t("nav.services") },
+    { id: "certifications", label: t("nav.certifications") },
     { id: "contact", label: t("nav.contact") },
   ];
 
@@ -43,7 +54,7 @@ export const SiteNav = () => {
       transition={{ delay: 0.2 }}
       className="fixed inset-x-0 top-0 z-40"
     >
-      <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-full border border-primary/20 bg-background-elevated/40 px-4 py-2 backdrop-blur-2xl shadow-glow-primary/50 sm:px-6">
+      <div className="mx-auto mt-3 sm:mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-full border border-primary/20 bg-background-elevated/40 px-3 py-1.5 backdrop-blur-2xl shadow-glow-primary/50 sm:px-6 sm:py-2">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Cpu className="h-5 w-5 text-primary" />
@@ -78,42 +89,82 @@ export const SiteNav = () => {
             <ThemeSwitcher />
           </div>
           <button 
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden flex items-center justify-center h-10 w-10 rounded-full text-foreground hover:bg-primary/10 transition-colors touch-target"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Premium Full-Screen Mobile Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute left-4 right-4 top-20 rounded-2xl border border-primary/20 bg-background/95 p-4 backdrop-blur-3xl shadow-2xl md:hidden"
-          >
-            <nav className="flex flex-col gap-2">
-              {items.map((it) => (
-                <a
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-xl z-40 md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Menu Content */}
+            <motion.nav
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="fixed inset-x-0 top-16 bottom-0 z-50 flex flex-col items-center justify-center gap-2 px-8 md:hidden"
+            >
+              {items.map((it, idx) => (
+                <motion.a
                   key={it.id}
                   href={`#${it.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`rounded-lg px-4 py-3 text-xs font-semibold uppercase tracking-widest transition-all hover:bg-primary/10 hover:text-primary hover:pl-6 ${
-                    activeSection === it.id ? "text-primary bg-primary/5 pl-6 border-l-2 border-primary" : "text-foreground"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ delay: idx * 0.06, duration: 0.3 }}
+                  className={`w-full max-w-sm text-center rounded-2xl px-6 py-4 text-base font-semibold uppercase tracking-[0.15em] transition-all touch-target ${
+                    activeSection === it.id
+                      ? "text-primary bg-primary/10 border border-primary/30 shadow-glow-primary"
+                      : "text-foreground/80 hover:text-primary hover:bg-primary/5"
                   }`}
                 >
                   {it.label}
-                </a>
+                </motion.a>
               ))}
-              <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-4 px-2 sm:hidden">
+
+              {/* Utilities Row */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: items.length * 0.06 + 0.1, duration: 0.3 }}
+                className="mt-6 flex items-center justify-center gap-4 rounded-2xl border border-border/30 bg-background-elevated/40 px-6 py-3"
+              >
                 <LanguageSwitcher />
+                <div className="h-6 w-px bg-border/40" />
                 <ThemeSwitcher />
-              </div>
-            </nav>
-          </motion.div>
+              </motion.div>
+
+              {/* Brand footer in mobile menu */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: items.length * 0.06 + 0.2, duration: 0.4 }}
+                className="mt-8 flex flex-col items-center gap-1"
+              >
+                <span className="terminal-text text-[9px] uppercase tracking-[0.3em] text-muted-foreground/50">
+                  {SITE.brandHandle}
+                </span>
+                <span className="h-px w-12 bg-primary/20" />
+              </motion.div>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </motion.header>

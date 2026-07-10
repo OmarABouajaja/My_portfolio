@@ -104,6 +104,54 @@ export type Database = {
         Update: { id?: string, name?: string, category?: string, description_en?: string | null, description_fr?: string | null, description_es?: string | null, description_ar?: string | null, image_url?: string | null, link_url?: string | null, display_order?: number, created_at?: string, updated_at?: string }
         Relationships: []
       }
+      certifications: {
+        Row: {
+          id: string
+          title_en: string
+          title_fr: string | null
+          title_es: string | null
+          title_ar: string | null
+          issuer: string
+          issue_date: string | null
+          credential_id: string | null
+          credential_url: string | null
+          image_url: string | null
+          display_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title_en: string
+          title_fr?: string | null
+          title_es?: string | null
+          title_ar?: string | null
+          issuer: string
+          issue_date?: string | null
+          credential_id?: string | null
+          credential_url?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title_en?: string
+          title_fr?: string | null
+          title_es?: string | null
+          title_ar?: string | null
+          issuer?: string
+          issue_date?: string | null
+          credential_id?: string | null
+          credential_url?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       finance_settings: {
         Row: { id: string, user_id: string | null, monthly_goal: number, currency: string, updated_at: string }
         Insert: { id?: string, user_id?: string | null, monthly_goal?: number, currency?: string, updated_at?: string }
@@ -332,6 +380,90 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      visitor_logs: {
+        Row: {
+          id: string
+          ip_address: string | null
+          os: string | null
+          browser: string | null
+          location: string | null
+          user_agent: string | null
+          resolution: string | null
+          languages: string | null
+          device_memory: string | null
+          hardware_concurrency: number | null
+          gpu_renderer: string | null
+          network_type: string | null
+          touch_support: boolean | null
+          pixel_ratio: number | null
+          country: string | null
+          region: string | null
+          city: string | null
+          isp: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          ip_address?: string | null
+          os?: string | null
+          browser?: string | null
+          location?: string | null
+          user_agent?: string | null
+          resolution?: string | null
+          languages?: string | null
+          device_memory?: string | null
+          hardware_concurrency?: number | null
+          gpu_renderer?: string | null
+          network_type?: string | null
+          touch_support?: boolean | null
+          pixel_ratio?: number | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          isp?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          ip_address?: string | null
+          os?: string | null
+          browser?: string | null
+          location?: string | null
+          user_agent?: string | null
+          resolution?: string | null
+          languages?: string | null
+          device_memory?: string | null
+          hardware_concurrency?: number | null
+          gpu_renderer?: string | null
+          network_type?: string | null
+          touch_support?: boolean | null
+          pixel_ratio?: number | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          isp?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      system_secrets: {
+        Row: {
+          key: string
+          value: string
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          value: string
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          value?: string
+          updated_at?: string
         }
         Relationships: []
       }

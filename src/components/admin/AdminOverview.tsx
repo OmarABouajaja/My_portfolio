@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Activity, Plus, FileText, CheckCircle2, Circle, Clock, MessageSquare, Play, Pause, RotateCcw, PenTool, Cpu, DollarSign, Headphones, Share2, Smartphone, Trash2, Eye } from "lucide-react";
+import { Activity, Plus, FileText, CheckCircle2, Circle, Clock, MessageSquare, Play, Pause, RotateCcw, PenTool, Cpu, DollarSign, Headphones, Share2, Smartphone, Trash2, Eye, Award } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -27,6 +27,11 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
   const { data: messages = [], isLoading: isLoadingMessages } = useQuery({ 
     queryKey: ["chat_messages"], 
     queryFn: () => safeFetchAll("chat_messages") 
+  });
+
+  const { data: certifications = [], isLoading: isLoadingCertifications } = useQuery({ 
+    queryKey: ["certifications"], 
+    queryFn: () => safeFetchAll("certifications") 
   });
 
   const [telemetryNodes] = useLocalStorage<any[]>("bo3_iot_nodes", []);
@@ -89,7 +94,7 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
   // Trigger OS-level desktop notifications when unread counts increase
   useDesktopNotifications(unreadContacts, unreadMessages);
   
-  const isAggregatingData = isLoadingProjects || isLoadingContacts || isLoadingVisitors || isLoadingMessages;
+  const isAggregatingData = isLoadingProjects || isLoadingContacts || isLoadingVisitors || isLoadingMessages || isLoadingCertifications;
 
   // Recent activity feed — merge contacts + visitors, sort by time
   const recentActivity = (() => {
@@ -117,14 +122,29 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* ─── Top Stat Cards ─── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-        <div className="group glass-panel p-5 rounded-xl border border-primary/20 hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-1 hover:shadow-glow-primary transition-all duration-300">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
+        <div 
+          onClick={() => setActiveTab?.("projects")}
+          className="group glass-panel p-5 rounded-xl border border-primary/20 hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-1 hover:shadow-glow-primary transition-all duration-300 cursor-pointer"
+        >
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Projects</h3>
             <Activity className="h-4 w-4 text-primary" />
           </div>
           <p className={`text-3xl font-display font-bold ${isAggregatingData ? "text-transparent animate-pulse bg-muted rounded-md h-8 w-12" : "text-foreground"}`}>
             {!isAggregatingData && projects.length}
+          </p>
+        </div>
+        <div 
+          onClick={() => setActiveTab?.("certifications")}
+          className="group glass-panel p-5 rounded-xl border border-primary/20 hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-1 hover:shadow-glow-primary transition-all duration-300 cursor-pointer"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Certifications</h3>
+            <Award className="h-4 w-4 text-primary" />
+          </div>
+          <p className={`text-3xl font-display font-bold ${isAggregatingData ? "text-transparent animate-pulse bg-muted rounded-md h-8 w-12" : "text-foreground"}`}>
+            {!isAggregatingData && certifications.length}
           </p>
         </div>
         <div className="glass-panel p-5 rounded-xl border border-accent/20 hover:border-accent/50 transition">

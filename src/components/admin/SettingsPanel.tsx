@@ -277,10 +277,24 @@ export const SettingsPanel = ({ setActiveTab }: { setActiveTab?: (tab: string) =
           </p>
         </div>
 
+        <div className="space-y-4 pt-6 border-t border-border/40">
+          <h3 className="terminal-text text-xs uppercase tracking-widest text-primary">Mobile Experience</h3>
+          <p className="text-xs text-muted-foreground mb-4">
+            Download the standalone Android APK (if generated) to test the native mobile experience.
+          </p>
+          <a
+            href="/app-release.apk"
+            download="Nexus_Portfolio_App.apk"
+            className="inline-flex items-center gap-2 rounded-md bg-accent/10 border border-accent/30 px-5 py-2.5 text-sm font-medium text-accent transition hover:bg-accent/20 hover:border-accent/50"
+          >
+            <ShieldCheck className="h-4 w-4" /> Download Android APK
+          </a>
+        </div>
+
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center gap-2 rounded-md bg-gradient-cyber px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-glow-primary transition hover:shadow-elevated disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-md bg-gradient-cyber px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-glow-primary transition hover:shadow-elevated disabled:opacity-50 mt-8"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Settings

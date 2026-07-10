@@ -11,7 +11,7 @@ CREATE TYPE transaction_type AS ENUM ('income', 'expense');
 -- ─── 2. CORE TABLES ───
 
 -- user_roles
-CREATE TABLE public.user_roles (
+CREATE TABLE IF NOT EXISTS public.user_roles (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL UNIQUE,
     role app_role NOT NULL DEFAULT 'user'::app_role,
@@ -19,7 +19,7 @@ CREATE TABLE public.user_roles (
 );
 
 -- site_metadata (single-row config)
-CREATE TABLE public.site_metadata (
+CREATE TABLE IF NOT EXISTS public.site_metadata (
     id TEXT PRIMARY KEY DEFAULT 'config',
     active_projects_count INTEGER DEFAULT 0,
     last_build TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
@@ -38,7 +38,7 @@ CREATE TABLE public.site_metadata (
 );
 
 -- projects
-CREATE TABLE public.projects (
+CREATE TABLE IF NOT EXISTS public.projects (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     slug TEXT UNIQUE NOT NULL,
     title_en TEXT NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE public.projects (
 );
 
 -- timeline_events
-CREATE TABLE public.timeline_events (
+CREATE TABLE IF NOT EXISTS public.timeline_events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     year INTEGER NOT NULL,
     title_en TEXT NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE public.timeline_events (
 );
 
 -- skills
-CREATE TABLE public.skills (
+CREATE TABLE IF NOT EXISTS public.skills (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     category TEXT NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE public.skills (
 );
 
 -- testimonials
-CREATE TABLE public.testimonials (
+CREATE TABLE IF NOT EXISTS public.testimonials (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     client_name TEXT NOT NULL,
     client_role TEXT,
@@ -107,7 +107,7 @@ CREATE TABLE public.testimonials (
 );
 
 -- blog_posts
-CREATE TABLE public.blog_posts (
+CREATE TABLE IF NOT EXISTS public.blog_posts (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     slug TEXT UNIQUE NOT NULL,
     title_en TEXT NOT NULL,
@@ -130,7 +130,7 @@ CREATE TABLE public.blog_posts (
 );
 
 -- contact_submissions
-CREATE TABLE public.contact_submissions (
+CREATE TABLE IF NOT EXISTS public.contact_submissions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE public.contact_submissions (
 );
 
 -- invoices
-CREATE TABLE public.invoices (
+CREATE TABLE IF NOT EXISTS public.invoices (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     invoice_number TEXT UNIQUE NOT NULL,
@@ -158,20 +158,49 @@ CREATE TABLE public.invoices (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- certifications
+CREATE TABLE IF NOT EXISTS public.certifications (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title_en TEXT NOT NULL,
+    title_fr TEXT,
+    title_es TEXT,
+    title_ar TEXT,
+    issuer TEXT NOT NULL,
+    issue_date DATE,
+    credential_id TEXT,
+    credential_url TEXT,
+    image_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- ─── 3. EXTENSION TABLES ───
 
 -- visitor_logs
-CREATE TABLE public.visitor_logs (
+CREATE TABLE IF NOT EXISTS public.visitor_logs (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     ip_address TEXT,
     os TEXT,
     browser TEXT,
     location TEXT,
+    user_agent TEXT,
+    resolution TEXT,
+    languages TEXT,
+    device_memory TEXT,
+    hardware_concurrency INTEGER,
+    gpu_renderer TEXT,
+    network_type TEXT,
+    touch_support BOOLEAN,
+    pixel_ratio NUMERIC,
+    country TEXT,
+    region TEXT,
+    city TEXT,
+    isp TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- services
-CREATE TABLE public.services (
+CREATE TABLE IF NOT EXISTS public.services (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     title_en TEXT NOT NULL,
     title_fr TEXT,
@@ -193,7 +222,7 @@ CREATE TABLE public.services (
 );
 
 -- equipment
-CREATE TABLE public.equipment (
+CREATE TABLE IF NOT EXISTS public.equipment (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     category TEXT NOT NULL DEFAULT 'hardware',
@@ -208,8 +237,25 @@ CREATE TABLE public.equipment (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- certifications
+CREATE TABLE IF NOT EXISTS public.certifications (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title_en TEXT NOT NULL,
+    title_fr TEXT,
+    title_es TEXT,
+    title_ar TEXT,
+    issuer TEXT NOT NULL,
+    issue_date DATE,
+    credential_id TEXT,
+    credential_url TEXT,
+    image_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- social_links (dynamic contact channels)
-CREATE TABLE public.social_links (
+CREATE TABLE IF NOT EXISTS public.social_links (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     platform TEXT NOT NULL,
     label TEXT NOT NULL,
@@ -224,7 +270,7 @@ CREATE TABLE public.social_links (
 -- ─── 4. CLIENT ECOSYSTEM TABLES ───
 
 -- client_tokens
-CREATE TABLE public.client_tokens (
+CREATE TABLE IF NOT EXISTS public.client_tokens (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     token TEXT UNIQUE NOT NULL,
     client_name TEXT NOT NULL,
@@ -234,7 +280,7 @@ CREATE TABLE public.client_tokens (
 );
 
 -- client_projects
-CREATE TABLE public.client_projects (
+CREATE TABLE IF NOT EXISTS public.client_projects (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     client_token_id UUID REFERENCES public.client_tokens(id) ON DELETE CASCADE NOT NULL,
     name TEXT NOT NULL,
@@ -247,7 +293,7 @@ CREATE TABLE public.client_projects (
 );
 
 -- chat_messages
-CREATE TABLE public.chat_messages (
+CREATE TABLE IF NOT EXISTS public.chat_messages (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     client_token_id UUID REFERENCES public.client_tokens(id) ON DELETE CASCADE NOT NULL,
     sender chat_sender NOT NULL,
@@ -259,7 +305,7 @@ CREATE TABLE public.chat_messages (
 -- ─── 5. FINANCE TABLES ───
 
 -- transactions
-CREATE TABLE public.transactions (
+CREATE TABLE IF NOT EXISTS public.transactions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     title TEXT NOT NULL,
@@ -270,11 +316,18 @@ CREATE TABLE public.transactions (
 );
 
 -- finance_settings
-CREATE TABLE public.finance_settings (
+CREATE TABLE IF NOT EXISTS public.finance_settings (
     id TEXT PRIMARY KEY DEFAULT 'default',
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     monthly_goal NUMERIC(10,2) DEFAULT 5000,
     currency TEXT DEFAULT 'USD',
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- system_secrets (Secure Vault)
+CREATE TABLE IF NOT EXISTS public.system_secrets (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -291,12 +344,14 @@ ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.equipment ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.certifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.social_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.client_tokens ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.client_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.finance_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.system_secrets ENABLE ROW LEVEL SECURITY;
 
 -- ─── 7. HELPER FUNCTIONS ───
 
@@ -310,12 +365,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION public.has_role(_role app_role, _user_id UUID)
+CREATE OR REPLACE FUNCTION public.has_role(_role app_role)
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.user_roles
-    WHERE user_id = _user_id AND role = _role
+    WHERE user_id = auth.uid() AND role = _role
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -376,6 +431,10 @@ CREATE POLICY "Admin full access services" ON public.services USING (public.is_a
 CREATE POLICY "Public read equipment" ON public.equipment FOR SELECT USING (true);
 CREATE POLICY "Admin full access equipment" ON public.equipment USING (public.is_admin());
 
+-- certifications
+CREATE POLICY "Public read certifications" ON public.certifications FOR SELECT USING (true);
+CREATE POLICY "Admin full access certifications" ON public.certifications USING (public.is_admin());
+
 -- social_links
 CREATE POLICY "Public read social_links" ON public.social_links FOR SELECT USING (true);
 CREATE POLICY "Admin full access social_links" ON public.social_links USING (public.is_admin());
@@ -388,6 +447,9 @@ CREATE POLICY "Admin full access chat_messages" ON public.chat_messages USING (p
 -- finance (Admin only)
 CREATE POLICY "Admin full access transactions" ON public.transactions USING (public.is_admin());
 CREATE POLICY "Admin full access finance_settings" ON public.finance_settings USING (public.is_admin());
+
+-- system_secrets (Strict Admin Only)
+CREATE POLICY "Admin full access system_secrets" ON public.system_secrets USING (public.is_admin());
 
 -- visitor_logs (Public insert, Admin read)
 ALTER TABLE public.visitor_logs ENABLE ROW LEVEL SECURITY;

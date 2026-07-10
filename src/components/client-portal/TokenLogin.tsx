@@ -3,7 +3,6 @@ import { Shield, Lock, Terminal, AlertTriangle, ArrowLeft, Cpu } from "lucide-re
 import { supabase } from "@/integrations/supabase/client";
 import { hasSupabase, isDemoMode } from "@/integrations/supabase/safeFetch";
 
-const FALLBACK_TOKEN = "CLI-1234";
 
 export const TokenLogin = ({ onAuth }: { onAuth: () => void }) => {
   const [token, setToken] = useState("");
@@ -20,18 +19,9 @@ export const TokenLogin = ({ onAuth }: { onAuth: () => void }) => {
 
     const trimmedToken = token.trim().toUpperCase();
 
-    if (!hasSupabase || isDemoMode()) {
-      // Mock mode: accept the fallback token
-      setTimeout(() => {
-        if (trimmedToken === FALLBACK_TOKEN) {
-          sessionStorage.setItem("client_auth", "true");
-          sessionStorage.setItem("nexus_client_token_id", "ct-1");
-          onAuth();
-        } else {
-          setError(true);
-          setLoading(false);
-        }
-      }, 800);
+    if (!hasSupabase) {
+      setError(true);
+      setLoading(false);
       return;
     }
 

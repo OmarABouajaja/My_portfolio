@@ -177,7 +177,13 @@ const BentoCard = ({ children, className = "", onClick }: { children: React.Reac
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -190,6 +196,7 @@ const BentoCard = ({ children, className = "", onClick }: { children: React.Reac
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   };
@@ -204,17 +211,17 @@ const BentoCard = ({ children, className = "", onClick }: { children: React.Reac
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
+        rotateX: isMobile ? 0 : rotateX,
+        rotateY: isMobile ? 0 : rotateY,
+        transformStyle: isMobile ? "flat" : "preserve-3d",
       }}
-      className={`spotlight-container glass-panel relative rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow-primary ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`spotlight-container glass-panel relative rounded-xl p-5 transition-all duration-300 ${isMobile ? "" : "hover:-translate-y-1"} hover:border-primary/60 hover:shadow-glow-primary ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-cyber opacity-0 transition group-hover:opacity-[0.08]"
-        style={{ transform: "translateZ(-10px)" }}
+        style={{ transform: isMobile ? "none" : "translateZ(-10px)" }}
       />
-      <div className="relative z-[1] h-full" style={{ transform: "translateZ(30px)" }}>
+      <div className="relative z-[1] h-full" style={{ transform: isMobile ? "none" : "translateZ(30px)" }}>
         {children}
       </div>
     </motion.div>
@@ -246,17 +253,17 @@ const ProjectCardContent = ({ project, pick, large, compact }: PCProps) => (
       </div>
       <div className="flex gap-1">
         {project.github_url && (
-          <a onClick={(e) => e.stopPropagation()} aria-label="GitHub" href={project.github_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary">
+          <a onClick={(e) => e.stopPropagation()} aria-label="GitHub" href={project.github_url} target="_blank" rel="noopener noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary">
             <Github className="h-3.5 w-3.5" />
           </a>
         )}
         {project.live_url && (
-          <a onClick={(e) => e.stopPropagation()} aria-label="Live" href={project.live_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary transition-colors">
+          <a onClick={(e) => e.stopPropagation()} aria-label="Live" href={project.live_url} target="_blank" rel="noopener noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-primary hover:text-primary transition-colors">
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         )}
         {project.drive_url && (
-          <a onClick={(e) => e.stopPropagation()} aria-label="Google Drive" href={project.drive_url} target="_blank" rel="noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-[#008744] hover:text-[#008744] transition-colors">
+          <a onClick={(e) => e.stopPropagation()} aria-label="Google Drive" href={project.drive_url} target="_blank" rel="noopener noreferrer" className="rounded-md border border-border p-1.5 text-muted-foreground hover:border-[#008744] hover:text-[#008744] transition-colors">
             <Cloud className="h-3.5 w-3.5" />
           </a>
         )}

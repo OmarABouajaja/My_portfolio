@@ -11,6 +11,7 @@ import ClientPortal from "./pages/ClientPortal.tsx";
 import { useThemeEngine } from "@/hooks/useThemeEngine";
 import { CustomCursor } from "@/components/CustomCursor";
 import { CommandMenu } from "@/components/CommandMenu";
+
 const queryClient = new QueryClient();
 
 const ThemeInit = () => {
@@ -23,10 +24,16 @@ const App = () => (
     <ThemeInit />
     <TooltipProvider>
       <CustomCursor />
-      <CommandMenu />
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        {/* CommandMenu lives inside BrowserRouter so useLocation works */}
+        <CommandMenu />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />

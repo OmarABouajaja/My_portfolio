@@ -60,14 +60,27 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
     setTelemetry(tel);
     
     // Fire and forget insertion of visitor log
-    fetch("https://api.ipify.org?format=json")
+    fetch("https://ipapi.co/json/")
       .then(res => res.json())
-      .then(data => {
+      .then(geo => {
         dbInsert("visitor_logs", {
-          ip_address: data.ip || "unknown",
+          ip_address: geo.ip || "unknown",
           os: tel.os,
           browser: tel.browser,
-          location: tel.timezone
+          location: `${geo.city || "unknown"}, ${geo.region || "unknown"}, ${geo.country_name || "unknown"}`,
+          user_agent: tel.userAgent,
+          resolution: tel.resolution,
+          languages: tel.languages,
+          device_memory: tel.deviceMemory,
+          hardware_concurrency: tel.hardwareConcurrency,
+          gpu_renderer: tel.gpuRenderer,
+          network_type: tel.networkType,
+          touch_support: tel.touchSupport,
+          pixel_ratio: tel.pixelRatio,
+          country: geo.country_name || null,
+          region: geo.region || null,
+          city: geo.city || null,
+          isp: geo.org || null
         });
       })
       .catch(() => {
@@ -75,7 +88,20 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
           ip_address: "unknown",
           os: tel.os,
           browser: tel.browser,
-          location: tel.timezone
+          location: tel.timezone,
+          user_agent: tel.userAgent,
+          resolution: tel.resolution,
+          languages: tel.languages,
+          device_memory: tel.deviceMemory,
+          hardware_concurrency: tel.hardwareConcurrency,
+          gpu_renderer: tel.gpuRenderer,
+          network_type: tel.networkType,
+          touch_support: tel.touchSupport,
+          pixel_ratio: tel.pixelRatio,
+          country: null,
+          region: null,
+          city: null,
+          isp: null
         });
       });
   }, []);
@@ -267,7 +293,7 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
             </div>
 
             {/* Content — no overflow scroll; scale keeps everything in view */}
-            <div className="p-4 sm:p-6 terminal-text text-[13px] leading-7 bg-[hsl(222_47%_3%)]">
+            <div className="p-4 sm:p-6 terminal-text text-xs sm:text-[13px] leading-6 sm:leading-7 bg-[hsl(222_47%_3%)]">
               <div className="mt-1 animate-flicker opacity-50 flex items-center justify-center gap-2">
                 <div className="h-1 w-4 bg-primary rounded-full"></div>
                 <div className="h-1 w-1 bg-primary rounded-full animate-ping"></div>
@@ -275,7 +301,7 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
               </div>
               
               <div className="mt-3 text-center text-[9px] text-muted-foreground uppercase tracking-widest animate-pulse">
-                Click or press ENTER to engage
+                Tap or press ENTER to engage
               </div>
 
               {/* Full ASCII — hidden on very short screens (< ~680px height) */}
@@ -302,11 +328,11 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
 ╚═════════════════════════════╝`}</pre>
               </div>
 
-              <div className="mb-3 text-primary animate-flicker text-xs">
+              <div className="mb-3 text-primary animate-flicker text-[10px] sm:text-xs">
                 ▌ welcome to my Space {`{${SITE.ownerName} Space }`}— Boot Sequence
               </div>
 
-              <div className="space-y-0.5">
+              <div className="space-y-1 sm:space-y-0.5">
                 {printed.map((l, idx) => (
                   <motion.div
                     key={idx}
@@ -353,14 +379,14 @@ export const BootLoader = ({ state, onEngage, onDone }: Props) => {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="mt-6 flex flex-col items-center gap-2 pb-2"
+                  className="mt-8 flex flex-col items-center gap-2 pb-2"
                 >
                   <div className="text-center text-[11px] uppercase tracking-[0.35em] text-primary">
                     {"> "}SYSTEM READY
                   </div>
                   <button
                     onClick={engage}
-                    className="group mt-1 inline-flex items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-6 py-2.5 text-xs uppercase tracking-[0.3em] text-primary transition-all hover:border-primary hover:bg-primary/10 hover:shadow-glow-primary"
+                    className="group mt-2 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-6 py-3.5 sm:py-2.5 text-xs sm:text-sm uppercase tracking-[0.3em] text-primary transition-all hover:border-primary hover:bg-primary/10 hover:shadow-glow-primary touch-target"
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                     {t("boot.ready")}

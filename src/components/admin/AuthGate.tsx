@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { hasSupabase } from "@/integrations/supabase/safeFetch";
 import {
   Cpu, Lock, Eye, EyeOff, ArrowRight, Loader2,
-  KeyRound, ShieldCheck, Zap, AlertTriangle, CheckCircle2, Mail,
+  KeyRound, ShieldCheck, Zap, AlertTriangle, CheckCircle2, Mail, Download, Smartphone
 } from "lucide-react";
 import { toast } from "sonner";
 import { SITE } from "@/config/siteConfig";
@@ -273,7 +273,8 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
 
   const verifyAdmin = async (uid: string) => {
     try {
-      const { data, error } = await supabase.rpc("has_role", { _role: "admin", _user_id: uid });
+      // Pass _user_id to match the remote database signature for has_role
+      const { data, error } = await supabase.rpc("has_role", { _role: "admin", _user_id: uid } as any);
       if (error) throw error;
       setIsAdmin(data || false);
     } catch {
@@ -355,21 +356,21 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
   // 4. Not authenticated or not admin → show login
   if (!session || !isAdmin) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-6">
+      <div className="flex min-h-screen items-center justify-center bg-background px-5 py-8">
         {/* Ambient Glow */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
         </div>
 
-        <div className="glass-panel w-full max-w-md rounded-2xl p-8 shadow-elevated relative overflow-hidden border border-border/50">
+        <div className="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-elevated relative overflow-hidden border border-border/30">
           <div className="pointer-events-none absolute inset-0 bg-gradient-cyber opacity-5" />
 
           <div className="relative z-10 flex flex-col items-center text-center">
             {/* Logo */}
-            <div className="relative mb-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-glow-primary">
-                <ShieldCheck className="h-8 w-8" />
+            <div className="relative mb-5">
+              <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-gradient-cyber text-background shadow-glow-primary">
+                <ShieldCheck className="h-7 w-7 sm:h-8 sm:w-8" />
               </div>
             </div>
 
@@ -391,7 +392,7 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
                         <input
                           type="email" required value={email} onChange={e => setEmail(e.target.value)}
                           autoComplete="email"
-                          className="mt-1.5 w-full rounded-lg border border-border bg-background/50 px-4 py-2.5 text-sm outline-none focus:border-primary focus:shadow-glow-primary transition placeholder:text-muted-foreground/40"
+                          className="mt-1.5 w-full rounded-xl border border-border bg-background/50 px-4 py-3 text-sm outline-none focus:border-primary focus:shadow-glow-primary transition placeholder:text-muted-foreground/40"
                           placeholder="you@domain.com"
                         />
                       </div>
@@ -403,7 +404,7 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
                           <input
                             type={showPassword ? "text" : "password"} required value={password}
                             onChange={e => setPassword(e.target.value)} autoComplete="current-password"
-                            className="w-full rounded-lg border border-border bg-background/50 px-4 py-2.5 pr-10 text-sm outline-none focus:border-primary focus:shadow-glow-primary transition placeholder:text-muted-foreground/40"
+                            className="w-full rounded-xl border border-border bg-background/50 px-4 py-3 pr-10 text-sm outline-none focus:border-primary focus:shadow-glow-primary transition placeholder:text-muted-foreground/40"
                             placeholder="••••••••"
                           />
                           <button type="button" onClick={() => setShowPassword(!showPassword)} tabIndex={-1}
@@ -425,7 +426,7 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
                       </div>
 
                       <button type="submit" disabled={submitting}
-                        className="w-full mt-1 flex items-center justify-center gap-2 rounded-lg bg-foreground px-5 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:opacity-50">
+                        className="w-full mt-1 flex items-center justify-center gap-2 rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background transition-all active:scale-[0.97] hover:bg-foreground/90 disabled:opacity-50">
                         {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Authenticate <ArrowRight className="w-4 h-4" /></>}
                       </button>
                     </form>
@@ -439,9 +440,17 @@ export const AuthGate = ({ children, isDemoRoute }: Props) => {
                     </div>
                     <button type="button"
                       onClick={() => { sessionStorage.setItem("nexus_demo_mode", "true"); window.location.href = "/demo"; }}
-                      className="w-full mt-6 rounded-lg border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-medium text-accent transition hover:bg-accent/20 hover:shadow-glow-accent">
+                      className="w-full mt-6 rounded-xl border border-accent/30 bg-accent/10 px-5 py-3 text-sm font-medium text-accent transition-all active:scale-[0.97] hover:bg-accent/20">
                       Explore Demo (Recruiters)
                     </button>
+                    <a
+                      href="https://github.com/Omar-ABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
+                      download
+                      className="w-full mt-3 rounded-xl border border-primary/30 bg-primary/10 px-5 py-3 text-sm font-medium text-primary transition-all active:scale-[0.97] hover:bg-primary/20 flex items-center justify-center gap-2"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      Get Android App
+                    </a>
                   </>
                 )}
 

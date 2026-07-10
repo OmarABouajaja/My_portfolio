@@ -3,7 +3,14 @@ import { SITE } from "@/config/siteConfig";
 import { AuthGate } from "@/components/admin/AuthGate";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
-import { LayoutDashboard, FileText, Settings, Database, Server } from "lucide-react";
+import { 
+  LayoutDashboard, FileText, Settings, Database, Server,
+  Search, Gauge, FolderKanban, Clock, Wrench, Code2, Monitor, BadgeCheck,
+  Cpu, Wifi, Share2, Smartphone, Wallet, Receipt, ScrollText, MessageSquare, 
+  Star, Link2, Activity, BrainCircuit, LayoutGrid, BookOpen, TerminalSquare,
+  ShieldAlert, HardDrive, Cloud, BarChart3, LogOut, 
+  Palette, Inbox, Download, Menu, X, ChevronLeft, ChevronRight, Terminal, Command
+} from "lucide-react";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { hasSupabase } from "@/integrations/supabase/safeFetch";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +21,7 @@ import { InvoiceGenerator } from "@/components/admin/InvoiceGenerator";
 import { SkillsManager } from "@/components/admin/SkillsManager";
 import { ServicesManager } from "@/components/admin/ServicesManager";
 import { EquipmentManager } from "@/components/admin/EquipmentManager";
+import { CertificationsManager } from "@/components/admin/CertificationsManager";
 import { ContactViewer } from "@/components/admin/ContactViewer";
 import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { BlogManager } from "@/components/admin/BlogManager";
@@ -34,9 +42,10 @@ import { TelemetryViewer } from "@/components/admin/TelemetryViewer";
 import { ClientMessages } from "@/components/admin/ClientMessages";
 import { SocialLinksManager } from "@/components/admin/SocialLinksManager";
 import { DataNexusTab } from "@/components/admin/DataNexusTab";
+import { CloudInfraManager } from "@/components/admin/CloudInfraManager";
 import { TimeWarpProvider } from "@/hooks/useTimeWarp";
 import { TimeWarpScrubber } from "@/components/admin/TimeWarpScrubber";
-import { Layers, MessageSquare, Star, BookOpen, Command, Cpu, DollarSign, Activity, Terminal, Share2, Smartphone, HardDrive, Menu, X, ChevronLeft, ChevronRight, ActivitySquare, Lock, Hexagon } from "lucide-react";
+
 
 const NavItem = ({
   value, icon: Icon, label, isCollapsed, colorClass = "text-primary",
@@ -122,35 +131,37 @@ type NavItemDef = {
 
 const DEFAULT_NAV: NavItemDef[] = [
   // Core
-  { value: "overview", icon: Command, label: "Dashboard", group: "Core" },
-  { value: "timeline", icon: LayoutDashboard, label: "Timeline", group: "Core" },
-  { value: "projects", icon: Database, label: "Projects", group: "Core" },
-  { value: "services", icon: Layers, label: "Services", group: "Core" },
-  { value: "skills", icon: Layers, label: "Stack", group: "Core" },
-  { value: "equipment", icon: HardDrive, label: "Equipment", group: "Core" },
+  { value: "overview", icon: Gauge, label: "Dashboard", group: "Core" },
+  { value: "timeline", icon: Clock, label: "Timeline", group: "Core" },
+  { value: "projects", icon: FolderKanban, label: "Projects", group: "Core" },
+  { value: "services", icon: Wrench, label: "Services", group: "Core" },
+  { value: "skills", icon: Code2, label: "Stack", group: "Core" },
+  { value: "equipment", icon: Monitor, label: "Equipment", group: "Core" },
+  { value: "certifications", icon: BadgeCheck, label: "Certifications", group: "Core" },
   // Ecosystem
   { value: "iot", icon: Cpu, label: "IoT Fleet", group: "Ecosystem" },
   { value: "devices", icon: Smartphone, label: "Devices", group: "Ecosystem", colorClass: "text-accent" },
   { value: "localdrop", icon: Share2, label: "LocalDrop", group: "Ecosystem", colorClass: "text-accent" },
   // Freelance
-  { value: "client_messages", icon: Lock, label: "Client Comms", group: "Freelance", colorClass: "text-success" },
-  { value: "finance", icon: DollarSign, label: "Finances", group: "Freelance" },
-  { value: "invoices", icon: FileText, label: "Invoices", group: "Freelance" },
-  { value: "resume", icon: FileText, label: "Resume Pro", group: "Freelance", colorClass: "text-accent" },
+  { value: "client_messages", icon: Inbox, label: "Client Comms", group: "Freelance", colorClass: "text-success" },
+  { value: "finance", icon: Wallet, label: "Finances", group: "Freelance" },
+  { value: "invoices", icon: Receipt, label: "Invoices", group: "Freelance" },
+  { value: "resume", icon: ScrollText, label: "Resume Pro", group: "Freelance", colorClass: "text-accent" },
   { value: "contact", icon: MessageSquare, label: "Inbox", group: "Freelance" },
   { value: "testimonials", icon: Star, label: "Feedback", group: "Freelance" },
-  { value: "social_links", icon: Hexagon, label: "Social Links", group: "Freelance", colorClass: "text-accent" },
+  { value: "social_links", icon: Link2, label: "Social Links", group: "Freelance", colorClass: "text-accent" },
   // Personal
   { value: "lifeos", icon: Activity, label: "Life OS", group: "Personal" },
-  { value: "neuralflow", icon: Activity, label: "Neural Flow", group: "Personal", colorClass: "text-destructive" },
-  { value: "nexusboard", icon: Command, label: "Task Board", group: "Personal", colorClass: "text-accent" },
+  { value: "neuralflow", icon: BrainCircuit, label: "Neural Flow", group: "Personal", colorClass: "text-destructive" },
+  { value: "nexusboard", icon: LayoutGrid, label: "Task Board", group: "Personal", colorClass: "text-accent" },
   { value: "blog", icon: BookOpen, label: "Blog", group: "Personal" },
-  { value: "vault", icon: Terminal, label: "Cmd Vault", group: "Personal", colorClass: "text-success" },
-  { value: "encrypted_vault", icon: Lock, label: "Secret Vault", group: "Personal", colorClass: "text-destructive" },
+  { value: "vault", icon: TerminalSquare, label: "Cmd Vault", group: "Personal", colorClass: "text-success" },
+  { value: "encrypted_vault", icon: ShieldAlert, label: "Secret Vault", group: "Personal", colorClass: "text-destructive" },
   // System
-  { value: "datanexus", icon: Hexagon, label: "Data Hub", group: "System", colorClass: "text-accent" },
+  { value: "datanexus", icon: Database, label: "Data Hub", group: "System", colorClass: "text-accent" },
   { value: "storage", icon: HardDrive, label: "DB & Storage", group: "System", colorClass: "text-warning" },
-  { value: "telemetry", icon: ActivitySquare, label: "Telemetry", group: "System", colorClass: "text-primary" },
+  { value: "cloud_infra", icon: Cloud, label: "Cloud Infra", group: "System", colorClass: "text-[#f48120]" },
+  { value: "telemetry", icon: BarChart3, label: "Telemetry", group: "System", colorClass: "text-primary" },
   { value: "settings", icon: Settings, label: "Settings", group: "System" },
 ];
 
@@ -456,22 +467,34 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
         {/* Main Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
           {/* Topbar */}
-          <header className="h-16 border-b border-border/40 bg-background/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-8 shrink-0 z-40 sticky top-0">
+          <header className="h-14 lg:h-16 border-b border-border/40 bg-background/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-8 shrink-0 z-40 sticky top-0">
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors shrink-0"
+                className="lg:hidden flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all active:scale-90 shrink-0"
               >
                 <Menu className="h-4 w-4" />
               </button>
-              <h2 className="font-display text-lg font-semibold tracking-tight lg:hidden">{SITE.adminTitle}</h2>
+              <div className="lg:hidden flex items-center gap-2">
+                <h2 className="font-display text-base font-semibold tracking-tight">{SITE.brandHandle}</h2>
+                <span className={`h-1.5 w-1.5 rounded-full ${hasSupabase ? "bg-success" : "bg-warning"} animate-pulse`} />
+              </div>
               
               <div className="hidden lg:flex items-center gap-2 terminal-text text-xs uppercase tracking-widest text-muted-foreground">
                 <span className={`h-2 w-2 rounded-full ${hasSupabase ? "bg-success" : "bg-warning"} animate-pulse`} />
                 {hasSupabase ? "Database Connected" : "Mock Data Mode"}
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 lg:gap-3">
+              <a
+                href="https://github.com/Omar-ABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
+                download
+                className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-md transition-colors"
+                title="Download Android APK"
+              >
+                <Download className="w-4 h-4" />
+                Get APK
+              </a>
               <VoiceMic setActiveTab={setActiveTab} />
               <ThemeSwitcher />
               <button 
@@ -480,23 +503,19 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   await supabase.auth.signOut();
                   window.location.href = "/admin";
                 }}
-                className="text-sm font-medium text-destructive hover:bg-destructive/10 px-3 py-1.5 rounded-md transition-colors flex items-center gap-2"
+                className="hidden lg:flex text-sm font-medium text-destructive hover:bg-destructive/10 px-3 py-1.5 rounded-md transition-colors items-center gap-2"
               >
                 Sign Out
               </button>
-              <a href="/" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <a href="/" className="hidden lg:flex text-sm font-medium text-muted-foreground hover:text-primary transition-colors items-center gap-2">
                 Exit to OS
               </a>
             </div>
           </header>
 
           {/* Scrollable Content */}
-          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative">
+          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative pb-28 lg:pb-8">
             <div className="mx-auto w-full max-w-7xl space-y-6">
-              {/* Mobile Navigation Warning */}
-              <div className="lg:hidden mb-6 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-accent">
-                <strong>Mobile Notice:</strong> You have to be on a PC to get the full quality experience. Using a desktop also reduces the chance of mobile browser crashes when handling heavy admin tasks.
-              </div>
 
               {!hasSupabase && (
                 <div className="mb-8 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3 text-sm text-warning">
@@ -560,6 +579,14 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
               </div>
             </TabsContent>
 
+            <TabsContent value="certifications">
+              <div className="glass-panel rounded-xl p-6">
+                <h2 className="text-lg font-semibold">Certifications Manager</h2>
+                <p className="text-sm text-muted-foreground mb-6">Manage your professional certifications and credentials.</p>
+                <CertificationsManager />
+              </div>
+            </TabsContent>
+
             <TabsContent value="iot">
               <div className="glass-panel rounded-xl p-6">
                 <h2 className="text-lg font-semibold">Hardware & IoT Fleet Manager</h2>
@@ -616,22 +643,6 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
               <NexusBoard />
             </TabsContent>
 
-            <TabsContent value="localdrop">
-              <div className="glass-panel rounded-xl p-6">
-                <h2 className="text-lg font-semibold">LocalDrop</h2>
-                <p className="text-sm text-muted-foreground mb-6">Peer-to-peer file transfer over local Wi-Fi via WebRTC.</p>
-                <LocalDrop />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="devices">
-              <div className="glass-panel rounded-xl p-6">
-                <h2 className="text-lg font-semibold">Device Matrix</h2>
-                <p className="text-sm text-muted-foreground mb-6">Screen mirroring, device monitoring, and ecosystem bridge control.</p>
-                <DeviceMatrix />
-              </div>
-            </TabsContent>
-
             <TabsContent value="blog">
               <div className="glass-panel rounded-xl p-6">
                 <h2 className="text-lg font-semibold">Blog & Articles</h2>
@@ -678,6 +689,10 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
               </div>
             </TabsContent>
 
+            <TabsContent value="cloud_infra" className="flex-1 m-0 data-[state=active]:flex flex-col p-4 sm:p-6 lg:p-8 animate-in fade-in-50 zoom-in-[0.98] duration-300">
+              <CloudInfraManager />
+            </TabsContent>
+
             <TabsContent value="datanexus" className="flex-1 m-0 data-[state=active]:flex flex-col p-4 sm:p-6 lg:p-8 animate-in fade-in-50 zoom-in-[0.98] duration-300 h-[calc(100vh-4rem)]">
               <DataNexusTab />
             </TabsContent>
@@ -697,75 +712,119 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
           </main>
         </div>
 
-        {/* Mobile Bottom App Bar (Crash-proofed without Radix TabsList) */}
-        <nav className="lg:hidden fixed bottom-0 left-0 w-full h-[68px] bg-background/80 backdrop-blur-2xl border-t border-border/40 z-50 flex items-center justify-around px-2 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-          <button onClick={() => setActiveTab("overview")} className={`relative flex flex-col items-center justify-center gap-1 w-16 h-14 transition-all duration-300 ${activeTab === "overview" ? "text-primary scale-110" : "text-muted-foreground hover:text-foreground"}`}>
-            {activeTab === "overview" && <div className="absolute top-0 w-8 h-1 bg-primary rounded-b-full shadow-glow-primary" />}
-            <Command className={`w-5 h-5 ${activeTab === "overview" ? "drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" : ""}`} />
-            <span className="text-[9px] font-bold tracking-wide">Dash</span>
-          </button>
-          
-          <button onClick={() => setActiveTab("lifeos")} className={`relative flex flex-col items-center justify-center gap-1 w-16 h-14 transition-all duration-300 ${activeTab === "lifeos" ? "text-primary scale-110" : "text-muted-foreground hover:text-foreground"}`}>
-            {activeTab === "lifeos" && <div className="absolute top-0 w-8 h-1 bg-primary rounded-b-full shadow-glow-primary" />}
-            <Activity className={`w-5 h-5 ${activeTab === "lifeos" ? "drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" : ""}`} />
-            <span className="text-[9px] font-bold tracking-wide">Focus</span>
-          </button>
-          
-          {/* Action Button */}
-          <div className="relative -top-6 flex flex-col items-center justify-center">
-            <div className="w-14 h-14 rounded-full bg-gradient-cyber p-[2px] shadow-glow-primary animate-in zoom-in duration-500 hover:scale-105 transition-transform">
-              <button 
-                onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
-                className="w-full h-full rounded-full bg-background flex items-center justify-center text-primary hover:bg-primary/10 transition-colors shadow-inner"
-              >
-                <Terminal className="w-6 h-6 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
-              </button>
-            </div>
-          </div>
+        {/* ═══ FLOATING GLASSMORPHIC DOCK ═══ */}
+        <nav className="lg:hidden fixed bottom-4 left-4 right-4 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+          <div className="relative bg-background/60 backdrop-blur-3xl border border-border/30 rounded-[28px] dock-glow flex items-center justify-around px-2 py-1" style={{ animation: 'dock-bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
+            {/* Subtle top edge highlight */}
+            <div className="absolute inset-x-4 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full" />
 
-          <button onClick={() => setActiveTab("iot")} className={`relative flex flex-col items-center justify-center gap-1 w-16 h-14 transition-all duration-300 ${activeTab === "iot" ? "text-success scale-110" : "text-muted-foreground hover:text-foreground"}`}>
-            {activeTab === "iot" && <div className="absolute top-0 w-8 h-1 bg-success rounded-b-full shadow-[0_0_10px_rgba(34,197,94,0.6)]" />}
-            <Cpu className={`w-5 h-5 ${activeTab === "iot" ? "drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" : ""}`} />
-            <span className="text-[9px] font-bold tracking-wide">IoT</span>
-          </button>
-          
-          <button onClick={() => setActiveTab("settings")} className={`relative flex flex-col items-center justify-center gap-1 w-16 h-14 transition-all duration-300 ${activeTab === "settings" ? "text-foreground scale-110" : "text-muted-foreground hover:text-foreground"}`}>
-            {activeTab === "settings" && <div className="absolute top-0 w-8 h-1 bg-foreground rounded-b-full shadow-md" />}
-            <Settings className="w-5 h-5" />
-            <span className="text-[9px] font-bold tracking-wide">Sys</span>
-          </button>
+            {[
+              { key: "overview", icon: Command, label: "Dash", color: "primary" },
+              { key: "lifeos", icon: Activity, label: "Focus", color: "primary" },
+              { key: "__cmd__", icon: Terminal, label: "Cmd", color: "primary", isCenter: true },
+              { key: "iot", icon: Cpu, label: "IoT", color: "success" },
+              { key: "settings", icon: Settings, label: "Sys", color: "foreground" },
+            ].map((item) => {
+              const isActive = !item.isCenter && activeTab === item.key;
+              const Icon = item.icon;
+              const colorVar = item.color === "primary" ? "hsl(var(--primary))" 
+                : item.color === "success" ? "hsl(var(--success))" 
+                : "hsl(var(--foreground))";
+
+              if (item.isCenter) {
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                    className="relative -top-5 flex flex-col items-center"
+                  >
+                    <div className="w-[52px] h-[52px] rounded-full bg-gradient-cyber p-[1.5px] shadow-glow-primary transition-transform active:scale-90">
+                      <div className="w-full h-full rounded-full bg-background/90 backdrop-blur-xl flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-primary dock-icon-active" />
+                      </div>
+                    </div>
+                    <span className="text-[8px] font-bold tracking-wider text-muted-foreground mt-0.5">{item.label}</span>
+                  </button>
+                );
+              }
+
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => setActiveTab(item.key)}
+                  className={`relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-300 active:scale-90 ${
+                    isActive ? "" : "text-muted-foreground/60"
+                  }`}
+                >
+                  {/* Active glow dot */}
+                  {isActive && (
+                    <div 
+                      className="absolute -top-0.5 w-5 h-[3px] rounded-full"
+                      style={{ backgroundColor: colorVar, boxShadow: `0 0 12px ${colorVar}` }}
+                    />
+                  )}
+                  <Icon 
+                    className={`w-5 h-5 transition-all duration-300 ${
+                      isActive ? "dock-icon-active" : ""
+                    }`}
+                    style={isActive ? { color: colorVar } : {}}
+                  />
+                  <span 
+                    className={`text-[9px] font-bold tracking-wide mt-0.5 transition-colors ${
+                      isActive ? "" : "text-muted-foreground/50"
+                    }`}
+                    style={isActive ? { color: colorVar } : {}}
+                  >
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </nav>
         <TimeWarpScrubber />
       </Tabs>
 
-      {/* Mobile Slide-Out Menu */}
+      {/* ═══ MOBILE SLIDE-OUT MENU ═══ */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden">
-          <div className="absolute inset-0 bg-background/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 bg-background/90 backdrop-blur-2xl border-r border-border/50 shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 ease-out">
-            <div className="h-20 flex items-center justify-between px-6 border-b border-border/40 shrink-0 bg-background/50">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 shadow-glow-primary">
-                  <Server className="h-5 w-5" />
-                </div>
-                <div>
-                  <h1 className="font-display font-semibold tracking-tight text-lg">{SITE.brandHandle}</h1>
-                  <span className="text-[9px] uppercase tracking-widest text-muted-foreground">Admin Menu</span>
-                </div>
-              </div>
-              <button className="text-muted-foreground hover:text-foreground p-2 rounded-full hover:bg-background-elevated transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-2 pb-24">
-              {groups.map((group) => (
-                <div key={`mobile-${group.name}`}>
-                  <div className="px-3 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 mb-1">
-                    {group.name}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsMobileMenuOpen(false)} />
+          <aside className="absolute inset-y-0 left-0 w-[280px] bg-background/95 backdrop-blur-3xl border-r border-border/30 shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 ease-out">
+            {/* Header */}
+            <div className="pt-[calc(env(safe-area-inset-top,0px)+16px)] px-5 pb-4 border-b border-border/20 shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-cyber text-background shadow-glow-primary">
+                    <Server className="h-5 w-5" />
                   </div>
-                  {group.items.map((item) => {
-                    flatIndex++;
-                    return (
+                  <div>
+                    <h1 className="font-display font-bold tracking-tight text-base">{SITE.brandHandle}</h1>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`h-1.5 w-1.5 rounded-full ${hasSupabase ? "bg-success" : "bg-warning"} animate-pulse`} />
+                      <span className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                        {hasSupabase ? "Live" : "Mock"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <button className="text-muted-foreground hover:text-foreground p-2 rounded-xl hover:bg-background-elevated transition-all active:scale-90" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Navigation Items */}
+            <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
+              {(() => {
+                let flatIndex = 0;
+                return groups.map((group) => (
+                  <div key={`mobile-${group.name}`}>
+                    <div className="px-3 py-2.5 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.15em] mt-3 first:mt-0">
+                      {group.name}
+                    </div>
+                    {group.items.map((item) => {
+                      flatIndex++;
+                      return (
                       <NavItem
                         key={`mobile-${item.value}`}
                         value={item.value}
@@ -779,11 +838,41 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                         reorderMode={false}
                         flatIdx={flatIndex}
                       />
-                    );
-                  })}
-                </div>
-              ))}
-              <div className="h-16" />
+                      );
+                    })}
+                  </div>
+                ));
+              })()}
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="p-4 border-t border-border/20 space-y-2" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}>
+              <a
+                href="https://github.com/Omar-ABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
+                download
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2.5 text-sm font-medium text-primary transition-all active:scale-95 hover:bg-primary/20"
+              >
+                <Download className="w-4 h-4" />
+                Download APK
+              </a>
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    sessionStorage.removeItem("nexus_demo_mode");
+                    await supabase.auth.signOut();
+                    window.location.href = "/admin";
+                  }}
+                  className="flex-1 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-xs font-medium text-destructive transition-all active:scale-95"
+                >
+                  Sign Out
+                </button>
+                <a
+                  href="/"
+                  className="flex-1 rounded-xl border border-border/30 bg-background-elevated/50 px-3 py-2 text-xs font-medium text-muted-foreground text-center transition-all active:scale-95"
+                >
+                  Exit to OS
+                </a>
+              </div>
             </div>
           </aside>
         </div>

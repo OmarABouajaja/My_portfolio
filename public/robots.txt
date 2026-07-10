@@ -15,4 +15,4 @@ Disallow: /admin
 Disallow: /client
 Allow: /
 
-Sitemap: https://omarabouajaja.dev/sitemap.xml
+Sitemap: https://omarabouajaja.site/sitemap.xml

@@ -68,6 +68,13 @@ export const VoiceMic = ({ setActiveTab }: VoiceMicProps) => {
         toast.success("💰 Navigating to Finances");
       },
     },
+    {
+      phrase: "certifications",
+      action: () => {
+        setActiveTab?.("certifications");
+        toast.success("🏆 Navigating to Certifications");
+      },
+    },
   ], [applyTheme, setActiveTab]);
 
   const { isListening, transcript, supported, startListening, stopListening } = useVoiceCommands(commands);

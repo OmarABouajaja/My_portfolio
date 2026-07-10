@@ -16,8 +16,9 @@ type SocialLink = {
 
 export const ContactSection = () => {
   const { t } = useTranslation();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", message: "", botField: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [lastSubmitted, setLastSubmitted] = useState(0);
   const [channels, setChannels] = useState<SocialLink[]>([]);
   const [fallbackEmail, setFallbackEmail] = useState(SITE.email);
 
@@ -33,20 +34,42 @@ export const ContactSection = () => {
     if (submitting) return;
     setSubmitting(true);
 
+    // Rate limiting: 60 seconds
+    if (Date.now() - lastSubmitted < 60000) {
+      toast.error(t("contact.rate_limit", "Please wait a minute before sending another message."));
+      setSubmitting(false);
+      return;
+    }
+
     // Capture values before any state reset
-    const { name, email, message } = form;
+    const { name, email, message, botField } = form;
+    
+    // Honeypot check
+    if (botField !== "") {
+      toast.success(t("contact.success", "Message received ✨"));
+      setForm({ name: "", email: "", message: "", botField: "" });
+      setSubmitting(false);
+      return;
+    }
+
     let persisted = false;
 
     if (hasSupabase) {
       try {
+        // Enforce max length on the server side payload just in case
+        const safeName = name.slice(0, 100);
+        const safeEmail = email.slice(0, 100);
+        const safeMessage = message.slice(0, 2000);
+
         const { error } = await supabase
           .from("contact_submissions" as any)
-          .insert([{ name, email, message }] as any);
+          .insert([{ name: safeName, email: safeEmail, message: safeMessage }] as any);
 
         if (!error) {
           persisted = true;
+          setLastSubmitted(Date.now());
           toast.success(t("contact.success", "Message received ✨"));
-          setForm({ name: "", email: "", message: "" });
+          setForm({ name: "", email: "", message: "", botField: "" });
 
           // Best-effort notification — fire and forget
           supabase.functions.invoke("notify-contact", { body: { name, email, message } }).catch(() => {});
@@ -57,10 +80,11 @@ export const ContactSection = () => {
     }
 
     if (!persisted) {
-      const body = `From: ${name} <${email}>%0D%0A%0D%0A${encodeURIComponent(message)}`;
-      window.location.href = `mailto:${fallbackEmail}?subject=${encodeURIComponent(`Message from ${name}`)}&body=${body}`;
+      const body = `From: ${name} <${email}>%0D%0A%0D%0A${encodeURIComponent(message.slice(0, 2000))}`;
+      window.location.href = `mailto:${fallbackEmail}?subject=${encodeURIComponent(`Message from ${name.slice(0, 100)}`)}&body=${body}`;
       toast.success(t("contact.fallback", "Opening mail client…"));
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", message: "", botField: "" });
+      setLastSubmitted(Date.now());
     }
 
     setSubmitting(false);
@@ -88,18 +112,27 @@ export const ContactSection = () => {
         >
           <div className="grid sm:grid-cols-2 gap-4">
             <FormField label={t("contact.name")}>
-              <input required value={form.name} onChange={update("name")}
+              <input required maxLength={100} value={form.name} onChange={update("name")}
                 className="w-full rounded-md border border-border bg-background-elevated/60 px-3 py-2 text-sm outline-none focus:border-primary focus:shadow-glow-primary" />
             </FormField>
             <FormField label={t("contact.email")}>
-              <input required type="email" value={form.email} onChange={update("email")}
+              <input required type="email" maxLength={100} value={form.email} onChange={update("email")}
                 className="w-full rounded-md border border-border bg-background-elevated/60 px-3 py-2 text-sm outline-none focus:border-primary focus:shadow-glow-primary" />
             </FormField>
           </div>
           <FormField label={t("contact.message")}>
-            <textarea required rows={5} value={form.message} onChange={update("message")}
+            <textarea required rows={5} maxLength={2000} value={form.message} onChange={update("message")}
               className="w-full rounded-md border border-border bg-background-elevated/60 px-3 py-2 text-sm outline-none focus:border-primary focus:shadow-glow-primary resize-none" />
           </FormField>
+          
+          {/* Honeypot field - visually hidden */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+            <label>
+              Don't fill this out if you're human:
+              <input type="text" tabIndex={-1} autoComplete="off" value={form.botField} onChange={update("botField")} />
+            </label>
+          </div>
+          
           <button
             type="submit"
             disabled={submitting}
@@ -131,7 +164,7 @@ const FormField = ({ label, children }: { label: string; children: React.ReactNo
 );
 
 const ChannelCard = ({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) => (
-  <a href={href} target="_blank" rel="noreferrer"
+  <a href={href} target="_blank" rel="noopener noreferrer"
     className="glass-panel flex items-center gap-4 rounded-xl p-4 transition hover:border-primary/60 hover:shadow-glow-primary">
     <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">{icon}</div>
     <div>

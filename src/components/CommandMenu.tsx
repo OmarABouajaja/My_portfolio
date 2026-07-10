@@ -13,15 +13,20 @@ import { Search, Terminal, LayoutDashboard, Cpu, MessageSquare, Download, Settin
 import { useQuery } from "@tanstack/react-query";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { SITE } from "@/config/siteConfig";
+import { useLocation } from "react-router-dom";
 
 export const CommandMenu = () => {
   const [open, setOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const location = useLocation();
 
   const { data: projects = [] } = useQuery({
     queryKey: ["command_projects"],
     queryFn: () => safeFetchAll<any>("projects"),
   });
+
+  // Disable global CommandMenu on admin route — admin has its own palette
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -38,6 +43,8 @@ export const CommandMenu = () => {
     window.location.hash = hash;
     setOpen(false);
   };
+
+  if (isAdminRoute) return null;
 
   return (
     <>

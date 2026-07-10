@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      nav: { projects: "Projects", timeline: "Timeline", services: "Services", contact: "Contact", admin: "Admin" },
+      nav: { projects: "Projects", timeline: "Timeline", services: "Services", certifications: "Certifications", contact: "Contact", admin: "Admin" },
       boot: {
         title: "ABOUAJAJA_OMAR/ v3.0",
         connecting: "Connecting to Abouajaja_Omar/ Cloud",
@@ -58,12 +58,13 @@ const resources = {
       blog: { title: "Data Streams", subtitle: "Technical logs and engineering articles.", readMore: "Read Data" },
       servicesSection: { title: "Core Offerings.", subtitle: "Specialized solutions for embedded systems, high-performance web architecture, and modern product design.", cta: "Start Project" },
       equipmentSection: { title: "My Setup.", subtitle: "The hardware and software tools I use daily to build high-performance systems.", link: "Get it here" },
+      certificationsSection: { title: "Credentials.", subtitle: "Industry-recognized certifications and professional qualifications.", verified: "Verified", verify: "Verify Credential" },
       footer: { rights: "All systems nominal." },
     },
   },
   es: {
     translation: {
-      nav: { projects: "Proyectos", timeline: "Trayectoria", services: "Servicios", contact: "Contacto", admin: "Admin" },
+      nav: { projects: "Proyectos", timeline: "Trayectoria", services: "Servicios", certifications: "Certificaciones", contact: "Contacto", admin: "Admin" },
       boot: {
         title: "ABOUAJAJA_OMAR/ v3.0",
         connecting: "Conectando a Abouajaja_Omar/ Cloud",
@@ -117,12 +118,13 @@ const resources = {
       blog: { title: "Flujos de Datos", subtitle: "Registros técnicos y artículos de ingeniería.", readMore: "Leer Datos" },
       servicesSection: { title: "Servicios Principales.", subtitle: "Soluciones especializadas para sistemas embebidos, arquitectura web de alto rendimiento y diseño de producto moderno.", cta: "Iniciar Proyecto" },
       equipmentSection: { title: "Mi Configuración.", subtitle: "Las herramientas de hardware y software que uso a diario para construir sistemas de alto rendimiento.", link: "Conseguirlo aquí" },
+      certificationsSection: { title: "Credenciales.", subtitle: "Certificaciones reconocidas por la industria y cualificaciones profesionales.", verified: "Verificado", verify: "Verificar Credencial" },
       footer: { rights: "Todos los sistemas operativos." },
     },
   },
   fr: {
     translation: {
-      nav: { projects: "Projets", timeline: "Parcours", services: "Services", contact: "Contact", admin: "Admin" },
+      nav: { projects: "Projets", timeline: "Parcours", services: "Services", certifications: "Certifications", contact: "Contact", admin: "Admin" },
       boot: {
         title: "ABOUAJAJA_OMAR/ v3.0",
         connecting: "Connexion à Abouajaja_Omar/ Cloud",
@@ -176,12 +178,13 @@ const resources = {
       blog: { title: "Flux de données", subtitle: "Journaux techniques et articles d'ingénierie.", readMore: "Lire l'article" },
       servicesSection: { title: "Offres Principales.", subtitle: "Solutions spécialisées pour systèmes embarqués, architecture web haute performance et design produit moderne.", cta: "Démarrer un Projet" },
       equipmentSection: { title: "Mon Setup.", subtitle: "Les outils hardware et software que j'utilise au quotidien pour construire des systèmes performants.", link: "Voir ici" },
+      certificationsSection: { title: "Certifications.", subtitle: "Certifications reconnues par l'industrie et qualifications professionnelles.", verified: "Vérifié", verify: "Vérifier" },
       footer: { rights: "Tous systèmes nominaux." },
     },
   },
   ar: {
     translation: {
-      nav: { projects: "المشاريع", timeline: "المسيرة", services: "الخدمات", contact: "تواصل", admin: "المدير" },
+      nav: { projects: "المشاريع", timeline: "المسيرة", services: "الخدمات", certifications: "الشهادات", contact: "تواصل", admin: "المدير" },
       boot: {
         title: "ABOUAJAJA_OMAR/ v3.0",
         connecting: "الاتصال بـ Abouajaja_Omar/ Cloud",
@@ -235,6 +238,7 @@ const resources = {
       blog: { title: "تدفق البيانات", subtitle: "سجلات تقنية ومقالات هندسية.", readMore: "قراءة المقال" },
       servicesSection: { title: "الخدمات الأساسية.", subtitle: "حلول متخصصة للأنظمة المدمجة والهندسة المعمارية عالية الأداء وتصميم المنتجات الحديثة.", cta: "ابدأ مشروعك" },
       equipmentSection: { title: "أدواتي.", subtitle: "الأدوات التي أستخدمها يوميًا لبناء أنظمة عالية الأداء.", link: "احصل عليه هنا" },
+      certificationsSection: { title: "الشهادات.", subtitle: "شهادات معتمدة من الصناعة ومؤهلات مهنية.", verified: "موثّق", verify: "تحقق من الشهادة" },
       footer: { rights: "كل الأنظمة تعمل." },
     },
   },
