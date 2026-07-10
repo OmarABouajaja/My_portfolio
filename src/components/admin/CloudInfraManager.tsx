@@ -82,8 +82,13 @@ export const CloudInfraManager = () => {
       
       setCloudflareZones(data?.zones || []);
     } catch (err: any) {
-      console.error("Failed to fetch CF zones:", err);
-      toast.error("Failed to connect to Cloudflare edge function");
+      if (err.name === 'FunctionsFetchError' || err.message?.includes('Failed to send a request')) {
+        console.warn("Cloudflare Edge Function not reachable. Did you deploy it?");
+        toast.error("Cloudflare function not deployed. Run `supabase functions deploy admin-cloudflare`");
+      } else {
+        console.error("Failed to fetch CF zones:", err);
+        toast.error("Failed to connect to Cloudflare edge function");
+      }
     } finally {
       setLoadingCloudflare(false);
     }
@@ -107,8 +112,13 @@ export const CloudInfraManager = () => {
 
       setSupabaseProjects(data?.projects || []);
     } catch (err: any) {
-      console.error("Failed to fetch Supabase projects:", err);
-      toast.error("Failed to connect to Supabase edge function");
+      if (err.name === 'FunctionsFetchError' || err.message?.includes('Failed to send a request')) {
+        console.warn("Supabase Edge Function not reachable. Did you deploy it?");
+        toast.error("Supabase function not deployed. Run `supabase functions deploy admin-supabase`");
+      } else {
+        console.error("Failed to fetch Supabase projects:", err);
+        toast.error("Failed to connect to Supabase edge function");
+      }
     } finally {
       setLoadingSupabase(false);
     }
