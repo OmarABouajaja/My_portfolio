@@ -488,7 +488,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
             </div>
             <div className="flex items-center gap-2 lg:gap-3">
               <a
-                href="https://github.com/Omar-ABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
+                href="https://github.com/OmarABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
                 download
                 className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-md transition-colors"
                 title="Download Android APK"
@@ -851,7 +851,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
             {/* Bottom Actions */}
             <div className="p-4 border-t border-border/20 space-y-2" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}>
               <a
-                href="https://github.com/Omar-ABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
+                href="https://github.com/OmarABouajaja/My_portfolio/releases/latest/download/app-debug.apk"
                 download
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-2.5 text-sm font-medium text-primary transition-all active:scale-95 hover:bg-primary/20"
               >
