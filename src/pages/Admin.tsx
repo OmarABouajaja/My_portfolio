@@ -121,7 +121,6 @@ const NavItem = ({
 
 import { AdminCommandPalette } from "@/components/admin/AdminCommandPalette";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { GripVertical, Unlock, Lock as LockIcon } from "lucide-react";
 
 type NavItemDef = {
   value: string;
