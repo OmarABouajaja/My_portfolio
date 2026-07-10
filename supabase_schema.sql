@@ -237,21 +237,15 @@ CREATE TABLE IF NOT EXISTS public.equipment (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- certifications
-CREATE TABLE IF NOT EXISTS public.certifications (
+-- system_notifications
+CREATE TABLE IF NOT EXISTS public.system_notifications (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    title_en TEXT NOT NULL,
-    title_fr TEXT,
-    title_es TEXT,
-    title_ar TEXT,
-    issuer TEXT NOT NULL,
-    issue_date DATE,
-    credential_id TEXT,
-    credential_url TEXT,
-    image_url TEXT,
-    display_order INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+    title TEXT NOT NULL,
+    message TEXT,
+    type TEXT DEFAULT 'info',
+    read_status BOOLEAN DEFAULT false,
+    link TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- social_links (dynamic contact channels)

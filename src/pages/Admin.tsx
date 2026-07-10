@@ -9,8 +9,10 @@ import {
   Cpu, Wifi, Share2, Smartphone, Wallet, Receipt, ScrollText, MessageSquare, 
   Star, Link2, Activity, BrainCircuit, LayoutGrid, BookOpen, TerminalSquare,
   ShieldAlert, HardDrive, Cloud, BarChart3, LogOut, 
-  Palette, Inbox, Download, Menu, X, ChevronLeft, ChevronRight, Terminal, Command
+  Palette, Inbox, Download, Menu, X, ChevronLeft, ChevronRight, Terminal, Command,
+  GripVertical, Unlock, Lock as LockIcon
 } from "lucide-react";
+import { NotificationBell } from "@/components/admin/NotificationBell";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { hasSupabase } from "@/integrations/supabase/safeFetch";
 import { supabase } from "@/integrations/supabase/client";
@@ -495,6 +497,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                 <Download className="w-4 h-4" />
                 Get APK
               </a>
+              <NotificationBell />
               <VoiceMic setActiveTab={setActiveTab} />
               <ThemeSwitcher />
               <button 
@@ -514,7 +517,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
           </header>
 
           {/* Scrollable Content */}
-          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative pb-28 lg:pb-8">
+          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 112px)' }}>
             <div className="mx-auto w-full max-w-7xl space-y-6">
 
               {!hasSupabase && (
@@ -785,13 +788,14 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
         <TimeWarpScrubber />
       </Tabs>
 
-      {/* ═══ MOBILE SLIDE-OUT MENU ═══ */}
+      {/* ═══ MOBILE BOTTOM SHEET MENU ═══ */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsMobileMenuOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-[280px] bg-background/95 backdrop-blur-3xl border-r border-border/30 shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 ease-out">
-            {/* Header */}
-            <div className="pt-[calc(env(safe-area-inset-top,0px)+16px)] px-5 pb-4 border-b border-border/20 shrink-0">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsMobileMenuOpen(false)} />
+          <aside className="absolute inset-x-0 bottom-0 h-[85vh] bg-background/95 backdrop-blur-3xl border-t border-border/30 rounded-t-3xl shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300 ease-out">
+            {/* Drag Handle & Header */}
+            <div className="pt-3 px-5 pb-4 border-b border-border/20 shrink-0">
+              <div className="w-12 h-1.5 bg-muted rounded-full mx-auto mb-4" />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-cyber text-background shadow-glow-primary">

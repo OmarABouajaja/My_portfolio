@@ -362,6 +362,57 @@ export type Database = {
         }
         Relationships: []
       }
+      system_notifications: {
+        Row: {
+          id: string
+          title: string
+          message: string | null
+          type: string | null
+          read_status: boolean | null
+          link: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          message?: string | null
+          type?: string | null
+          read_status?: boolean | null
+          link?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          message?: string | null
+          type?: string | null
+          read_status?: boolean | null
+          link?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      system_secrets: {
+        Row: {
+          key: string
+          value: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          value: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          value?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
