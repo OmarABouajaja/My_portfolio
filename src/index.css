@@ -125,6 +125,7 @@
     background-image: var(--gradient-radial);
     background-attachment: fixed;
     /* Native Web App Behaviors */
+    overscroll-behavior: none;
     overscroll-behavior-y: none; /* Disables pull-to-refresh on mobile */
     -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight */
     -webkit-touch-callout: none; /* Disables long-press context menu on links/images */
