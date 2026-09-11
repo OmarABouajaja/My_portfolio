@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { Plus, Type, Image as ImageIcon, Calculator, Trash2, Maximize, Folders, GripHorizontal } from "lucide-react";
+import { motion, useAnimation, useDragControls } from "framer-motion";
+import { Plus, Type, Image as ImageIcon, Calculator, Trash2, Maximize, Folders, GripHorizontal, Columns } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "sonner";
 
@@ -14,60 +14,22 @@ interface BoardNode {
   content: string; // Text, URL, or Math expression
 }
 
+interface BoardColumn {
+  id: string;
+  name: string;
+}
+
 interface Board {
   id: string;
   name: string;
   nodes: BoardNode[];
+  columns?: BoardColumn[];
 }
 
-export const NexusBoard = () => {
-  const [boards, setBoards] = useLocalStorage<Board[]>("bo3_nexus_boards", [
-    { id: "default", name: "Master Architecture", nodes: [] }
-  ]);
-  const [activeBoardId, setActiveBoardId] = useState<string>("default");
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const activeBoard = boards.find(b => b.id === activeBoardId) || boards[0];
+const BoardNodeCard = ({ node, containerRef, updateNode, deleteNode, updateNodePos }: any) => {
+  const dragControls = useDragControls();
 
-  const updateBoardNodes = (newNodes: BoardNode[]) => {
-    setBoards(boards.map(b => b.id === activeBoardId ? { ...b, nodes: newNodes } : b));
-  };
-
-  const addNode = (type: NodeType) => {
-    const newNode: BoardNode = {
-      id: Date.now().toString(),
-      type,
-      x: window.innerWidth / 2 - 150, // Centerish
-      y: window.innerHeight / 2 - 100,
-      content: type === "calc" ? "100 * 2.5" : ""
-    };
-    updateBoardNodes([...activeBoard.nodes, newNode]);
-  };
-
-  const updateNode = (id: string, content: string) => {
-    const newNodes = activeBoard.nodes.map(n => n.id === id ? { ...n, content } : n);
-    updateBoardNodes(newNodes);
-  };
-
-  const updateNodePos = (id: string, x: number, y: number) => {
-    const newNodes = activeBoard.nodes.map(n => n.id === id ? { ...n, x, y } : n);
-    updateBoardNodes(newNodes);
-  };
-
-  const deleteNode = (id: string) => {
-    updateBoardNodes(activeBoard.nodes.filter(n => n.id !== id));
-  };
-
-  const addBoard = () => {
-    const name = prompt("Enter Board Name:");
-    if (!name) return;
-    const newBoard = { id: Date.now().toString(), name, nodes: [] };
-    setBoards([...boards, newBoard]);
-    setActiveBoardId(newBoard.id);
-  };
-
-  // Node Renderers
-  const renderNodeContent = (node: BoardNode) => {
+  const renderNodeContent = () => {
     if (node.type === "text") {
       return (
         <textarea 
@@ -108,7 +70,6 @@ export const NexusBoard = () => {
     if (node.type === "calc") {
       let result: string | number = "Error";
       try {
-        // Safe evaluation simulation for numbers only
         result = Function(`'use strict'; return (${node.content || '0'})`)();
       } catch (e) {
         result = "Invalid";
@@ -133,6 +94,103 @@ export const NexusBoard = () => {
   };
 
   return (
+    <motion.div
+      drag
+      dragListener={false}
+      dragControls={dragControls}
+      dragMomentum={false}
+      dragConstraints={containerRef}
+      initial={{ x: node.x, y: node.y, scale: 0.9, opacity: 0 }}
+      animate={{ x: node.x, y: node.y, scale: 1, opacity: 1 }}
+      onDragEnd={(_, info) => {
+        updateNodePos(node.id, node.x + info.offset.x, node.y + info.offset.y);
+      }}
+      className={`absolute w-64 ${node.type === 'image' ? 'min-h-[200px]' : 'min-h-[150px]'} glass-panel border rounded-xl overflow-hidden shadow-xl flex flex-col group
+        ${node.type === 'text' ? 'border-primary/30' : node.type === 'image' ? 'border-accent/30' : 'border-warning/30'}`}
+    >
+      <div 
+        onPointerDown={(e) => dragControls.start(e)}
+        className={`h-8 flex items-center justify-between px-3 border-b cursor-grab active:cursor-grabbing
+        ${node.type === 'text' ? 'bg-primary/10 border-primary/20' : node.type === 'image' ? 'bg-accent/10 border-accent/20' : 'bg-warning/10 border-warning/20'}`}
+      >
+        <div className="flex items-center gap-2 pointer-events-none">
+          <GripHorizontal className="w-3 h-3 text-muted-foreground" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">{node.type}</span>
+        </div>
+        <button 
+          onClick={(e) => { e.stopPropagation(); deleteNode(node.id); }}
+          className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition z-10"
+        >
+          <Trash2 className="w-3 h-3" />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-hidden pointer-events-auto">
+        {renderNodeContent()}
+      </div>
+    </motion.div>
+  );
+};
+
+export const NexusBoard = () => {
+  const [boards, setBoards] = useLocalStorage<Board[]>("bo3_nexus_boards", [
+    { id: "default", name: "Master Architecture", nodes: [], columns: [{id: "col1", name: "Backlog"}, {id: "col2", name: "In Progress"}, {id: "col3", name: "Done"}] }
+  ]);
+  const [activeBoardId, setActiveBoardId] = useState<string>("default");
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeBoard = boards.find(b => b.id === activeBoardId) || boards[0];
+
+  const updateBoardNodes = (newNodes: BoardNode[]) => {
+    setBoards(boards.map(b => b.id === activeBoardId ? { ...b, nodes: newNodes } : b));
+  };
+
+  const addNode = (type: NodeType) => {
+    const newNode: BoardNode = {
+      id: Date.now().toString(),
+      type,
+      x: window.innerWidth / 2 - 150, // Centerish
+      y: window.innerHeight / 2 - 100,
+      content: type === "calc" ? "100 * 2.5" : ""
+    };
+    updateBoardNodes([...activeBoard.nodes, newNode]);
+  };
+
+  const updateNode = (id: string, content: string) => {
+    const newNodes = activeBoard.nodes.map(n => n.id === id ? { ...n, content } : n);
+    updateBoardNodes(newNodes);
+  };
+
+  const updateNodePos = (id: string, x: number, y: number) => {
+    const newNodes = activeBoard.nodes.map(n => n.id === id ? { ...n, x, y } : n);
+    updateBoardNodes(newNodes);
+  };
+
+  const deleteNode = (id: string) => {
+    updateBoardNodes(activeBoard.nodes.filter(n => n.id !== id));
+  };
+
+  const addBoard = () => {
+    const name = prompt("Enter Board Name:");
+    if (!name) return;
+    const newBoard = { id: Date.now().toString(), name, nodes: [], columns: [] };
+    setBoards([...boards, newBoard]);
+    setActiveBoardId(newBoard.id);
+  };
+
+  const addColumn = () => {
+    const name = prompt("Enter Column Name:");
+    if (!name) return;
+    const newColumns = [...(activeBoard.columns || []), { id: Date.now().toString(), name }];
+    setBoards(boards.map(b => b.id === activeBoardId ? { ...b, columns: newColumns } : b));
+  };
+
+  const removeColumn = (id: string) => {
+    const newColumns = (activeBoard.columns || []).filter(c => c.id !== id);
+    setBoards(boards.map(b => b.id === activeBoardId ? { ...b, columns: newColumns } : b));
+  };
+
+  return (
     <div className="w-full h-full flex flex-col relative overflow-hidden bg-[#0a0a0c]">
       
       {/* Background Grid Pattern */}
@@ -143,6 +201,22 @@ export const NexusBoard = () => {
           backgroundSize: '40px 40px'
         }}
       />
+
+      {/* Visual Columns Background */}
+      {activeBoard.columns && activeBoard.columns.length > 0 && (
+        <div className="absolute inset-0 flex mt-20 px-8 gap-6 pointer-events-none z-0">
+          {activeBoard.columns.map(col => (
+            <div key={col.id} className="flex-1 border-x border-border/20 bg-background/5 h-full relative">
+              <div className="absolute top-0 left-0 right-0 h-10 border-b border-border/20 flex items-center justify-between px-4 pointer-events-auto">
+                <span className="text-sm font-bold uppercase tracking-widest text-primary/80">{col.name}</span>
+                <button onClick={() => removeColumn(col.id)} className="text-muted-foreground hover:text-destructive opacity-50 hover:opacity-100 transition">
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Top Toolbar */}
       <div className="absolute top-4 left-4 right-4 z-50 flex items-center justify-between gap-4">
@@ -175,47 +249,24 @@ export const NexusBoard = () => {
           <button onClick={() => addNode("calc")} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-warning/20 hover:text-warning rounded text-muted-foreground transition text-xs font-bold uppercase">
             <Calculator className="w-4 h-4" /> Math
           </button>
+          <div className="w-px h-6 bg-border mx-1" />
+          <button onClick={addColumn} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-muted/20 hover:text-foreground rounded text-muted-foreground transition text-xs font-bold uppercase">
+            <Columns className="w-4 h-4" /> Add Col
+          </button>
         </div>
       </div>
 
       {/* Infinite Canvas Area */}
       <div className="flex-1 w-full h-full relative" ref={containerRef}>
         {activeBoard.nodes.map(node => (
-          <motion.div
-            key={node.id}
-            drag
-            dragMomentum={false}
-            dragConstraints={containerRef}
-            initial={{ x: node.x, y: node.y, scale: 0.9, opacity: 0 }}
-            animate={{ x: node.x, y: node.y, scale: 1, opacity: 1 }}
-            onDragEnd={(_, info) => {
-              // Update state with new offset
-              updateNodePos(node.id, node.x + info.offset.x, node.y + info.offset.y);
-            }}
-            className={`absolute w-64 ${node.type === 'image' ? 'min-h-[200px]' : 'min-h-[150px]'} glass-panel border rounded-xl overflow-hidden shadow-xl flex flex-col group
-              ${node.type === 'text' ? 'border-primary/30' : node.type === 'image' ? 'border-accent/30' : 'border-warning/30'}`}
-          >
-            {/* Node Header */}
-            <div className={`h-8 flex items-center justify-between px-3 border-b cursor-grab active:cursor-grabbing
-              ${node.type === 'text' ? 'bg-primary/10 border-primary/20' : node.type === 'image' ? 'bg-accent/10 border-accent/20' : 'bg-warning/10 border-warning/20'}`}
-            >
-              <div className="flex items-center gap-2 pointer-events-none">
-                <GripHorizontal className="w-3 h-3 text-muted-foreground" />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{node.type}</span>
-              </div>
-              <button 
-                onClick={() => deleteNode(node.id)}
-                className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition"
-              >
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-
-            {/* Node Body */}
-            <div className="flex-1 overflow-hidden" onPointerDownCapture={(e) => e.stopPropagation()}>
-              {renderNodeContent(node)}
-            </div>
-          </motion.div>
+          <BoardNodeCard 
+            key={node.id} 
+            node={node} 
+            containerRef={containerRef} 
+            updateNode={updateNode} 
+            deleteNode={deleteNode} 
+            updateNodePos={updateNodePos} 
+          />
         ))}
       </div>
 

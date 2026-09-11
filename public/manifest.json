@@ -1,16 +1,24 @@
 {
-  "name": "Omar Abouajaja OS",
-  "short_name": "Abouajaja_Omar/",
+  "name": "OB — Omar Abouajaja OS",
+  "short_name": "OB/",
   "description": "Digital Portfolio of Omar Abouajaja — Robotics, IoT & Full-Stack Engineering",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "orientation": "portrait-primary",
   "background_color": "#050B14",
-  "theme_color": "#22d3ee",
+  "theme_color": "#050B14",
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
     },
     {
       "src": "/pwa-192x192.png",
@@ -25,7 +33,7 @@
       "purpose": "any"
     },
     {
-      "src": "/maskable-icon-512x512.png",
+      "src": "/pwa-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"

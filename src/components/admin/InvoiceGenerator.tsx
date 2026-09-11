@@ -4,6 +4,8 @@ import { Plus, Trash2, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { dbInsert } from "@/integrations/supabase/mutations";
 import { useSiteMetadata } from "@/hooks/useSiteMetadata";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { SITE } from "@/config/siteConfig";
 
 type InvoiceItem = {
   id: string;
@@ -22,9 +24,10 @@ export const InvoiceGenerator = () => {
   const [items, setItems] = useState<InvoiceItem[]>([
     { id: "1", description: "Full-Stack Development (Hours)", quantity: 40, rate: 50 },
   ]);
-  const [currency, setCurrency] = useState("USD");
-  const [notes, setNotes] = useState("Thank you for your business.");
-  const [taxRate, setTaxRate] = useState(0);
+  const [currency, setCurrency] = useLocalStorage("bo3_invoice_currency", "USD");
+  const [notes, setNotes] = useLocalStorage("bo3_invoice_notes", "Thank you for your business.");
+  const [taxRate, setTaxRate] = useLocalStorage("bo3_invoice_tax_rate", 0);
+  const [template, setTemplate] = useLocalStorage("bo3_invoice_template", "modern");
 
   const addItem = () => {
     setItems([...items, { id: Math.random().toString(), description: "", quantity: 1, rate: 0 }]);
@@ -50,11 +53,18 @@ export const InvoiceGenerator = () => {
 
     try {
       const doc = new jsPDF();
-      
       // Header
-      doc.setFontSize(24);
-      doc.setTextColor(34, 211, 238); // Primary cyan
-      doc.text("INVOICE", 14, 22);
+      if (template === "modern") {
+        doc.setFontSize(24);
+        doc.setTextColor(34, 211, 238); // Primary cyan
+        doc.text("INVOICE", 14, 22);
+      } else {
+        doc.setFontSize(26);
+        doc.setTextColor(0, 0, 0); // Classic Black
+        doc.text("INVOICE", 14, 22);
+        doc.setLineWidth(0.5);
+        doc.line(14, 25, 196, 25);
+      }
       
       doc.setFontSize(10);
       doc.setTextColor(100, 100, 100);
@@ -67,8 +77,8 @@ export const InvoiceGenerator = () => {
       doc.text("From:", 14, 50);
       doc.setFontSize(10);
       doc.setTextColor(100, 100, 100);
-      doc.text("Abouajaja Omar", 14, 55);
-      doc.text("Robotics & Full-Stack Engineer", 14, 60);
+      doc.text(SITE.ownerName || "Abouajaja Omar", 14, 55);
+      doc.text(SITE.resumeTitle || "Robotics & Full-Stack Engineer", 14, 60);
       doc.text(meta?.contact_email || "contact@example.com", 14, 65);
       
       // To
@@ -85,8 +95,15 @@ export const InvoiceGenerator = () => {
       }
       
       // Table Header
-      doc.setFillColor(245, 245, 245);
-      doc.rect(14, 85, 182, 10, "F");
+      if (template === "modern") {
+        doc.setFillColor(245, 245, 245);
+        doc.rect(14, 85, 182, 10, "F");
+      } else {
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(0.2);
+        doc.line(14, 85, 196, 85);
+        doc.line(14, 95, 196, 95);
+      }
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(10);
       doc.text("Description", 16, 92);
@@ -118,11 +135,16 @@ export const InvoiceGenerator = () => {
         doc.text(`${tax.toFixed(2)} ${currency}`, 170, y);
         y += 8;
       }
-      
       doc.setFontSize(12);
-      doc.setTextColor(34, 211, 238);
+      if (template === "modern") {
+        doc.setTextColor(34, 211, 238);
+      } else {
+        doc.setTextColor(0, 0, 0);
+        doc.setFont("helvetica", "bold");
+      }
       doc.text("Total:", 140, y);
       doc.text(`${total.toFixed(2)} ${currency}`, 170, y);
+      doc.setFont("helvetica", "normal");
       
       // Notes
       if (notes) {
@@ -136,7 +158,6 @@ export const InvoiceGenerator = () => {
       }
       
       doc.save(`Invoice_${clientName.replace(/\s+/g, "_")}.pdf`);
-      
       // Persist invoice record to DB
       await dbInsert("invoices", {
         invoice_number: `INV-${Date.now().toString(36).toUpperCase()}`,
@@ -264,6 +285,18 @@ export const InvoiceGenerator = () => {
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
               <option value="TND">TND (DT)</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Template</span>
+            <select
+              value={template}
+              onChange={(e) => setTemplate(e.target.value)}
+              className="rounded-md border border-border bg-background px-2 py-1 text-sm outline-none"
+            >
+              <option value="modern">Modern (Cyan)</option>
+              <option value="classic">Classic (B&W)</option>
             </select>
           </div>
           

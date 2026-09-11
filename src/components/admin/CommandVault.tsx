@@ -16,6 +16,32 @@ export const CommandVault = () => {
   const [newCommand, setNewCommand] = useState("");
   const [newCategory, setNewCategory] = useState("IoT");
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [variables, setVariables] = useState<Record<number, Record<string, string>>>({});
+
+  const extractVars = (cmd: string) => {
+    const matches = [...cmd.matchAll(/\[(.*?)\]/g)];
+    return Array.from(new Set(matches.map(m => m[1])));
+  };
+
+  const updateVariable = (snippetId: number, varName: string, value: string) => {
+    setVariables(prev => ({
+      ...prev,
+      [snippetId]: {
+        ...(prev[snippetId] || {}),
+        [varName]: value
+      }
+    }));
+  };
+
+  const getResolvedCommand = (snippet: Snippet) => {
+    let cmd = snippet.command;
+    const vars = extractVars(cmd);
+    vars.forEach(v => {
+      const val = variables[snippet.id]?.[v] || `[${v}]`;
+      cmd = cmd.split(`[${v}]`).join(val);
+    });
+    return cmd;
+  };
 
   const addSnippet = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,9 +55,9 @@ export const CommandVault = () => {
     setSnippets(snippets.filter(s => s.id !== id));
   };
 
-  const copyToClipboard = async (id: number, text: string) => {
+  const copyToClipboard = async (id: number, resolvedText: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(resolvedText);
       setCopiedId(id);
       toast.success("Command copied to clipboard");
       setTimeout(() => setCopiedId(null), 2000);
@@ -57,7 +83,7 @@ export const CommandVault = () => {
           />
           <input 
             type="text" 
-            placeholder="sudo npm run..." 
+            placeholder="Command (use [VAR] for variables)" 
             value={newCommand}
             onChange={(e) => setNewCommand(e.target.value)}
             className="md:col-span-2 bg-background-elevated border border-border rounded-lg px-3 py-2 text-sm font-mono text-success focus:outline-none focus:border-primary/50"
@@ -109,15 +135,35 @@ export const CommandVault = () => {
 
               {/* Terminal Body */}
               <div className="p-5 flex items-center justify-between gap-4 flex-1">
-                <div className="flex items-start gap-3 overflow-hidden">
-                  <span className="text-primary text-sm font-mono select-none mt-0.5">~%</span>
-                  <code className="text-sm text-foreground/90 font-mono break-all line-clamp-3 select-all">
-                    {snippet.command}
-                  </code>
+                <div className="flex flex-col gap-3 w-full overflow-hidden">
+                  <div className="flex items-start gap-3">
+                    <span className="text-primary text-sm font-mono select-none mt-0.5">~%</span>
+                    <code className="text-sm text-foreground/90 font-mono break-all line-clamp-3 select-all">
+                      {getResolvedCommand(snippet)}
+                    </code>
+                  </div>
+
+                  {/* Variables Inputs */}
+                  {extractVars(snippet.command).length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2 p-3 bg-background-elevated/30 border border-border/50 rounded-lg">
+                      {extractVars(snippet.command).map(v => (
+                        <div key={v} className="flex items-center gap-2 bg-background-elevated border border-border rounded px-2 py-1">
+                          <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{v}:</span>
+                          <input
+                            type="text"
+                            placeholder="value"
+                            value={variables[snippet.id]?.[v] || ""}
+                            onChange={(e) => updateVariable(snippet.id, v, e.target.value)}
+                            className="bg-transparent border-none outline-none text-xs text-foreground font-mono w-20"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <button 
-                  onClick={() => copyToClipboard(snippet.id, snippet.command)}
+                  onClick={() => copyToClipboard(snippet.id, getResolvedCommand(snippet))}
                   className={`shrink-0 p-2.5 rounded-lg transition-all duration-300 border ${
                     copiedId === snippet.id 
                       ? 'bg-success/20 text-success border-success/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]' 

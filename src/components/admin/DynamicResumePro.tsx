@@ -15,6 +15,7 @@ type Project = {
 
 export const DynamicResumePro = () => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [layout, setLayout] = useState<"standard" | "compact">("standard");
   const { data: projects = [] } = useQuery({
     queryKey: ["resume_projects"],
     queryFn: () => safeFetchAll<Project>("projects"),
@@ -37,107 +38,108 @@ export const DynamicResumePro = () => {
         doc.rect(0, 0, 210, 297, "F");
       }
 
-      let yPos = 20;
+      let yPos = layout === "compact" ? 15 : 20;
 
       // Header
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(28);
+      doc.setFontSize(layout === "compact" ? 22 : 28);
       doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
       doc.text(SITE.ownerName.toUpperCase(), 14, yPos);
       
-      yPos += 8;
-      doc.setFontSize(12);
+      yPos += layout === "compact" ? 6 : 8;
+      doc.setFontSize(layout === "compact" ? 10 : 12);
       doc.setTextColor(textColor[0], textColor[1], textColor[2]);
       doc.text(SITE.resumeTitle, 14, yPos);
       
-      yPos += 6;
+      yPos += layout === "compact" ? 5 : 6;
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(layout === "compact" ? 9 : 10);
       doc.setTextColor(mutedColor[0], mutedColor[1], mutedColor[2]);
       doc.text(SITE.resumeContact, 14, yPos);
 
       // Line Separator
-      yPos += 8;
+      yPos += layout === "compact" ? 6 : 8;
       doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
       doc.setLineWidth(0.5);
       doc.line(14, yPos, 196, yPos);
 
       // Summary
-      yPos += 15;
+      yPos += layout === "compact" ? 10 : 15;
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
+      doc.setFontSize(layout === "compact" ? 12 : 14);
       doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
       doc.text("PROFESSIONAL SUMMARY", 14, yPos);
 
-      yPos += 8;
+      yPos += layout === "compact" ? 6 : 8;
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(layout === "compact" ? 9 : 10);
       doc.setTextColor(textColor[0], textColor[1], textColor[2]);
       const summary = SITE.resumeSummary;
       const splitSummary = doc.splitTextToSize(summary, 180);
       doc.text(splitSummary, 14, yPos);
-      yPos += splitSummary.length * 5 + 5;
+      yPos += splitSummary.length * (layout === "compact" ? 4 : 5) + 5;
 
       // Skills
-      yPos += 10;
+      yPos += layout === "compact" ? 6 : 10;
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
+      doc.setFontSize(layout === "compact" ? 12 : 14);
       doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
       doc.text("CORE COMPETENCIES", 14, yPos);
 
-      yPos += 8;
+      yPos += layout === "compact" ? 6 : 8;
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
+      doc.setFontSize(layout === "compact" ? 9 : 10);
       doc.setTextColor(textColor[0], textColor[1], textColor[2]);
       doc.text("Frontend:", 14, yPos);
       doc.setFont("helvetica", "normal");
       doc.text(SITE.skills.frontend, 40, yPos);
 
-      yPos += 6;
+      yPos += layout === "compact" ? 5 : 6;
       doc.setFont("helvetica", "bold");
       doc.text("Backend:", 14, yPos);
       doc.setFont("helvetica", "normal");
       doc.text(SITE.skills.backend, 40, yPos);
 
-      yPos += 6;
+      yPos += layout === "compact" ? 5 : 6;
       doc.setFont("helvetica", "bold");
       doc.text("Hardware:", 14, yPos);
       doc.setFont("helvetica", "normal");
       doc.text(SITE.skills.hardware, 40, yPos);
 
       // Projects (Dynamically from LocalStorage)
-      yPos += 20;
+      yPos += layout === "compact" ? 12 : 20;
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
+      doc.setFontSize(layout === "compact" ? 12 : 14);
       doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
       doc.text("SELECTED PROJECTS", 14, yPos);
 
-      yPos += 10;
+      yPos += layout === "compact" ? 8 : 10;
       if (projects.length === 0) {
         doc.setFont("helvetica", "italic");
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setTextColor(mutedColor[0], mutedColor[1], mutedColor[2]);
         doc.text("No projects found in database. Add some via the Projects Manager.", 14, yPos);
       } else {
-        projects.slice(0, 4).forEach((proj) => { // limit to 4 projects to fit on page
+        const maxProjects = layout === "compact" ? 6 : 4;
+        projects.slice(0, maxProjects).forEach((proj) => { 
           doc.setFont("helvetica", "bold");
-          doc.setFontSize(12);
+          doc.setFontSize(layout === "compact" ? 10 : 12);
           doc.setTextColor(textColor[0], textColor[1], textColor[2]);
           doc.text(`• ${proj.title_en || "Untitled Project"}`, 14, yPos);
 
           doc.setFont("helvetica", "italic");
-          doc.setFontSize(9);
+          doc.setFontSize(layout === "compact" ? 8 : 9);
           doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
           doc.text(`[${proj.category || "General"}]`, 180, yPos, { align: "right" });
 
-          yPos += 6;
+          yPos += layout === "compact" ? 5 : 6;
           doc.setFont("helvetica", "normal");
-          doc.setFontSize(10);
+          doc.setFontSize(layout === "compact" ? 9 : 10);
           doc.setTextColor(mutedColor[0], mutedColor[1], mutedColor[2]);
           const desc = doc.splitTextToSize(proj.description_en || "No description available.", 175);
           doc.text(desc, 20, yPos);
 
-          yPos += desc.length * 5 + 6;
+          yPos += desc.length * (layout === "compact" ? 4 : 5) + 6;
         });
       }
 
@@ -162,23 +164,44 @@ export const DynamicResumePro = () => {
         </div>
 
         {/* Theme Toggle */}
-        <div className="flex bg-background-elevated p-1 rounded-lg border border-border w-fit">
-          <button
-            onClick={() => setTheme("dark")}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition ${
-              theme === "dark" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Moon className="w-4 h-4" /> Cyber Dark
-          </button>
-          <button
-            onClick={() => setTheme("light")}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition ${
-              theme === "light" ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Sun className="w-4 h-4" /> Printable Light
-          </button>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex bg-background-elevated p-1 rounded-lg border border-border w-fit">
+            <button
+              onClick={() => setLayout("standard")}
+              className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition ${
+                layout === "standard" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Standard Layout
+            </button>
+            <button
+              onClick={() => setLayout("compact")}
+              className={`flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition ${
+                layout === "compact" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Compact Layout
+            </button>
+          </div>
+          
+          <div className="flex bg-background-elevated p-1 rounded-lg border border-border w-fit">
+            <button
+              onClick={() => setTheme("dark")}
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition ${
+                theme === "dark" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Moon className="w-4 h-4" /> Cyber Dark
+            </button>
+            <button
+              onClick={() => setTheme("light")}
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition ${
+                theme === "light" ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Sun className="w-4 h-4" /> Printable Light
+            </button>
+          </div>
         </div>
       </div>
 

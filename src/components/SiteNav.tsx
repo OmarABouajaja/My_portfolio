@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Menu, X } from "lucide-react";
+import { Cpu, Menu, X, Briefcase, Clock, Layers, Award, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
@@ -40,11 +40,11 @@ export const SiteNav = () => {
     return () => observer.disconnect();
   }, []);
   const items = [
-    { id: "projects", label: t("nav.projects") },
-    { id: "timeline", label: t("nav.timeline") },
-    { id: "services", label: t("nav.services") },
-    { id: "certifications", label: t("nav.certifications") },
-    { id: "contact", label: t("nav.contact") },
+    { id: "projects", label: t("nav.projects"), icon: Briefcase, colorClass: "text-primary hover:text-primary", bgClass: "bg-primary/5", borderClass: "border-primary/30", glowClass: "shadow-glow-primary" },
+    { id: "timeline", label: t("nav.timeline"), icon: Clock, colorClass: "text-accent hover:text-accent", bgClass: "bg-accent/5", borderClass: "border-accent/30", glowClass: "shadow-[0_0_15px_rgba(var(--accent),0.3)]" },
+    { id: "services", label: t("nav.services"), icon: Layers, colorClass: "text-warning hover:text-warning", bgClass: "bg-warning/5", borderClass: "border-warning/30", glowClass: "shadow-[0_0_15px_rgba(var(--warning),0.3)]" },
+    { id: "certifications", label: t("nav.certifications"), icon: Award, colorClass: "text-success hover:text-success", bgClass: "bg-success/5", borderClass: "border-success/30", glowClass: "shadow-[0_0_15px_rgba(var(--success),0.3)]" },
+    { id: "contact", label: t("nav.contact"), icon: Mail, colorClass: "text-destructive hover:text-destructive", bgClass: "bg-destructive/5", borderClass: "border-destructive/30", glowClass: "shadow-[0_0_15px_rgba(var(--destructive),0.3)]" },
   ];
 
   return (
@@ -54,11 +54,10 @@ export const SiteNav = () => {
       transition={{ delay: 0.2 }}
       className="fixed inset-x-0 top-0 z-40"
     >
-      <div className="mx-auto mt-3 sm:mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-full border border-primary/20 bg-background-elevated/40 px-3 py-1.5 backdrop-blur-2xl shadow-glow-primary/50 sm:px-6 sm:py-2">
+      <div className="mx-auto mt-3 sm:mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-full border border-border/50 bg-background-elevated/60 px-3 py-1.5 backdrop-blur-2xl shadow-lg shadow-black/20 sm:px-6 sm:py-2">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Cpu className="h-5 w-5 text-primary" />
-            <div className="absolute inset-0 -z-10 blur-md bg-primary/40 group-hover:bg-primary/60 transition" />
           </div>
           <span 
             onDoubleClick={(e) => { e.preventDefault(); navigate('/admin'); }}
@@ -69,18 +68,23 @@ export const SiteNav = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          {items.map((it) => (
-            <a
-              key={it.id}
-              href={`#${it.id}`}
-              className={`relative rounded-full px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] transition-all duration-300 hover:bg-primary/10 hover:text-primary hover:shadow-[inset_0_0_12px_rgba(34,211,238,0.15)] group ${
-                activeSection === it.id ? "text-primary bg-primary/5" : "text-muted-foreground"
-              }`}
-            >
-              {it.label}
-              <span className={`absolute bottom-1 left-1/2 h-[1px] -translate-x-1/2 bg-primary transition-all duration-300 ${activeSection === it.id ? "w-1/2" : "w-0 group-hover:w-1/2"}`} />
-            </a>
-          ))}
+          {items.map((it) => {
+            const Icon = it.icon;
+            const isActive = activeSection === it.id;
+            return (
+              <a
+                key={it.id}
+                href={`#${it.id}`}
+                className={`relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] transition-all duration-300 group ${
+                  isActive ? `${it.colorClass.split(' ')[0]} ${it.bgClass}` : `text-muted-foreground ${it.colorClass}`
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`} />
+                {it.label}
+                <span className={`absolute bottom-1 left-1/2 h-[1px] -translate-x-1/2 transition-all duration-300 ${it.colorClass.split(' ')[0].replace('text-', 'bg-')} ${isActive ? "w-1/2" : "w-0 group-hover:w-1/2"}`} />
+              </a>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -120,24 +124,29 @@ export const SiteNav = () => {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="fixed inset-x-0 top-16 bottom-0 z-50 flex flex-col items-center justify-center gap-2 px-8 md:hidden"
             >
-              {items.map((it, idx) => (
-                <motion.a
-                  key={it.id}
-                  href={`#${it.id}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ delay: idx * 0.06, duration: 0.3 }}
-                  className={`w-full max-w-sm text-center rounded-2xl px-6 py-4 text-base font-semibold uppercase tracking-[0.15em] transition-all touch-target ${
-                    activeSection === it.id
-                      ? "text-primary bg-primary/10 border border-primary/30 shadow-glow-primary"
-                      : "text-foreground/80 hover:text-primary hover:bg-primary/5"
-                  }`}
-                >
-                  {it.label}
-                </motion.a>
-              ))}
+              {items.map((it, idx) => {
+                const Icon = it.icon;
+                const isActive = activeSection === it.id;
+                return (
+                  <motion.a
+                    key={it.id}
+                    href={`#${it.id}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ delay: idx * 0.06, duration: 0.3 }}
+                    className={`w-full max-w-sm text-center flex items-center justify-center gap-3 rounded-2xl px-6 py-4 text-base font-semibold uppercase tracking-[0.15em] transition-all touch-target ${
+                      isActive
+                        ? `${it.colorClass.split(' ')[0]} ${it.bgClass} border ${it.borderClass} ${it.glowClass}`
+                        : `text-foreground/80 hover:${it.colorClass.split(' ')[0]} hover:${it.bgClass}`
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    {it.label}
+                  </motion.a>
+                );
+              })}
 
               {/* Utilities Row */}
               <motion.div

@@ -23,6 +23,11 @@ export const CloudInfraManager = () => {
   const [projectMetrics, setProjectMetrics] = useState<any>(null);
   const [loadingMetrics, setLoadingMetrics] = useState(false);
 
+  // WAF State
+  const [viewingWafZone, setViewingWafZone] = useState<string | null>(null);
+  const [wafEvents, setWafEvents] = useState<any[]>([]);
+  const [loadingWaf, setLoadingWaf] = useState(false);
+
   // Secrets Management State
   const [cfToken, setCfToken] = useState("");
   const [sbPat, setSbPat] = useState("");
@@ -199,6 +204,29 @@ export const CloudInfraManager = () => {
     }
   };
 
+  const fetchWafEvents = async (zoneId: string) => {
+    if (viewingWafZone === zoneId) {
+      setViewingWafZone(null); // Toggle off
+      return;
+    }
+    
+    setViewingWafZone(zoneId);
+    setLoadingWaf(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("admin-cloudflare", {
+        body: { action: "get_waf_events", zoneId }
+      });
+      if (error) throw error;
+      setWafEvents(data?.events || []);
+    } catch (err: any) {
+      console.error("Fetch WAF failed:", err);
+      toast.error("Failed to fetch WAF events. Check GraphQL permissions.");
+      setViewingWafZone(null);
+    } finally {
+      setLoadingWaf(false);
+    }
+  };
+
   const fetchProjectMetrics = async (projectId: string) => {
     if (viewingMetricsProject === projectId) {
       setViewingMetricsProject(null);
@@ -361,6 +389,14 @@ export const CloudInfraManager = () => {
                       {viewingDnsZone === zone.id ? "Hide DNS" : "View DNS"}
                     </button>
                     
+                    <button 
+                      onClick={() => fetchWafEvents(zone.id)}
+                      className="px-3 py-1.5 text-xs rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 font-medium transition flex items-center gap-2 flex-1 justify-center whitespace-nowrap"
+                    >
+                      <ShieldAlert className="w-3 h-3" />
+                      {viewingWafZone === zone.id ? "Hide WAF" : "View WAF"}
+                    </button>
+
                     <a 
                       href={`https://dash.cloudflare.com/?to=/:account/${zone.name}/dns`}
                       target="_blank"
@@ -395,6 +431,41 @@ export const CloudInfraManager = () => {
                                 {record.proxied && (
                                   <Cloud className="w-3 h-3 text-[#f48120] shrink-0" title="Proxied" />
                                 )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* WAF Events Panel */}
+                  {viewingWafZone === zone.id && (
+                    <div className="mt-4 border-t border-destructive/30 pt-4 animate-in slide-in-from-top-2 duration-200">
+                      <h4 className="text-xs font-semibold uppercase tracking-widest text-destructive mb-3 flex items-center gap-2">
+                        <ShieldAlert className="w-4 h-4" /> 
+                        WAF Threat Logs (24h)
+                      </h4>
+                      {loadingWaf ? (
+                        <div className="flex justify-center p-4"><Loader2 className="w-4 h-4 animate-spin text-destructive" /></div>
+                      ) : wafEvents.length === 0 ? (
+                        <p className="text-xs text-muted-foreground text-center p-4 border border-border/50 rounded-md bg-background/20">No blocked threats detected recently.</p>
+                      ) : (
+                        <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1 hide-scrollbar">
+                          {wafEvents.map((event, idx) => (
+                            <div key={idx} className="flex flex-col gap-2 p-3 rounded bg-destructive/5 border border-destructive/20 text-xs font-mono">
+                              <div className="flex items-center justify-between">
+                                <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold ${event.action === 'block' ? 'bg-destructive/20 text-destructive' : 'bg-warning/20 text-warning'}`}>
+                                  {event.action}
+                                </span>
+                                <span className="text-muted-foreground">{new Date(event.datetime).toLocaleString()}</span>
+                              </div>
+                              <div className="flex items-center justify-between text-muted-foreground">
+                                <span>IP: <span className="text-foreground">{event.clientIP}</span></span>
+                                <span>{event.clientCountryName}</span>
+                              </div>
+                              <div className="truncate text-[10px] opacity-70" title={event.userAgent}>
+                                {event.userAgent}
                               </div>
                             </div>
                           ))}

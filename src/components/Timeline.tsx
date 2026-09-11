@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Award, Cpu, Rocket, Star } from "lucide-react";
+import { Award, Cpu, Rocket, Star, GraduationCap, Briefcase, Code2, Globe, Zap, Target, BookOpen, Trophy, Lightbulb, Heart, Flag, Wrench } from "lucide-react";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { useLocalized } from "@/hooks/useLocalized";
 import { SectionHeader } from "@/components/BentoSection";
@@ -21,14 +21,26 @@ const ICONS: Record<string, React.ReactNode> = {
   award: <Award className="h-4 w-4" />,
   rocket: <Rocket className="h-4 w-4" />,
   star: <Star className="h-4 w-4" />,
+  graduation: <GraduationCap className="h-4 w-4" />,
+  briefcase: <Briefcase className="h-4 w-4" />,
+  code: <Code2 className="h-4 w-4" />,
+  globe: <Globe className="h-4 w-4" />,
+  zap: <Zap className="h-4 w-4" />,
+  target: <Target className="h-4 w-4" />,
+  book: <BookOpen className="h-4 w-4" />,
+  trophy: <Trophy className="h-4 w-4" />,
+  lightbulb: <Lightbulb className="h-4 w-4" />,
+  heart: <Heart className="h-4 w-4" />,
+  flag: <Flag className="h-4 w-4" />,
+  wrench: <Wrench className="h-4 w-4" />,
 };
 
 const renderIcon = (iconStr: string) => {
-  if (!iconStr) return <Cpu className="h-4 w-4" />;
+  if (!iconStr) return <Rocket className="h-4 w-4" />;
   if (iconStr.startsWith("/") || iconStr.startsWith("http")) {
     return <img src={iconStr} alt="icon" className="h-5 w-5 object-contain" />;
   }
-  return ICONS[iconStr] ?? <Cpu className="h-4 w-4" />;
+  return ICONS[iconStr] ?? <Rocket className="h-4 w-4" />;
 };
 
 export const Timeline = () => {
@@ -74,12 +86,11 @@ export const Timeline = () => {
               className="relative ps-12"
             >
               {/* Node */}
-              <div className="absolute start-0 top-1.5 flex h-7 w-7 items-center justify-center rounded-full border border-primary/60 bg-background-elevated text-primary shadow-glow-primary overflow-hidden">
-                <div className="absolute inset-0 rounded-full bg-primary/20 animate-pulse" />
-                <span className="relative z-10 flex items-center justify-center">{renderIcon(e.icon)}</span>
+              <div className="absolute start-0 top-1.5 flex h-7 w-7 items-center justify-center rounded-full border border-primary/40 bg-background-elevated text-primary">
+                <span className="flex items-center justify-center">{renderIcon(e.icon)}</span>
               </div>
 
-              <div className="glass-panel rounded-lg p-5 transition-all hover:-translate-y-1 hover:shadow-glow-primary hover:border-primary/50">
+              <div className="glass-panel rounded-lg p-5 transition-all hover:-translate-y-0.5 hover:border-primary/30">
                 <div className="flex items-center gap-3">
                   <span className="terminal-text text-xs uppercase tracking-widest text-primary">{e.year}</span>
                   {e.highlight && (

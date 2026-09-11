@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+export type NotificationType = 'SECURITY_ALERT' | 'SYSTEM_UPDATE' | 'info' | 'warning' | 'success' | string;
+
 export type Notification = {
   id: string;
   title: string;
   message: string | null;
-  type: string | null;
+  type: NotificationType | null;
   read_status: boolean | null;
   link: string | null;
   created_at: string;
@@ -21,7 +23,7 @@ export const useNotifications = () => {
     fetchNotifications();
 
     const channel = supabase
-      .channel('system_notifications_changes')
+      .channel(`system_notifications_changes_${Math.random()}`)
       .on(
         'postgres_changes',
         {
@@ -33,9 +35,13 @@ export const useNotifications = () => {
           const newNotification = payload.new as Notification;
           setNotifications((prev) => [newNotification, ...prev]);
           setUnreadCount((prev) => prev + 1);
+          
+          const icon = newNotification.type === 'SECURITY_ALERT' ? '🛡️'
+                     : newNotification.type === 'SYSTEM_UPDATE' ? '📦'
+                     : '🔔';
           toast(newNotification.title, {
             description: newNotification.message,
-            icon: '🔔',
+            icon,
           });
         }
       )
@@ -119,12 +125,24 @@ export const useNotifications = () => {
     }
   }
 
+  const sendNotification = async (title: string, message: string, type: NotificationType = 'info', link?: string) => {
+    try {
+      const { error } = await supabase
+        .from('system_notifications')
+        .insert({ title, message, type, link });
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
   return {
     notifications,
     unreadCount,
     loading,
     markAsRead,
     markAllAsRead,
-    clearAll
+    clearAll,
+    sendNotification
   };
 };

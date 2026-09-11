@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
-import { Activity, Plus, FileText, CheckCircle2, Circle, Clock, MessageSquare, Play, Pause, RotateCcw, PenTool, Cpu, DollarSign, Headphones, Share2, Smartphone, Trash2, Eye, Award } from "lucide-react";
+import { Activity, Plus, FileText, CheckCircle2, Circle, Clock, MessageSquare, Play, Pause, RotateCcw, PenTool, Cpu, DollarSign, Headphones, Share2, Smartphone, Trash2, Eye, Award, GripVertical } from "lucide-react";
+import { Reorder, useDragControls } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useFocusTimer } from "@/hooks/useFocusTimer";
 import { useDesktopNotifications } from "@/hooks/useDesktopNotifications";
+
+const WidgetWrapper = ({ widgetId, children }: { widgetId: string, children: (dragControls: any) => React.ReactNode }) => {
+  const dragControls = useDragControls();
+  return (
+    <Reorder.Item key={widgetId} value={widgetId} dragListener={false} dragControls={dragControls} className="col-span-1 h-full">
+      {children(dragControls)}
+    </Reorder.Item>
+  );
+};
 
 type FocusTask = { id: number; title: string; status: string };
 
@@ -108,6 +118,19 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
     return items.sort((a, b) => b.raw - a.raw).slice(0, 5);
   })();
 
+  // --- Widget Layout Management ---
+  const DEFAULT_WIDGET_ORDER = ["quick-actions", "focus-tasks", "timer-and-brain", "recent-activity"];
+  const [widgetOrder, setWidgetOrder] = useLocalStorage<string[]>("bo3_dashboard_layout", DEFAULT_WIDGET_ORDER);
+  
+  // Clean up order if new widgets are added or removed
+  useEffect(() => {
+    const validOrder = widgetOrder.filter(id => DEFAULT_WIDGET_ORDER.includes(id));
+    const missing = DEFAULT_WIDGET_ORDER.filter(id => !validOrder.includes(id));
+    if (missing.length > 0) {
+      setWidgetOrder([...validOrder, ...missing]);
+    }
+  }, []);
+
   const timeAgo = (iso: string) => {
     if (!iso) return "just now";
     const diff = Date.now() - new Date(iso).getTime();
@@ -203,13 +226,28 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
         </div>
       </div>
 
-      {/* ─── Second Row: Actions & Focus ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-panel rounded-2xl p-6 border border-border shadow-sm">
-          <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-            <span className="w-1 h-5 bg-primary rounded-full"></span> Quick Actions
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* ─── Modular Widgets (Drag & Drop) ─── */}
+      <Reorder.Group 
+        axis="y" 
+        values={widgetOrder} 
+        onReorder={setWidgetOrder} 
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      >
+        {widgetOrder.map((widgetId) => {
+          
+          if (widgetId === "quick-actions") return (
+            <WidgetWrapper key="quick-actions" widgetId="quick-actions">
+              {(dragControls) => (
+              <div className="glass-panel rounded-2xl p-6 border border-border shadow-sm h-full group/widget">
+                <div className="flex justify-between items-center mb-5">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <span className="w-1 h-5 bg-primary rounded-full"></span> Quick Actions
+                  </h3>
+                  <div onPointerDown={(e) => dragControls.start(e)} className="cursor-grab active:cursor-grabbing p-1">
+                    <GripVertical className="w-5 h-5 text-muted-foreground/30 opacity-0 group-hover/widget:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <button 
               aria-label="Quick Action: New Project" 
               onClick={() => setActiveTab?.("projects")}
@@ -264,8 +302,14 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
             </button>
           </div>
         </div>
+              )}
+            </WidgetWrapper>
+        );
 
-        <div className="glass-panel rounded-2xl p-6 flex flex-col border border-primary/20 shadow-glow-primary">
+        if (widgetId === "focus-tasks") return (
+          <WidgetWrapper key="focus-tasks" widgetId="focus-tasks">
+            {(dragControls) => (
+        <div className="glass-panel rounded-2xl p-6 flex flex-col border border-primary/20 shadow-glow-primary h-full group/widget">
           <div className="flex justify-between items-center mb-5">
             <div>
               <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -273,9 +317,14 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
               </h3>
               <p className="text-xs text-muted-foreground mt-1">Click to toggle status · right-click or trash to delete</p>
             </div>
-            <span className="text-[10px] bg-primary text-primary-foreground px-2.5 py-1 rounded-md uppercase tracking-widest font-bold shadow-sm">
-              ADHD Mode
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] bg-primary text-primary-foreground px-2.5 py-1 rounded-md uppercase tracking-widest font-bold shadow-sm">
+                ADHD Mode
+              </span>
+              <div onPointerDown={(e) => dragControls.start(e)} className="cursor-grab active:cursor-grabbing p-1">
+                <GripVertical className="w-5 h-5 text-muted-foreground/30 opacity-0 group-hover/widget:opacity-100 transition-opacity" />
+              </div>
+            </div>
           </div>
           <div className="space-y-3 flex-1">
             {focusTasks.map(task => (
@@ -337,8 +386,19 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
             </form>
           </div>
         </div>
+            )}
+          </WidgetWrapper>
+        );
 
-        <div className="flex flex-col gap-6">
+        if (widgetId === "timer-and-brain") return (
+          <WidgetWrapper key="timer-and-brain" widgetId="timer-and-brain">
+            {(dragControls) => (
+        <div className="flex flex-col gap-6 h-full group/widget relative">
+          <div className="absolute top-2 right-2 z-20" onPointerDown={(e) => dragControls.start(e)}>
+            <div className="cursor-grab active:cursor-grabbing p-1">
+              <GripVertical className="w-5 h-5 text-muted-foreground/30 opacity-0 group-hover/widget:opacity-100 transition-opacity" />
+            </div>
+          </div>
           <div className="glass-panel rounded-xl p-6 border border-secondary/20 flex flex-col items-center justify-center text-center relative overflow-hidden">
             {isActive && brownNoiseEnabled && (
               <div className="absolute inset-0 bg-secondary/5 animate-pulse-slow pointer-events-none" />
@@ -393,14 +453,24 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
           </div>
 
         </div>
+            )}
+          </WidgetWrapper>
+        );
 
-        {/* Recent Activity Feed */}
-        <div className="glass-panel rounded-xl p-6 border border-border">
+        if (widgetId === "recent-activity") return (
+          <WidgetWrapper key="recent-activity" widgetId="recent-activity">
+            {(dragControls) => (
+        <div className="glass-panel rounded-xl p-6 border border-border h-full group/widget">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Eye className="w-4 h-4 text-accent" /> Recent Activity
             </h3>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-widest terminal-text">Live Feed</span>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-widest terminal-text">Live Feed</span>
+              <div onPointerDown={(e) => dragControls.start(e)} className="cursor-grab active:cursor-grabbing p-1">
+                <GripVertical className="w-5 h-5 text-muted-foreground/30 opacity-0 group-hover/widget:opacity-100 transition-opacity" />
+              </div>
+            </div>
           </div>
           <div className="space-y-3">
             {recentActivity.length > 0 ? recentActivity.map((item, idx) => (
@@ -423,7 +493,12 @@ export const AdminOverview = ({ setActiveTab }: { setActiveTab?: (tab: string) =
             )}
           </div>
         </div>
-      </div>
+            )}
+          </WidgetWrapper>
+        );
+        return null;
+        })}
+      </Reorder.Group>
     </div>
   );
 };

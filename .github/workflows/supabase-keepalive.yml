@@ -1,0 +1,20 @@
+name: Supabase Keepalive Ping
+
+on:
+  schedule:
+    # Runs at 00:00 every 3rd day of the month (e.g. 1st, 4th, 7th...)
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows you to run it manually from the GitHub UI
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          # We ping a public table via the REST API using your public anon key.
+          # This counts as "API Activity" and prevents Supabase from pausing the free tier project.
+          curl -s -o /dev/null -w "%{http_code}" \
+          "https://suwuoyrlatbpgcosdqah.supabase.co/rest/v1/site_metadata?limit=1" \
+          -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1d3VveXJsYXRicGdjb3NkcWFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3OTA4NzcsImV4cCI6MjA4NTM2Njg3N30.DGUdSaZPM1rf1dI9BvqBxpLwdJC03CUb74LPB_6JI_o" \
+          -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1d3VveXJsYXRicGdjb3NkcWFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3OTA4NzcsImV4cCI6MjA4NTM2Njg3N30.DGUdSaZPM1rf1dI9BvqBxpLwdJC03CUb74LPB_6JI_o"

@@ -101,6 +101,43 @@ serve(async (req) => {
       });
     }
 
+    if (action === "get_waf_events" && zoneId) {
+      // Cloudflare GraphQL API requires the X-Auth-Email if using Global API Key, but Token works with Bearer
+      const query = `
+        query {
+          viewer {
+            zones(filter: { zoneTag: "${zoneId}" }) {
+              firewallEventsAdaptiveGroups(
+                limit: 15,
+                filter: { datetime_gt: "${new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()}" },
+                orderBy: [datetime_DESC]
+              ) {
+                dimensions {
+                  action
+                  clientIP
+                  clientCountryName
+                  userAgent
+                  datetime
+                }
+              }
+            }
+          }
+        }
+      `;
+      
+      const res = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ query }),
+      });
+      const data = await res.json();
+      
+      const events = data?.data?.viewer?.zones?.[0]?.firewallEventsAdaptiveGroups || [];
+      return new Response(JSON.stringify({ events: events.map((e: any) => e.dimensions) }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, Target, Zap, Coffee, Moon, Sun } from "lucide-react";
+import { CheckCircle2, Circle, Target, Zap, Coffee, Moon, Sun, Tag } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-type Protocol = { id: string; title: string; completed: boolean; icon: "sun" | "moon" | "coffee" | "zap" };
+type Protocol = { id: string; title: string; completed: boolean; icon: "sun" | "moon" | "coffee" | "zap"; tags?: string[] };
 
 export const LifeOS = () => {
   const [lastReset, setLastReset] = useLocalStorage("bo3_lifeos_last_reset", new Date().toDateString());
   
   const defaultProtocols: Protocol[] = [
-    { id: "p1", title: "Morning Hydration & Meds", completed: false, icon: "sun" },
-    { id: "p2", title: "Inbox Triage (Zero Inbox)", completed: false, icon: "coffee" },
-    { id: "p3", title: "2x Deep Work Sessions", completed: false, icon: "zap" },
-    { id: "p4", title: "Evening Wind-down Routine", completed: false, icon: "moon" },
+    { id: "p1", title: "Morning Hydration & Meds", completed: false, icon: "sun", tags: ["health", "morning"] },
+    { id: "p2", title: "Inbox Triage (Zero Inbox)", completed: false, icon: "coffee", tags: ["work", "morning"] },
+    { id: "p3", title: "2x Deep Work Sessions", completed: false, icon: "zap", tags: ["work", "focus"] },
+    { id: "p4", title: "Evening Wind-down Routine", completed: false, icon: "moon", tags: ["health", "evening"] },
   ];
 
   const [protocols, setProtocols] = useLocalStorage<Protocol[]>("bo3_lifeos_protocols", defaultProtocols);
+  const [activeTag, setActiveTag] = useState<string>("all");
+
+  const allTags = Array.from(new Set(protocols.flatMap(p => p.tags || [])));
+  const filteredProtocols = activeTag === "all" ? protocols : protocols.filter(p => p.tags?.includes(activeTag));
 
   // Check if we need to reset daily protocols
   useEffect(() => {
@@ -92,9 +96,32 @@ export const LifeOS = () => {
           </div>
         </div>
 
+        {/* Tag Filtering */}
+        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1">
+          <button
+            onClick={() => setActiveTag("all")}
+            className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${
+              activeTag === "all" ? "bg-primary text-primary-foreground" : "bg-background-elevated hover:bg-background-elevated/80 text-muted-foreground"
+            }`}
+          >
+            All
+          </button>
+          {allTags.map(tag => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(tag)}
+              className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap flex items-center gap-1 transition-colors ${
+                activeTag === tag ? "bg-primary text-primary-foreground" : "bg-background-elevated hover:bg-background-elevated/80 text-muted-foreground"
+              }`}
+            >
+              <Tag className="w-3 h-3" /> {tag}
+            </button>
+          ))}
+        </div>
+
         {/* Protocol Checklist */}
         <div className="space-y-3">
-          {protocols.map(p => (
+          {filteredProtocols.map(p => (
             <div 
               key={p.id}
               onClick={() => toggleProtocol(p.id)}
@@ -108,9 +135,21 @@ export const LifeOS = () => {
                 {getIcon(p.icon, p.completed)}
               </div>
               
-              <span className={`text-base font-medium transition-colors ${p.completed ? "text-foreground line-through opacity-70" : "text-foreground/90"}`}>
-                {p.title}
-              </span>
+              
+              <div className="flex flex-col">
+                <span className={`text-base font-medium transition-colors ${p.completed ? "text-foreground line-through opacity-70" : "text-foreground/90"}`}>
+                  {p.title}
+                </span>
+                {p.tags && p.tags.length > 0 && (
+                  <div className="flex gap-1 mt-1">
+                    {p.tags.map(t => (
+                      <span key={t} className="text-[9px] uppercase tracking-wider text-muted-foreground bg-background px-1.5 py-0.5 rounded-sm">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <div className="ml-auto">
                 {p.completed ? (

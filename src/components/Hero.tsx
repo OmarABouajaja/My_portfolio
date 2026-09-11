@@ -144,45 +144,21 @@ export const Hero = ({ meta }: Props) => {
 
         {/* 3D Core HUD Cadre or Mobile Fallback */}
         <div className="relative h-[280px] sm:h-[360px] w-full lg:h-[560px] group mt-6 lg:mt-0">
-          {/* Outer glow */}
-          <div className="absolute inset-0 rounded-full bg-primary/10 blur-3xl transition-opacity duration-700 group-hover:opacity-100 opacity-50" />
+          {/* Subtle ambient glow */}
+          <div className="absolute inset-0 rounded-2xl bg-primary/5 blur-3xl transition-opacity duration-700 group-hover:opacity-80 opacity-30" />
           
-          {/* HUD Frame Container */}
-          <div className="absolute inset-0 rounded-xl border border-primary/20 bg-background-elevated/20 shadow-[inset_0_0_30px_rgba(59,130,246,0.1)] backdrop-blur-[2px] overflow-hidden">
+          {/* Clean Frame Container */}
+          <div className="absolute inset-0 rounded-xl border border-border/40 bg-background-elevated/30 backdrop-blur-[2px] overflow-hidden">
             
-            {/* Corner Brackets */}
-            <div className="absolute left-0 top-0 h-6 sm:h-8 w-6 sm:w-8 border-l-2 border-t-2 border-primary/60 rounded-tl-lg" />
-            <div className="absolute right-0 top-0 h-6 sm:h-8 w-6 sm:w-8 border-r-2 border-t-2 border-primary/60 rounded-tr-lg" />
-            <div className="absolute bottom-0 left-0 h-6 sm:h-8 w-6 sm:w-8 border-b-2 border-l-2 border-primary/60 rounded-bl-lg" />
-            <div className="absolute bottom-0 right-0 h-6 sm:h-8 w-6 sm:w-8 border-b-2 border-r-2 border-primary/60 rounded-br-lg" />
+            {/* Subtle corner accents */}
+            <div className="absolute left-0 top-0 h-5 sm:h-6 w-5 sm:w-6 border-l border-t border-primary/30 rounded-tl-lg" />
+            <div className="absolute right-0 top-0 h-5 sm:h-6 w-5 sm:w-6 border-r border-t border-primary/30 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 h-5 sm:h-6 w-5 sm:w-6 border-b border-l border-primary/30 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 h-5 sm:h-6 w-5 sm:w-6 border-b border-r border-primary/30 rounded-br-lg" />
             
-            {/* HUD Labels */}
-            <div className="absolute left-3 sm:left-4 top-2 sm:top-3 terminal-text text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-primary/70">
-              SYS.CORE.01
-            </div>
-            <div className="absolute bottom-2 sm:bottom-3 right-3 sm:right-4 terminal-text text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-secondary/70 flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse" />
-              {isMobile ? "CORE_STANDBY" : "RENDERING_ACTIVE"}
-            </div>
-            
-            {/* Scanning line */}
-            <div className="absolute left-0 top-0 w-full h-[1px] bg-primary/40 shadow-[0_0_10px_#3b82f6] animate-scanline pointer-events-none" />
-            
-            {isMobile ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <div className="relative flex h-32 w-32 items-center justify-center">
-                  <div className="absolute h-full w-full animate-ping rounded-full bg-primary/20" />
-                  <div className="absolute h-24 w-24 rounded-full bg-gradient-cyber blur-xl opacity-60 animate-pulse-slow" />
-                  <div className="z-10 flex h-16 w-16 items-center justify-center rounded-full border border-primary/50 bg-background/50 backdrop-blur-sm">
-                    <Activity className="h-6 w-6 text-primary animate-pulse" />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Suspense fallback={<CoreFallback />}>
-                <HeroCoreWrapper />
-              </Suspense>
-            )}
+            <Suspense fallback={<CoreFallback />}>
+              <HeroCoreWrapper isMobile={isMobile} />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -198,9 +174,9 @@ export const Hero = ({ meta }: Props) => {
   );
 };
 
-const HeroCoreWrapper = forwardRef<HTMLDivElement>((_props, ref) => (
+const HeroCoreWrapper = forwardRef<HTMLDivElement, { isMobile?: boolean }>((props, ref) => (
   <div ref={ref} className="h-full w-full">
-    <HeroCore />
+    <HeroCore isMobile={props.isMobile} />
   </div>
 ));
 HeroCoreWrapper.displayName = "HeroCoreWrapper";

@@ -109,7 +109,7 @@ function EnergyField() {
 }
 
 /* ─── Central wireframe core ─── */
-function WireCore() {
+function WireCore({ isMobile }: { isMobile?: boolean }) {
   const group = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Mesh>(null);
   const outerIco = useRef<THREE.Mesh>(null);
@@ -155,31 +155,31 @@ function WireCore() {
 
         {/* Orbital rings */}
         <mesh rotation={[Math.PI / 2.2, 0, 0]}>
-          <torusGeometry args={[2.1, 0.012, 16, 200]} />
+          <torusGeometry args={[2.1, 0.012, 16, isMobile ? 60 : 200]} />
           <meshBasicMaterial color="#3b82f6" transparent opacity={0.4} />
         </mesh>
         <mesh rotation={[Math.PI / 1.8, Math.PI / 4, 0]}>
-          <torusGeometry args={[2.4, 0.006, 16, 200]} />
+          <torusGeometry args={[2.4, 0.006, 16, isMobile ? 60 : 200]} />
           <meshBasicMaterial color="#8b5cf6" transparent opacity={0.3} />
         </mesh>
         <mesh rotation={[Math.PI / 3, -Math.PI / 6, Math.PI / 5]}>
-          <torusGeometry args={[1.8, 0.004, 16, 160]} />
+          <torusGeometry args={[1.8, 0.004, 16, isMobile ? 50 : 160]} />
           <meshBasicMaterial color="#3b82f6" transparent opacity={0.2} />
         </mesh>
       </Float>
 
       <EnergyField />
-      <ParticleRing />
-      <ParticleRing count={200} radius={3.2} />
-      <ParticleCloud />
+      <ParticleRing count={isMobile ? 100 : 300} />
+      <ParticleRing count={isMobile ? 70 : 200} radius={3.2} />
+      <ParticleCloud count={isMobile ? 25 : 60} />
     </group>
   );
 }
 
-export const HeroCore = () => {
+export const HeroCore = ({ isMobile }: { isMobile?: boolean }) => {
   return (
     <Canvas
-      dpr={[1, 3]} /* Maximize DPI rendering for extremely crisp 4K HD output */
+      dpr={isMobile ? [1, 1.5] : [1, 3]} /* Maximize DPI rendering for extremely crisp 4K HD output */
       camera={{ position: [0, 0, 7.5], fov: 45 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "auto" }}
@@ -189,7 +189,7 @@ export const HeroCore = () => {
       <pointLight position={[-5, -3, 2]} intensity={1} color="#8b5cf6" />
       <pointLight position={[0, -5, 3]} intensity={0.5} color="#3b82f6" />
       <Suspense fallback={null}>
-        <WireCore />
+        <WireCore isMobile={isMobile} />
       </Suspense>
     </Canvas>
   );

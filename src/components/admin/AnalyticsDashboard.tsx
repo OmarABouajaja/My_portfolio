@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { safeFetchAll } from "@/integrations/supabase/safeFetch";
 import { 
   Users, Globe, Cpu, Smartphone, Monitor, ShieldAlert,
-  ChevronDown, Search, BarChart3, Database, Calendar, Wifi, HardDrive, RefreshCw
+  ChevronDown, Search, BarChart3, Database, Calendar, Wifi, HardDrive, RefreshCw, Fingerprint
 } from "lucide-react";
 
 type VisitorLog = {
@@ -78,6 +78,21 @@ export const AnalyticsDashboard = () => {
 
   const uniqueOSList = Object.keys(osStats);
 
+  // Advanced Fingerprinting logic
+  const deviceFingerprints = logs.reduce((acc: Record<string, { count: number, logs: VisitorLog[] }>, log) => {
+    // Generate a pseudo-fingerprint string
+    const fp = `${log.ip_address}-${log.user_agent}-${log.resolution}-${log.gpu_renderer}-${log.hardware_concurrency}-${log.device_memory}`;
+    if (!acc[fp]) {
+      acc[fp] = { count: 0, logs: [] };
+    }
+    acc[fp].count += 1;
+    acc[fp].logs.push(log);
+    return acc;
+  }, {});
+
+  const recurringDevices = Object.values(deviceFingerprints).filter(f => f.count > 1).length;
+  const totalUniqueDevices = Object.keys(deviceFingerprints).length;
+
   // Render Helpers
   const percentage = (val: number) => {
     if (logs.length === 0) return "0%";
@@ -137,13 +152,13 @@ export const AnalyticsDashboard = () => {
 
         <div className="glass-panel p-5 rounded-xl border border-warning/20 hover:border-warning/40 transition">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Touch Devices</h4>
-            <Smartphone className="h-4 w-4 text-warning" />
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Unique Devices</h4>
+            <Fingerprint className="h-4 w-4 text-warning" />
           </div>
           <p className="text-3xl font-display font-bold">
-            {isLoading ? "..." : `${Math.round((logs.filter(l => l.touch_support === true).length / Math.max(logs.length, 1)) * 100)}%`}
+            {isLoading ? "..." : totalUniqueDevices}
           </p>
-          <span className="text-[10px] text-muted-foreground">Touch-enabled screens</span>
+          <span className="text-[10px] text-muted-foreground">{recurringDevices} recurring devices</span>
         </div>
       </div>
 
@@ -351,13 +366,16 @@ export const AnalyticsDashboard = () => {
 
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-background-elevated/40 border border-border/30 rounded-lg p-3">
-                  <div className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground mb-1">IP Address</div>
-                  <div className="font-mono text-foreground font-semibold">{selectedLog.ip_address}</div>
+                <div className="bg-background-elevated/40 border border-border/30 rounded-lg p-3 relative overflow-hidden">
+                  <div className="absolute -right-2 -top-2 opacity-5">
+                    <Fingerprint className="w-16 h-16" />
+                  </div>
+                  <div className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground mb-1 relative z-10">IP Address</div>
+                  <div className="font-mono text-foreground font-semibold relative z-10">{selectedLog.ip_address}</div>
                 </div>
                 <div className="bg-background-elevated/40 border border-border/30 rounded-lg p-3">
                   <div className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground mb-1">Timezone</div>
-                  <div className="font-mono text-foreground font-semibold">{selectedLog.location?.split(',')[0]}</div>
+                  <div className="font-mono text-foreground font-semibold">{selectedLog.location?.split(',')[0] || "unknown"}</div>
                 </div>
               </div>
 

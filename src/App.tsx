@@ -11,6 +11,7 @@ import ClientPortal from "./pages/ClientPortal.tsx";
 import { useThemeEngine } from "@/hooks/useThemeEngine";
 import { CustomCursor } from "@/components/CustomCursor";
 import { CommandMenu } from "@/components/CommandMenu";
+import { ApkUpdateBanner } from "@/components/ApkUpdateBanner";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
     <ThemeInit />
     <TooltipProvider>
       <CustomCursor />
+      <ApkUpdateBanner />
       <Toaster />
       <Sonner />
       <BrowserRouter

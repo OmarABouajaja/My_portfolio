@@ -56,10 +56,10 @@
                      linear-gradient(90deg, hsl(187 60% 25% / 0.15) 1px, transparent 1px);
     --gradient-glass: linear-gradient(135deg, hsl(222 40% 12% / 0.6), hsl(222 40% 8% / 0.3));
 
-    /* Shadows / glows */
-    --glow-primary: 0 0 40px hsl(187 95% 55% / 0.4), 0 0 80px hsl(187 95% 55% / 0.15);
-    --glow-secondary: 0 0 40px hsl(270 85% 65% / 0.4);
-    --shadow-elevated: 0 20px 60px -10px hsl(187 95% 55% / 0.25);
+    /* Shadows / glows — subtle, not sci-fi */
+    --glow-primary: 0 0 20px hsl(187 95% 55% / 0.2), 0 0 40px hsl(187 95% 55% / 0.08);
+    --glow-secondary: 0 0 20px hsl(270 85% 65% / 0.2);
+    --shadow-elevated: 0 16px 48px -8px hsl(187 95% 55% / 0.12);
 
     /* Fonts */
     --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
@@ -89,8 +89,8 @@
     --gradient-radial: radial-gradient(circle at 50% 0%, hsl(142 76% 50% / 0.15), transparent 60%);
     --gradient-grid: linear-gradient(hsl(142 60% 25% / 0.15) 1px, transparent 1px),
                      linear-gradient(90deg, hsl(142 60% 25% / 0.15) 1px, transparent 1px);
-    --glow-primary: 0 0 40px hsl(142 76% 50% / 0.4), 0 0 80px hsl(142 76% 50% / 0.15);
-    --shadow-elevated: 0 20px 60px -10px hsl(142 76% 50% / 0.25);
+    --glow-primary: 0 0 20px hsl(142 76% 50% / 0.2), 0 0 40px hsl(142 76% 50% / 0.08);
+    --shadow-elevated: 0 16px 48px -8px hsl(142 76% 50% / 0.12);
   }
 
   [data-theme="destructive"] {
@@ -106,8 +106,73 @@
     --gradient-radial: radial-gradient(circle at 50% 0%, hsl(0 84% 60% / 0.15), transparent 60%);
     --gradient-grid: linear-gradient(hsl(0 60% 25% / 0.15) 1px, transparent 1px),
                      linear-gradient(90deg, hsl(0 60% 25% / 0.15) 1px, transparent 1px);
-    --glow-primary: 0 0 40px hsl(0 84% 60% / 0.4), 0 0 80px hsl(0 84% 60% / 0.15);
-    --shadow-elevated: 0 20px 60px -10px hsl(0 84% 60% / 0.25);
+    --glow-primary: 0 0 20px hsl(0 84% 60% / 0.2), 0 0 40px hsl(0 84% 60% / 0.08);
+    --shadow-elevated: 0 16px 48px -8px hsl(0 84% 60% / 0.12);
+  }
+
+  [data-theme="ocean-blue"] {
+    /* THEME: OCEAN BLUE — deep sea calm */
+    --primary: 210 100% 50%;
+    --primary-glow: 210 100% 60%;
+    --secondary: 180 100% 45%;
+    --secondary-glow: 180 100% 55%;
+    --accent: 195 100% 45%;
+    --border: 210 60% 30% / 0.4;
+    --ring: 210 100% 50%;
+    --gradient-cyber: linear-gradient(135deg, hsl(210 100% 50%), hsl(180 100% 45%));
+    --gradient-radial: radial-gradient(circle at 50% 0%, hsl(210 100% 50% / 0.15), transparent 60%);
+    --gradient-grid: linear-gradient(hsl(210 60% 30% / 0.15) 1px, transparent 1px),
+                     linear-gradient(90deg, hsl(210 60% 30% / 0.15) 1px, transparent 1px);
+    --glow-primary: 0 0 20px hsl(210 100% 50% / 0.2), 0 0 40px hsl(210 100% 50% / 0.08);
+    --shadow-elevated: 0 16px 48px -8px hsl(210 100% 50% / 0.12);
+  }
+
+  [data-theme="dracula"] {
+    /* THEME: DRACULA — vampiric pink & purple */
+    --background: 231 15% 11%;
+    --background-elevated: 231 15% 14%;
+    --foreground: 60 30% 96%;
+    --card: 231 15% 13%;
+    --card-foreground: 60 30% 96%;
+    --muted: 231 15% 18%;
+    --muted-foreground: 231 15% 60%;
+    --primary: 326 100% 74%;
+    --primary-glow: 326 100% 80%;
+    --secondary: 265 89% 78%;
+    --secondary-glow: 265 89% 85%;
+    --accent: 326 100% 65%;
+    --border: 326 60% 35% / 0.35;
+    --ring: 326 100% 74%;
+    --gradient-cyber: linear-gradient(135deg, hsl(326 100% 74%), hsl(265 89% 78%));
+    --gradient-radial: radial-gradient(circle at 50% 0%, hsl(326 100% 74% / 0.15), transparent 60%);
+    --gradient-grid: linear-gradient(hsl(326 60% 35% / 0.12) 1px, transparent 1px),
+                     linear-gradient(90deg, hsl(326 60% 35% / 0.12) 1px, transparent 1px);
+    --glow-primary: 0 0 20px hsl(326 100% 74% / 0.18), 0 0 40px hsl(326 100% 74% / 0.06);
+    --shadow-elevated: 0 16px 48px -8px hsl(326 100% 74% / 0.1);
+  }
+
+  [data-theme="synthwave"] {
+    /* THEME: SYNTHWAVE — hot magenta & neon orange retro-futurism */
+    --background: 270 20% 5%;
+    --background-elevated: 270 20% 8%;
+    --foreground: 45 100% 92%;
+    --card: 270 20% 7%;
+    --card-foreground: 45 100% 92%;
+    --muted: 270 15% 14%;
+    --muted-foreground: 270 15% 55%;
+    --primary: 315 100% 50%;
+    --primary-glow: 315 100% 60%;
+    --secondary: 30 100% 50%;
+    --secondary-glow: 30 100% 60%;
+    --accent: 315 100% 40%;
+    --border: 315 60% 30% / 0.4;
+    --ring: 315 100% 50%;
+    --gradient-cyber: linear-gradient(135deg, hsl(315 100% 50%), hsl(30 100% 50%));
+    --gradient-radial: radial-gradient(circle at 50% 0%, hsl(315 100% 50% / 0.18), transparent 60%);
+    --gradient-grid: linear-gradient(hsl(315 60% 30% / 0.15) 1px, transparent 1px),
+                     linear-gradient(90deg, hsl(315 60% 30% / 0.15) 1px, transparent 1px);
+    --glow-primary: 0 0 20px hsl(315 100% 50% / 0.22), 0 0 40px hsl(315 100% 50% / 0.08);
+    --shadow-elevated: 0 16px 48px -8px hsl(315 100% 50% / 0.15);
   }
 
   /* No light mode — Industrial Cyber is dark-first */
@@ -147,7 +212,7 @@
     user-select: none;
   }
 
-  /* CRT scanline overlay — full on desktop, reduced on mobile for perf */
+  /* CRT scanline overlay — reduced drastically for a cleaner modern look */
   body::after {
     content: "";
     position: fixed;
@@ -156,15 +221,15 @@
     background: repeating-linear-gradient(
       transparent,
       transparent 2px,
-      rgba(0, 0, 0, 0.05) 3px,
-      rgba(0, 0, 0, 0.05) 4px
+      rgba(0, 0, 0, 0.03) 3px,
+      rgba(0, 0, 0, 0.03) 4px
     );
     z-index: 9998;
-    opacity: 0.6;
+    opacity: 0.15; /* Down from 0.6 */
   }
 
   @media (max-width: 767px) {
-    body::after { opacity: 0.25; }
+    body::after { opacity: 0.05; }
   }
 
   [dir="rtl"] body { font-family: 'Space Grotesk', 'Tajawal', sans-serif; }
@@ -221,7 +286,7 @@
   }
   .circuit-node {
     fill: hsl(var(--primary));
-    filter: drop-shadow(0 0 6px hsl(var(--primary)));
+    filter: drop-shadow(0 0 3px hsl(var(--primary) / 0.5));
   }
 }
 
@@ -240,14 +305,29 @@
 
   /* Mobile-first utilities */
   .touch-target { min-height: 44px; min-width: 44px; }
+  
+  @media (max-width: 767px) {
+    /* Touch target expansion for mobile */
+    button, 
+    a, 
+    input[type="checkbox"],
+    input[type="radio"],
+    select,
+    [role="menuitem"],
+    [role="option"],
+    [role="tab"] {
+      min-height: 44px;
+    }
+  }
+
   .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
   .mobile-px { @apply px-4 sm:px-6; }
 
   /* Floating Dock utilities */
   .dock-glow {
     box-shadow:
-      0 0 20px hsl(var(--primary) / 0.35),
-      0 0 60px hsl(var(--primary) / 0.12),
+      0 0 12px hsl(var(--primary) / 0.2),
+      0 0 36px hsl(var(--primary) / 0.06),
       0 8px 32px rgba(0, 0, 0, 0.4);
   }
   .dock-icon-active {
@@ -343,38 +423,3 @@
   100% { transform: translateY(0); }
 }
 
-/*
- * ── CUSTOM CURSOR ─────────────────────────────────────────────────────────────
- * Placed OUTSIDE all @layer blocks so it has the highest cascade position.
- * This guarantees no component or Tailwind utility can accidentally restore
- * the native cursor on pointer-driven devices (desktops / laptops).
- *
- * The browser's text-insertion caret is a separate UA mechanism and is
- * NOT affected by cursor:none — inputs remain fully usable.
- *
- * .cursor-grab / .cursor-grabbing are EXEMPT so drag handles still show
- * the grab cursor (see Admin navbar reorder mode).
- */
-@media (pointer: fine) {
-  html,
-  html *,
-  html *::before,
-  html *::after {
-    cursor: none !important;
-  }
-
-  /* Drag handle exceptions — shows OS grab cursor in navbar reorder mode */
-  .cursor-grab,
-  .cursor-grab *,
-  .cursor-grab *::before,
-  .cursor-grab *::after {
-    cursor: grab !important;
-  }
-
-  .cursor-grabbing,
-  .cursor-grabbing *,
-  .cursor-grabbing *::before,
-  .cursor-grabbing *::after {
-    cursor: grabbing !important;
-  }
-}
