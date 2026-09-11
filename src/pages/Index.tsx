@@ -45,14 +45,14 @@ const Index = () => {
           <ScrollProgress isOffline={metadataState.status !== "online"} />
           <MobileNotice />
           <SiteNav />
-          <main>
-            <Hero meta={siteConfig} />
-            {siteConfig?.enable_projects !== false && <BentoSection meta={siteConfig} />}
-            {siteConfig?.enable_tech_stack !== false && <TechMarquee />}
-            <ServicesSection />
-            {siteConfig?.enable_timeline !== false && <Timeline />}
-            <EquipmentSection />
-            <CertificationsSection />
+            <main>
+              <Hero meta={siteConfig} />
+              {siteConfig?.enable_projects !== false && <BentoSection meta={siteConfig} />}
+              {siteConfig?.enable_tech_stack !== false && <TechMarquee />}
+              {siteConfig?.enable_services !== false && <ServicesSection />}
+              {siteConfig?.enable_timeline !== false && <Timeline />}
+              {siteConfig?.enable_equipment !== false && <EquipmentSection />}
+              {siteConfig?.enable_certifications !== false && <CertificationsSection />}
             {siteConfig?.enable_testimonials !== false && <Testimonials />}
             {siteConfig?.enable_blog !== false && <BlogSection />}
             {siteConfig?.enable_contact !== false && <ContactSection />}

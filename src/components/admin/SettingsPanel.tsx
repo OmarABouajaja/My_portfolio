@@ -572,7 +572,7 @@ export const SettingsPanel = ({ setActiveTab }: { setActiveTab?: (tab: string) =
         <div className="space-y-4 pt-6 border-t border-border/40">
           <h3 className="terminal-text text-xs uppercase tracking-widest text-primary">Section Visibility</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            {["projects", "timeline", "tech_stack", "testimonials", "blog", "contact"].map((section) => (
+            {["projects", "services", "timeline", "tech_stack", "equipment", "certifications", "testimonials", "blog", "contact"].map((section) => (
               <label key={section} className="flex items-center gap-3 rounded-md border border-border bg-background-elevated/40 px-4 py-3 cursor-pointer hover:border-primary/50 transition">
                 <input
                   type="checkbox"
