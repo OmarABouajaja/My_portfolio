@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { SITE } from "@/config/siteConfig";
 import { AuthGate } from "@/components/admin/AuthGate";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -47,6 +47,7 @@ import { DataNexusTab } from "@/components/admin/DataNexusTab";
 import { CloudInfraManager } from "@/components/admin/CloudInfraManager";
 import { TimeWarpProvider } from "@/hooks/useTimeWarp";
 import { TimeWarpScrubber } from "@/components/admin/TimeWarpScrubber";
+import { DockCustomizer } from "@/components/admin/DockCustomizer";
 
 
 const NavItem = ({
@@ -168,6 +169,46 @@ export const DEFAULT_NAV: NavItemDef[] = [
 
 const GROUP_ABBREV: Record<string, string> = { Core: "C", Ecosystem: "E", Freelance: "F", Personal: "P", System: "S" };
 
+/** Haptic helper — silently no-ops on iOS */
+const haptic = (ms: number | number[] = 8) => { try { (navigator as any).vibrate?.(ms); } catch { /* */ } };
+
+/** Dock button with long-press-to-customize support */
+const DockButton = ({ item, isActive, colorVar, slotIdx, onTap, onLongPress }: {
+  item: NavItemDef; isActive: boolean; colorVar: string; slotIdx: number;
+  onTap: () => void; onLongPress: () => void;
+}) => {
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const Icon = item.icon;
+
+  const startPress = () => {
+    pressTimer.current = setTimeout(() => { onLongPress(); }, 500);
+  };
+  const endPress = (didTap: boolean) => {
+    if (pressTimer.current) { clearTimeout(pressTimer.current); pressTimer.current = null; }
+    if (didTap) onTap();
+  };
+
+  return (
+    <button
+      onPointerDown={startPress}
+      onPointerUp={() => endPress(true)}
+      onPointerLeave={() => endPress(false)}
+      onContextMenu={(e) => { e.preventDefault(); onLongPress(); }}
+      className={`relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-300 active:scale-90 select-none ${isActive ? "" : "text-muted-foreground/60"}`}
+    >
+      {isActive && (
+        <div className="absolute -top-0.5 w-5 h-[3px] rounded-full" style={{ backgroundColor: colorVar, boxShadow: `0 0 12px ${colorVar}` }} />
+      )}
+      <Icon className={`w-5 h-5 transition-all duration-300 ${isActive ? "dock-icon-active" : ""}`} style={isActive ? { color: colorVar } : {}} />
+      <span className={`text-[9px] font-bold tracking-wide mt-0.5 transition-colors ${isActive ? "" : "text-muted-foreground/50"}`} style={isActive ? { color: colorVar } : {}}>
+        {item.label}
+      </span>
+      {/* Long-press hint dot */}
+      <span className="absolute bottom-1 right-1.5 w-1 h-1 rounded-full bg-muted-foreground/20" title="Long-press to customize" />
+    </button>
+  );
+};
+
 export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -176,6 +217,8 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
   const [navOrder, setNavOrder] = useLocalStorage<string[]>("bo3_nav_order", DEFAULT_NAV.map(n => n.value));
   const [categoryOrder, setCategoryOrder] = useLocalStorage<string[]>("bo3_category_order", ["Core", "Ecosystem", "Freelance", "Personal", "System"]);
   const [dockItemKeys, setDockItemKeys] = useLocalStorage<string[]>("bo3_dock_items", ["overview", "lifeos", "iot", "settings"]);
+  const [dockCustomizerSlot, setDockCustomizerSlot] = useState<number | null>(null);
+  const [mobileSearch, setMobileSearch] = useState("");
 
   const [dragType, setDragType] = useState<"category" | "item" | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
@@ -506,16 +549,22 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
               {/* Topbar */}
               <header className="h-14 lg:h-16 border-b border-border/40 bg-background/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-8 shrink-0 z-40 sticky top-0">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <button
-                    onClick={() => setIsMobileMenuOpen(true)}
+                    onClick={() => { haptic(6); setIsMobileMenuOpen(true); }}
                     className="lg:hidden flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all active:scale-90 shrink-0"
                   >
                     <Menu className="h-4 w-4" />
                   </button>
-                  <div className="lg:hidden flex items-center gap-2">
-                    <h2 className="font-display text-base font-semibold tracking-tight">{SITE.brandHandle}</h2>
-                    <span className={`h-1.5 w-1.5 rounded-full ${hasSupabase ? "bg-success" : "bg-warning"} animate-pulse`} />
+                  {/* Mobile breadcrumb */}
+                  <div className="lg:hidden flex items-center gap-2 min-w-0">
+                    <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${hasSupabase ? "bg-success" : "bg-warning"} animate-pulse`} />
+                    <span className="font-display text-sm font-semibold tracking-tight truncate">
+                      {orderedNav.find(n => n.value === activeTab)?.label ?? SITE.brandHandle}
+                    </span>
+                    <span className="hidden sm:inline text-[9px] terminal-text uppercase tracking-widest text-muted-foreground bg-background-elevated px-2 py-0.5 rounded-full border border-border/40 shrink-0">
+                      {orderedNav.find(n => n.value === activeTab)?.group ?? ""}
+                    </span>
                   </div>
 
                   <div className="hidden lg:flex items-center gap-2 terminal-text text-xs uppercase tracking-widest text-muted-foreground">
@@ -572,7 +621,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="projects">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Projects Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your portfolio projects across all languages.</p>
                       <ProjectsManager />
@@ -580,7 +629,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="timeline">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Timeline Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your career history events.</p>
                       <TimelineManager />
@@ -588,7 +637,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="services">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Services Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your core offerings and pricing.</p>
                       <ServicesManager />
@@ -596,7 +645,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="skills">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Tech Stack Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage the technologies displayed in the marquee.</p>
                       <SkillsManager />
@@ -604,7 +653,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="testimonials">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Testimonials Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage client feedback and reviews.</p>
                       <TestimonialsManager />
@@ -616,7 +665,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="equipment">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Equipment Arsenal</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your setup and daily drivers.</p>
                       <EquipmentManager />
@@ -624,7 +673,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="certifications">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Certifications Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your professional certifications and credentials.</p>
                       <CertificationsManager />
@@ -632,7 +681,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="iot">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Hardware & IoT Fleet Manager</h2>
                       <p className="text-sm text-muted-foreground mb-6">Track live deployed nodes and lab inventory.</p>
                       <IoTFleetManager />
@@ -648,7 +697,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="finance">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Freelance Finance Hub</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage revenue goals, transactions, and hardware expenses.</p>
                       <FinanceManager />
@@ -656,7 +705,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="vault">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Developer Command Vault</h2>
                       <p className="text-sm text-muted-foreground mb-6">Store and quickly copy complex terminal snippets.</p>
                       <CommandVault />
@@ -664,13 +713,13 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="encrypted_vault">
-                    <div className="glass-panel rounded-xl p-6 min-h-[500px]">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6 min-h-[500px]">
                       <EncryptedVault />
                     </div>
                   </TabsContent>
 
                   <TabsContent value="lifeos">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">ADHD Life OS</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage daily brain dumps and sync with Apple Reminders.</p>
                       <LifeOS />
@@ -678,7 +727,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="neuralflow">
-                    <div className="glass-panel rounded-xl p-6 min-h-[500px]">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6 min-h-[500px]">
                       <NeuralFlow />
                     </div>
                   </TabsContent>
@@ -688,7 +737,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="blog">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Blog & Articles</h2>
                       <p className="text-sm text-muted-foreground mb-6">Publish technical logs and engineering thoughts.</p>
                       <BlogManager />
@@ -696,7 +745,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="social_links">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Social & Contact Links</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage your public contact channels displayed on the portfolio.</p>
                       <SocialLinksManager />
@@ -704,7 +753,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="contact">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Inbox</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage contact form submissions.</p>
                       <ContactViewer />
@@ -712,7 +761,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="invoices">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Invoice Generator Pro</h2>
                       <p className="text-sm text-muted-foreground mb-6">Create and manage professional PDF invoices for clients.</p>
                       <InvoiceGenerator />
@@ -720,13 +769,13 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="resume">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <DynamicResumePro />
                     </div>
                   </TabsContent>
 
                   <TabsContent value="storage">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">Database & Local Storage</h2>
                       <p className="text-sm text-muted-foreground mb-6">Manage offline-first DB storage, export backups, and view resource metrics.</p>
                       <StorageManager />
@@ -746,7 +795,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </TabsContent>
 
                   <TabsContent value="settings">
-                    <div className="glass-panel rounded-xl p-6">
+                    <div className="glass-panel rounded-xl p-4 sm:p-6">
                       <h2 className="text-lg font-semibold">System Settings</h2>
                       <p className="text-sm text-muted-foreground mb-6">Configure global parameters and metadata.</p>
                       <SettingsPanel setActiveTab={setActiveTab} />
@@ -765,7 +814,7 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                 {[
                   orderedNav.find(n => n.value === dockItemKeys[0]) || DEFAULT_NAV.find(n => n.value === "overview") || DEFAULT_NAV[0],
                   orderedNav.find(n => n.value === dockItemKeys[1]) || DEFAULT_NAV.find(n => n.value === "lifeos") || DEFAULT_NAV[0],
-                  { value: "__cmd__", icon: Terminal, label: "Cmd", colorClass: "text-primary", isCenter: true },
+                  { value: "__cmd__", icon: Terminal, label: "Cmd", colorClass: "text-primary", isCenter: true, group: "system" },
                   orderedNav.find(n => n.value === dockItemKeys[2]) || DEFAULT_NAV.find(n => n.value === "iot") || DEFAULT_NAV[0],
                   orderedNav.find(n => n.value === dockItemKeys[3]) || DEFAULT_NAV.find(n => n.value === "settings") || DEFAULT_NAV[0],
                 ].map((item, idx) => {
@@ -778,12 +827,14 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                         : item.colorClass?.includes("text-warning") ? "hsl(var(--warning))"
                           : item.colorClass?.includes("text-accent") ? "hsl(var(--accent))"
                             : "hsl(var(--foreground))";
+                  // Real slot index (skip center)
+                  const slotIdx = idx < 2 ? idx : idx > 2 ? idx - 1 : -1;
 
                   if (item.isCenter) {
                     return (
                       <button
                         key="__cmd__"
-                        onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                        onClick={() => { haptic(6); document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true })); }}
                         className="relative -top-5 flex flex-col items-center"
                       >
                         <div className="w-[52px] h-[52px] rounded-full bg-gradient-cyber p-[1.5px] shadow-glow-primary transition-transform active:scale-90">
@@ -797,38 +848,31 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   }
 
                   return (
-                    <button
+                    <DockButton
                       key={item.value + idx}
-                      onClick={() => setActiveTab(item.value)}
-                      className={`relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-300 active:scale-90 ${isActive ? "" : "text-muted-foreground/60"
-                        }`}
-                    >
-                      {/* Active glow dot */}
-                      {isActive && (
-                        <div
-                          className="absolute -top-0.5 w-5 h-[3px] rounded-full"
-                          style={{ backgroundColor: colorVar, boxShadow: `0 0 12px ${colorVar}` }}
-                        />
-                      )}
-                      <Icon
-                        className={`w-5 h-5 transition-all duration-300 ${isActive ? "dock-icon-active" : ""
-                          }`}
-                        style={isActive ? { color: colorVar } : {}}
-                      />
-                      <span
-                        className={`text-[9px] font-bold tracking-wide mt-0.5 transition-colors ${isActive ? "" : "text-muted-foreground/50"
-                          }`}
-                        style={isActive ? { color: colorVar } : {}}
-                      >
-                        {item.label}
-                      </span>
-                    </button>
+                      item={item}
+                      isActive={isActive}
+                      colorVar={colorVar}
+                      slotIdx={slotIdx}
+                      onTap={() => { haptic(8); setActiveTab(item.value); }}
+                      onLongPress={() => { haptic([30, 20, 30]); setDockCustomizerSlot(slotIdx); }}
+                    />
                   );
                 })}
               </div>
             </nav>
             <TimeWarpScrubber />
           </Tabs>
+
+          {/* ═══ DOCK CUSTOMIZER MODAL ═══ */}
+          {dockCustomizerSlot !== null && (
+            <DockCustomizer
+              slotIndex={dockCustomizerSlot}
+              dockItemKeys={dockItemKeys}
+              setDockItemKeys={setDockItemKeys}
+              onClose={() => setDockCustomizerSlot(null)}
+            />
+          )}
 
           {/* ═══ AI ASSISTANT FAB ═══ */}
           <AIAssistant setActiveTab={setActiveTab} />
@@ -862,35 +906,55 @@ export default function Admin({ isDemoRoute }: { isDemoRoute?: boolean }) {
                   </div>
                 </div>
 
+                {/* Search Bar */}
+                <div className="px-3 pt-2 pb-1 shrink-0">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    <input
+                      value={mobileSearch}
+                      onChange={(e) => setMobileSearch(e.target.value)}
+                      placeholder="Search tabs…"
+                      className="w-full bg-background-elevated border border-border rounded-xl pl-9 pr-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/50"
+                    />
+                  </div>
+                </div>
+
                 {/* Navigation Items */}
                 <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
                   {(() => {
                     let flatIndex = 0;
-                    return groups.map((group) => (
-                      <div key={`mobile-${group.name}`}>
-                        <div className="px-3 py-2.5 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.15em] mt-3 first:mt-0">
-                          {group.name}
+                    const searchQ = mobileSearch.toLowerCase().trim();
+                    return groups.map((group) => {
+                      const filteredItems = group.items.filter(item =>
+                        !searchQ || item.label.toLowerCase().includes(searchQ) || item.group.toLowerCase().includes(searchQ)
+                      );
+                      if (filteredItems.length === 0) return null;
+                      return (
+                        <div key={`mobile-${group.name}`}>
+                          <div className="px-3 py-2.5 text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.15em] mt-3 first:mt-0">
+                            {group.name}
+                          </div>
+                          {filteredItems.map((item) => {
+                            flatIndex++;
+                            return (
+                              <NavItem
+                                key={`mobile-${item.value}`}
+                                value={item.value}
+                                icon={item.icon}
+                                label={item.label}
+                                isCollapsed={false}
+                                colorClass={item.colorClass}
+                                isActive={activeTab === item.value}
+                                onSelect={(v: string) => { haptic(8); setActiveTab(v); }}
+                                onClick={() => { setIsMobileMenuOpen(false); setMobileSearch(""); }}
+                                reorderMode={false}
+                                flatIdx={flatIndex}
+                              />
+                            );
+                          })}
                         </div>
-                        {group.items.map((item) => {
-                          flatIndex++;
-                          return (
-                            <NavItem
-                              key={`mobile-${item.value}`}
-                              value={item.value}
-                              icon={item.icon}
-                              label={item.label}
-                              isCollapsed={false}
-                              colorClass={item.colorClass}
-                              isActive={activeTab === item.value}
-                              onSelect={setActiveTab}
-                              onClick={handleMobileNav}
-                              reorderMode={false}
-                              flatIdx={flatIndex}
-                            />
-                          );
-                        })}
-                      </div>
-                    ));
+                      );
+                    });
                   })()}
                 </div>
 

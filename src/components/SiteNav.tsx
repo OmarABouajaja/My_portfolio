@@ -47,6 +47,16 @@ export const SiteNav = () => {
     { id: "contact", label: t("nav.contact"), icon: Mail, colorClass: "text-destructive hover:text-destructive", bgClass: "bg-destructive/5", borderClass: "border-destructive/30", glowClass: "shadow-[0_0_15px_rgba(var(--destructive),0.3)]" },
   ];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      window.history.pushState(null, "", `#${id}`);
+    }
+  };
+
   return (
     <motion.header
       initial={{ y: -30, opacity: 0 }}
@@ -75,6 +85,7 @@ export const SiteNav = () => {
               <a
                 key={it.id}
                 href={`#${it.id}`}
+                onClick={(e) => handleNavClick(e, it.id)}
                 className={`relative flex items-center gap-1.5 rounded-full px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] transition-all duration-300 group ${
                   isActive ? `${it.colorClass.split(' ')[0]} ${it.bgClass}` : `text-muted-foreground ${it.colorClass}`
                 }`}
@@ -131,7 +142,7 @@ export const SiteNav = () => {
                   <motion.a
                     key={it.id}
                     href={`#${it.id}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => handleNavClick(e, it.id)}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}

@@ -70,7 +70,7 @@ export const Hero = ({ meta }: Props) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.7 }}
-            className="mt-2 sm:mt-3 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-lg"
+            className="mt-2 sm:mt-3 font-display text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-lg"
           >
             <span className="text-gradient-cyber">{t("hero.name")}</span>
           </motion.h1>

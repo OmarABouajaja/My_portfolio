@@ -13,6 +13,9 @@ export type SiteMetadata = {
   enable_timeline?: boolean;
   enable_tech_stack?: boolean;
   enable_testimonials?: boolean;
+  enable_services?: boolean;
+  enable_equipment?: boolean;
+  enable_certifications?: boolean;
   enable_blog?: boolean;
   enable_contact?: boolean;
   updated_at: string;
